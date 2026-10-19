@@ -1,0 +1,6 @@
+# The Vercel CLI ignores .gitignore: never upload the originals.
+# sources/ holds unblurred screenshots showing other users' names and photos.
+sources
+captures
+dist
+.astro

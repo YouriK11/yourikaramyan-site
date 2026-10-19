@@ -1,0 +1,302 @@
+/*
+  Foundations: colors, type, spacing, buttons.
+  Identity of the CV: midnight blue text, apricot details, white background, light tint panels.
+  Apricot is never used for text on white (contrast 2.3:1). It is a stroke, a decoration, or text on midnight blue (6.8:1).
+*/
+
+:root {
+  /* Colors */
+  --nuit: #18214f;
+  --nuit-clair: #263171;
+  --abricot: #ee9a35;
+  --abricot-clair: #f3ad58;
+  --blanc: #ffffff;
+  --brume: #eef1f8;
+  --ardoise: #5b6386; /* secondary text: 5.9:1 on white, 5.2:1 on --brume */
+  --trait: #dde2ee; /* hairlines */
+  --brume-sur-nuit: #c3c9df; /* secondary text on --nuit: 9.3:1 */
+
+  /* Type (the --font-* variables come from Astro's Fonts API) */
+  --police-titre: var(--font-display);
+  --police-texte: var(--font-body);
+  --texte-s: 0.9375rem;
+  --texte-m: 1.0625rem;
+  --texte-l: clamp(1.125rem, 1.02rem + 0.45vw, 1.375rem);
+  --titre-3: 1.25rem;
+  --titre-2: clamp(2.25rem, 1.45rem + 3.4vw, 4rem);
+
+  /* Layout */
+  --gouttiere: clamp(1rem, -0.25rem + 3.2vw, 3rem);
+  --largeur: 72rem;
+  --section: clamp(4rem, 2.6rem + 6vw, 8rem);
+  --hauteur-entete: 4rem;
+  --rayon: 14px;
+  --rayon-s: 10px;
+}
+
+/* Reset */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  scroll-padding-top: calc(var(--hauteur-entete) + 1rem);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+/* Footer stays at the bottom of short pages */
+body {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  min-height: 100vh;
+  min-height: 100svh;
+  background: var(--blanc);
+  color: var(--nuit);
+  font-family: var(--police-texte);
+  font-size: var(--texte-m);
+  line-height: 1.55;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+main {
+  flex: 1 0 auto;
+}
+
+h1,
+h2,
+h3,
+h4,
+p,
+ul,
+ol,
+dl,
+dd,
+figure,
+blockquote {
+  margin: 0;
+}
+
+ul[role='list'],
+ol[role='list'] {
+  list-style: none;
+  padding: 0;
+}
+
+img,
+picture,
+svg,
+video {
+  display: block;
+  max-width: 100%;
+}
+
+img {
+  height: auto;
+}
+
+a {
+  color: inherit;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+}
+
+:focus-visible {
+  outline: 3px solid var(--nuit);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+.sur-nuit :focus-visible {
+  outline-color: var(--abricot);
+}
+
+::selection {
+  background: var(--abricot);
+  color: var(--nuit);
+}
+
+/* Utilities */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+.lien-evitement {
+  position: absolute;
+  top: 0.75rem;
+  left: 0.75rem;
+  z-index: 100;
+  padding: 0.75rem 1rem;
+  border-radius: var(--rayon-s);
+  background: var(--nuit);
+  color: var(--blanc);
+  font-weight: 600;
+  text-decoration: none;
+  transform: translateY(-200%);
+}
+
+.lien-evitement:focus-visible {
+  transform: none;
+  outline-color: var(--abricot);
+}
+
+.conteneur {
+  width: min(100% - 2 * var(--gouttiere), var(--largeur));
+  margin-inline: auto;
+}
+
+.mesure {
+  max-width: 65ch;
+}
+
+.texte-secondaire {
+  color: var(--ardoise);
+}
+
+.sur-nuit {
+  background: var(--nuit);
+  color: var(--blanc);
+}
+
+.sur-nuit .texte-secondaire {
+  color: var(--brume-sur-nuit);
+}
+
+/* Sections */
+.section {
+  padding-block: var(--section);
+}
+
+.section--brume {
+  background: var(--brume);
+}
+
+/* Section title: the CV's apricot underline marker */
+.titre-section {
+  font-family: var(--police-titre);
+  font-size: var(--titre-2);
+  font-weight: 760;
+  font-stretch: 92%;
+  line-height: 1.02;
+  letter-spacing: -0.005em;
+  text-wrap: balance;
+}
+
+.titre-section::after {
+  content: '';
+  display: block;
+  width: 3rem;
+  height: 6px;
+  margin-top: 1rem;
+  border-radius: 3px;
+  background: var(--abricot);
+}
+
+/* Links in running text */
+.lien {
+  text-decoration-line: underline;
+  text-decoration-color: var(--abricot);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.22em;
+}
+
+.lien:hover {
+  text-decoration-thickness: 3px;
+}
+
+/* Buttons */
+.bouton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.625rem;
+  min-height: 3rem;
+  padding: 0.75rem 1.25rem;
+  border: 2px solid var(--nuit);
+  border-radius: var(--rayon-s);
+  background: var(--nuit);
+  color: var(--blanc);
+  font-family: var(--police-texte);
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.2;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.bouton:hover {
+  background: var(--nuit-clair);
+  border-color: var(--nuit-clair);
+}
+
+.bouton:active {
+  transform: translateY(1px);
+}
+
+.bouton svg {
+  width: 1.25em;
+  height: 1.25em;
+  flex: none;
+}
+
+.bouton--contour {
+  background: transparent;
+  color: var(--nuit);
+}
+
+.bouton--contour:hover {
+  background: var(--brume);
+  border-color: var(--nuit);
+}
+
+.bouton--abricot {
+  border-color: var(--abricot);
+  background: var(--abricot);
+  color: var(--nuit);
+}
+
+.bouton--abricot:hover {
+  border-color: var(--abricot-clair);
+  background: var(--abricot-clair);
+}
+
+.bouton--petit {
+  min-height: 2.5rem;
+  padding: 0.5rem 0.875rem;
+  font-size: var(--texte-s);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bouton {
+    transition: none;
+  }
+
+  .bouton:active {
+    transform: none;
+  }
+}

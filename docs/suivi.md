@@ -8,13 +8,13 @@ Ce fichier garde les décisions de Youri, les contenus validés, les éléments 
 | Étape | Contenu | État |
 |---|---|---|
 | 0 | Installation (Astro 7, GSAP, sitemap), dossier hors OneDrive, git | Terminée le 19/10/2026 |
-| 1 | Fondations : couleurs, polices, menu, pied de page, favicon YK | À faire |
+| 1 | Fondations : couleurs, polices, menu, pied de page, favicon YK | Terminée le 19/10/2026 |
 | 2 | Accueil et effet signature | À faire |
 | 3 | Étude de cas MonArc | À faire |
 | 4 | Parcours, compétences, contact | À faire |
 | 5 | Page /col-macarthur et système de duplication | À faire |
 | 6 | Finitions : images de partage, accessibilité, Lighthouse mobile, compteur de visites | À faire |
-| 7 | Mise en ligne sur yourikaramyan.com (GitHub + Netlify) | À faire |
+| 7 | Mise en ligne sur yourikaramyan.com (GitHub + Vercel, achat du domaine sur Vercel) | À faire |
 
 ## Décisions validées par Youri (19/10/2026)
 
@@ -24,8 +24,18 @@ Ce fichier garde les décisions de Youri, les contenus validés, les éléments 
 - Captures de l'app : flouter les photos de profil ET les prénoms des autres utilisateurs. Le profil de Youri reste net.
 - Marque : écrire « Col&McArthur » sur la page. Adresse : `/col-macarthur`.
 - « IA générative » reste dans les compétences, mot pour mot comme dans le CV.
-- Hébergement : Netlify.
 - Compteur de visites : oui, avec une solution gratuite et sans cookies.
+
+## Décisions validées par Youri (19/10/2026, suite)
+
+- Hébergement : **Vercel** (remplace Netlify, dont la limite d'environ 20 mises en ligne par mois est trop basse pour créer beaucoup de pages entreprises).
+- Domaine yourikaramyan.com : pas encore acheté. Youri l'achètera sur Vercel à l'étape 7.
+- GitHub : compte existant, identifiant `YouriK11`. Dépôt privé.
+- Photo : `sources/photo.png` (1119 × 1730, fond uni proche de #EEF1F8). Remplace la photo extraite du CV.
+- MonArc sur l'App Store : https://apps.apple.com/be/app/monarc/id6816906304?l=fr-FR
+- MonArc n'est pas encore sur Google Play. Le site affiche l'App Store et la version web (getmonarcapp.com, qui sert aussi aux utilisateurs Android). Pas de bouton Google Play.
+- Chiffres Instagram (preuves photo par jour) : refusés.
+- Boutique 2022 : ne pas afficher son nom.
 
 ## Chiffres validés (à afficher arrondis)
 
@@ -43,8 +53,8 @@ Boutique e-commerce 2022, Shopify (capture, validés par Youri) :
 - 21 844,88 € de ventes du 1er mars 2022 au 29 janvier 2023 : afficher « plus de 21 000 € de ventes » ;
 - taux de conversion 1,55 % : afficher « 1,5 % » ou la valeur exacte.
 
-Chiffres NON validés, à ne pas utiliser :
-- les preuves photo publiées par jour (Instagram) : pas de réponse de Youri.
+Chiffres refusés, à ne pas utiliser :
+- les preuves photo publiées par jour (Instagram).
 
 ## Contenus validés : page /col-macarthur
 
@@ -68,10 +78,5 @@ Faits vérifiés sur Col&McArthur (octobre 2026) :
 
 ## En attente de Youri
 
-- [ ] Photo en bonne qualité. En attendant : `sources/photo-cv.jpg` (640 × 768, extraite du CV).
-- [ ] Lien App Store de MonArc. En attendant : emplacement signalé.
-- [ ] Lien Google Play de MonArc, et confirmation que l'app y est publiée. En attendant : emplacement signalé.
-- [ ] Nom de la boutique 2022 (facultatif). En attendant : ne pas la nommer.
-- [ ] Chiffres Instagram (preuves photo par jour) : oui ou non.
-- [ ] Domaine yourikaramyan.com : déjà acheté ? chez qui ?
-- [ ] Compte GitHub : existe ou à créer ?
+- [ ] Rôle exact de Youri sur MonArc. La fiche App Store affiche le développeur « Anaelle Grambras ». Projet à deux ? Qui a fait quoi ? (à régler avant l'étape 3)
+- [ ] **Bloquant pour l'étape 7** : la ligne MonArc du CV mentionne Google Play, et les boutons « Télécharger mon CV » distribuent ce PDF. Ne pas passer `SITE.enConstruction` à false tant que Youri n'a pas fourni un CV corrigé. Remplacer alors `sources/CV_Youri_Karamyan.pdf` et `public/Youri-Karamyan-CV.pdf` ensemble.

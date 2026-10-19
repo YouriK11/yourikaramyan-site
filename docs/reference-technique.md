@@ -17,7 +17,7 @@ Prototype de l'effet d'accueil (lecture seule, ses fichiers gsap.js et bricolage
 ## Astro 7 : pièges vérifiés
 
 - **`compressHTML: true`** (réglé). Le défaut d'Astro 7 (`'jsx'`) colle les mots aux balises en ligne quand un retour à la ligne les sépare : « développeur⏎<strong>web</strong> » devient « développeurweb ».
-- **`trailingSlash: 'always'`** (réglé). Les pages sont construites en `/page/index.html` et Netlify sert `/page/`. Liens internes toujours avec la barre finale. Les fichiers générés avec extension (`/og/x.png`, `/robots.txt`) s'appellent sans barre finale.
+- **`trailingSlash: 'always'`** (réglé). Les pages sont construites en `/page/index.html` et servies en `/page/` (Vercel : `"trailingSlash": true`). Liens internes toujours avec la barre finale. Les fichiers générés avec extension (`/og/x.png`, `/robots.txt`) s'appellent sans barre finale.
 - **Scripts** : un `<script>` sans attribut est du TypeScript, regroupé, chargé en `type="module"` (différé). Il s'affiche là où il est écrit : le mettre dans un composant ou dans la mise en page, jamais après la balise de fermeture de la mise en page. Un script qui doit s'exécuter tout de suite dans `<head>` prend `is:inline`.
 - **Compilateur Rust** : HTML strict. Toute balise non vide doit être fermée, pas de `<div>` dans un `<p>`.
 - Ne jamais créer `src/fetch.ts` (nom réservé en Astro 7).
@@ -35,7 +35,8 @@ Prototype de l'effet d'accueil (lecture seule, ses fichiers gsap.js et bricolage
 - L'API Fonts d'Astro est stable : clé `fonts` au premier niveau de la config (`experimental.fonts` est refusé).
 - **Bricolage Grotesque** : graisse 200-800 et largeur 75-100, taille optique figée à 96, sous-ensemble `latin` seulement. Fichier d'environ 79,5 Ko, `font-stretch: 75% 100%` généré.
   - Option A : `fontProviders.google()` avec `weights: ["200 800"]`, `styles: ["normal"]`, `subsets: ["latin"]`, `options: { experimental: { variableAxis: { opsz: ["96"], wdth: [["75","100"]] } } }`.
-  - Option B (recommandée) : récupérer une fois ce fichier, le placer dans `src/assets/fonts/` et utiliser `fontProviders.local()` avec `weight: "200 800"`, `stretch: "75% 100%"`. Aucune option expérimentale, aucun accès réseau pendant la construction.
+  - Option B (**retenue, en place à l'étape 1**) : fichier `src/assets/fonts/bricolage-grotesque-latin-opsz96.woff2` (79 Ko, axes wght 200-800 et wdth 75-100, défauts 800/100) chargé par `fontProviders.local()` avec `weight: "200 800"`, `stretch: "75% 100%"`. Aucune option expérimentale, aucun accès réseau pendant la construction. Instrument Sans : `src/assets/fonts/instrument-sans-latin.woff2` (30 Ko). Licences OFL à côté.
+  - Avec `fallbacks: ['system-ui']`, Astro génère des polices de secours ajustées pour BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue et Arial (vérifié dans `dist/index.html`).
 - **Instrument Sans** : `fontProviders.google()`, `weights: ["400 700"]`, `subsets: ["latin"]`. Environ 29,9 Ko. Précharger seulement le style normal : `<Font cssVariable="--font-body" preload={[{ style: "normal" }]} />`.
 - **Sous-ensemble `latin` uniquement** : ajouter `latin-ext` fausse les métriques de la police de secours en 7.4.1. Le latin couvre tout le français sauf U+202F.
 - **Espace fine insécable U+202F** : absente des deux polices. `Intl.NumberFormat('fr-BE')` en produit une (« 1 700 »). La remplacer par U+00A0 avec un échappement explicite : `.replace(/ /g, " ")`. Utiliser U+00A0 devant « : ; ! ? » et à l'intérieur des guillemets.
@@ -43,6 +44,22 @@ Prototype de l'effet d'accueil (lecture seule, ses fichiers gsap.js et bricolage
 - Avec la taille optique figée à 96, Bricolage garde son dessin d'affichage même en petit. Réserver Bricolage aux titres.
 - À éviter : `fontProviders.npm()` (cassé en 7.4.1) et l'`index.css` des paquets @fontsource (graisse seule, la largeur ne marche pas).
 - Android n'a pas Arial : envisager `fallbacks: ["system-ui"]`, à vérifier.
+
+## Fondations en place (étape 1)
+
+- **Favicon** : monogramme YK tracé à partir de Bricolage (800/100), fond bleu nuit, trait abricot. Pour le refaire :
+  1. `python scripts/favicon-svg.py <police.woff2> <dossier>` (fontTools et brotli requis) ;
+  2. `node scripts/favicon-png.mjs <dossier>` ;
+  3. `favicon.ico` (16/32/48) avec Pillow ;
+  4. copier les fichiers dans `public/`.
+- **Menu mobile** : panneau plein écran en `popover` natif (s'ouvre sans JS). Le script ajoute :
+  - la fermeture au clic sur un lien ;
+  - `inert` sur la page derrière pendant l'ouverture (posé au `toggle` ouvert, retiré au `beforetoggle` fermé, pour que le focus revienne sur « Menu ») ;
+  - la fermeture quand la largeur passe en mode ordinateur.
+  - Sans prise en charge du Popover API, le panneau et son bouton restent masqués.
+- **Ancres** : `<body id="haut">` pour « Haut de page ». `#top` laisse le focus sur le lien du pied de page dans Firefox et Safari.
+- **Pied de page** collé en bas des pages courtes : `body` en flex colonne, `main { flex: 1 0 auto }`.
+- **`SITE.enConstruction`** (`src/data/site.ts`) met toutes les pages en `noindex`. À passer à false à l'étape 7, seulement quand le CV corrigé (sans Google Play) est en place.
 
 ## Images
 
@@ -91,14 +108,37 @@ Modèle `Counter.astro` dans `docs/recherche/gsap-effet-signature.md`, F27 :
   - Exclure ses propres visites : ouvrir le site une fois avec `#toggle-goatcounter` dans chaque navigateur.
   - Les bloqueurs de publicité bloquent le script : les chiffres sont des minimums.
 - L'autorité belge (APD) lit largement les règles sur le traçage. Ajouter une courte note de confidentialité qui nomme GoatCounter.
-- Autres options moins adaptées : Cloudflare Web Analytics (données complètes 7 jours seulement), Umami Cloud (US/UE), Netlify Analytics (gratuit : 1 jour d'historique).
+- Autres options moins adaptées : Vercel Web Analytics (1 mois d'historique, région non documentée), Cloudflare Web Analytics (données complètes 7 jours seulement), Umami Cloud (US/UE).
 
-## Mise en ligne (étape 7)
+## Mise en ligne (étape 7) : Vercel
 
-- **Netlify** : aucun adaptateur. `netlify.toml` avec `command = "npm run build"` et `publish = "dist"`. Version de Node fixée par `.nvmrc` (24, déjà en place) : ne pas ajouter `NODE_VERSION` en plus.
-- **Crédits du plan gratuit** : 300 crédits par mois, 15 par mise en production, 20 par Go de bande passante. Environ 20 mises en production par mois au maximum. Au-delà, tous les sites sont mis en pause. Regrouper les envois, travailler sur une branche (aperçus gratuits) ou ajouter `[skip netlify]` au message du dernier commit.
-- **Visibilité** : les nouvelles équipes Netlify créent des projets privés par défaut. Passer le projet en public (Project configuration > General > Visitor access), sinon recruteurs et LinkedIn tombent sur une page de connexion.
-- Dépôt GitHub privé sous le compte personnel de Youri (un dépôt d'organisation privé exige un plan payant).
-- **En-têtes** : cache d'un an sur `/_astro/*`. `X-Robots-Tag: noindex` sur `/col-macarthur` et `/col-macarthur/*`, en plus de la balise `meta robots`. Vérifier avec `curl -sI`.
-- **Domaine** : OVH .com à 7,99 € HT la 1re année puis 14,29 € HT par an. Combell 9,99 € puis 46,99 € HTVA par an. Chez OVH : `A @ 75.2.60.5` et `CNAME www <site>.netlify.app`, www en domaine principal, supprimer les enregistrements de parking. Désactiver DNSSEC avant de déléguer les serveurs DNS à Netlify.
-- Si `www` devient le domaine principal, passer `site` à `https://www.yourikaramyan.com` dans `astro.config.mjs` : la canonical doit correspondre à l'adresse servie.
+Netlify a été écarté (environ 20 mises en ligne par mois sur le plan gratuit). Notes complètes : `docs/recherche/vercel.md`. Les notes Netlify (`docs/recherche/netlify-analytics-og.md`) restent valables pour GoatCounter, les images de partage et LinkedIn.
+
+- **Plan Hobby** (gratuit) : usage personnel et non commercial uniquement. Pas d'offre payante, de prix, de publicité ni de lien d'affiliation sur le site.
+- **Limites Hobby** :
+  - 100 mises en ligne par jour, 100 par heure, 60 par 5 minutes ; une construction à la fois.
+  - Par mois : 100 Go de transfert, 1 million de requêtes.
+  - Hobby n'achète jamais de dépassement : au-delà, les fonctions s'arrêtent et un projet en pause se relance à la main.
+  - Regrouper plusieurs pages entreprises dans un même envoi.
+- **Construction** : Astro est détecté tout seul (sortie `dist`, aucun adaptateur pour un site statique, ne pas ajouter @astrojs/vercel). Le préréglage Astro met déjà un cache d'un an sur `/_astro/*`.
+- **Node** : Vercel ignore `.nvmrc`. Il lit `"engines": { "node": "24.x" }` dans `package.json` (réglé). `.nvmrc` sert seulement en local.
+- **Dépôt privé sur Hobby** : Vercel ne publie que les commits dont l'auteur est le propriétaire du compte (compte GitHub `YouriK11`). Les premiers commits sont signés `youri.karamyan@student.hepl.be`.
+  - Avant le premier envoi, soit faire vérifier cette adresse sur GitHub, soit configurer `git config user.email "266993000+YouriK11@users.noreply.github.com"`.
+  - Effet des lignes `Co-Authored-By` inconnu : surveiller la première mise en ligne.
+- **Compte Vercel** : s'inscrire avec « Continue with GitHub » (YouriK11), et donner à l'application GitHub de Vercel l'accès au dépôt privé.
+- **vercel.json** : `"trailingSlash": true` (redirection 308 de `/x` vers `/x/`, cohérent avec Astro). Laisser `cleanUrls` à false. Pas de `rewrites` avec Astro. Un seul fichier entre `vercel.json` et `vercel.ts`.
+- **noindex des pages entreprises** :
+  - balise `meta robots` dans la mise en page entreprise ;
+  - exclusion du sitemap ;
+  - en option, en-tête `X-Robots-Tag` généré par `vercel.ts` à partir de la liste des entreprises, pour ne jamais éditer de fichier à la main.
+  - Les motifs `source` sont stricts et sensibles à la casse : écrire `/col-macarthur/`. Pas de point dans un nom d'entreprise.
+- **Protection des déploiements** : les adresses d'aperçu (`*-git-*.vercel.app`, `*-<hash>-*.vercel.app`) exigent une connexion Vercel. Ne partager que le domaine (ou `<projet>.vercel.app`). LinkedInBot fait partie des robots reconnus par Vercel.
+- **CLI** : elle ignore `.gitignore`. `.vercelignore` (en place) exclut `sources/`. Préférer les envois par Git. Ne jamais lancer `vercel --public`.
+- **Domaine acheté sur Vercel** :
+  - .com à 11,25 $ par an hors TVA, facturé en dollars ;
+  - renouvellement automatique 30 jours avant l'échéance, confidentialité WHOIS incluse ;
+  - DNS et HTTPS configurés par Vercel, aucune boîte e-mail fournie ;
+  - utiliser l'e-mail du compte pour le titulaire et confirmer l'e-mail de vérification ICANN.
+  - **Domaine principal** : choisir `yourikaramyan.com` (sans www) comme Production et rediriger `www` vers lui, pour correspondre à `site` dans `astro.config.mjs`.
+- **Avant la mise en ligne du domaine** : `site` pointe vers un domaine inexistant, donc les aperçus LinkedIn n'auront pas d'image. Ne partager aucun lien entreprise avant que le domaine fonctionne. Après correction, rafraîchir avec le LinkedIn Post Inspector.
+- **Vercel Web Analytics** (Hobby) : 50 000 événements par mois, 1 mois d'historique garanti, région de stockage non documentée. GoatCounter reste le choix recommandé (UE, sans cookies, historique long).

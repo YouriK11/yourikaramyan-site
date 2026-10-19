@@ -1,0 +1,30 @@
+---
+import Base from '../layouts/Base.astro';
+import Entete from '../components/Entete.astro';
+import PiedDePage from '../components/PiedDePage.astro';
+---
+
+<Base titre="Page introuvable | Youri Karamyan" noindex canonical={false}>
+  <Entete />
+  <main id="contenu" class="introuvable">
+    <div class="conteneur">
+      <h1 class="titre-section">Page introuvable</h1>
+      <p class="mesure introuvable__texte">
+        Le lien est peut-être incomplet. L'accueil présente mon profil, mon étude de cas et mes coordonnées.
+      </p>
+      <a class="bouton" href="/">Revenir à l'accueil</a>
+    </div>
+  </main>
+  <PiedDePage />
+</Base>
+
+<style>
+  .introuvable {
+    padding-block: var(--section);
+  }
+
+  .introuvable__texte {
+    margin-block: 1.5rem 2rem;
+    font-size: var(--texte-l);
+  }
+</style>

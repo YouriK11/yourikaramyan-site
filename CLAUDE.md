@@ -4,7 +4,7 @@ Site personnel de Youri Karamyan : CV en ligne et portfolio.
 Objectif : décrocher un stage en marketing digital et e-commerce.
 
 **Au début de chaque session, lire `docs/suivi.md`** : décisions validées, contenus validés, éléments en attente, avancement des étapes. Le mettre à jour à la fin de chaque étape.
-Avant de coder avec Astro, GSAP, Netlify ou les images de partage, lire `docs/reference-technique.md` (documentation vérifiée en octobre 2026).
+Avant de coder avec Astro, GSAP, Vercel ou les images de partage, lire `docs/reference-technique.md` (documentation vérifiée en octobre 2026).
 
 ## Qui est Youri
 - 22 ans, étudiant en 3e bachelier E-Business à la HEPL (Liège).
@@ -16,6 +16,7 @@ Avant de coder avec Astro, GSAP, Netlify ou les images de partage, lire `docs/re
 - La copie publiée est `public/Youri-Karamyan-CV.pdf`. Si le CV change, remplacer les deux fichiers.
 - N'inventer aucune expérience, aucune date, aucun chiffre. Si une information manque : la demander à Youri, ou poser un emplacement visible `[À COMPLÉTER : ...]`.
 - N'afficher que les chiffres listés dans `docs/suivi.md` (section « Chiffres validés »), arrondis comme indiqué.
+- MonArc n'est pas encore sur Google Play (Youri, 19/10/2026), même si le CV le dit. Le site ne l'affirme jamais : il parle de l'App Store et de la version web.
 
 ## Public et ton
 - Recruteurs et fondateurs de PME belges. Moins d'une minute sur le site, souvent sur téléphone.
@@ -32,7 +33,7 @@ Avant de coder avec Astro, GSAP, Netlify ou les images de partage, lire `docs/re
 
 ## Structure du site
 1. Accueil : nom en très grand, une phrase de présentation, boutons « Télécharger mon CV » et « Me contacter ». Effet signature : le seul grand moment animé du site.
-2. Étude de cas MonArc : contexte, actions (conception, lancement, promotion, gestion de la base clients), résultats en compteurs animés, captures dans des maquettes de téléphone, boutons App Store, Google Play et getmonarcapp.com.
+2. Étude de cas MonArc : contexte, actions (conception, lancement, promotion, gestion de la base clients), résultats en compteurs animés, captures dans des maquettes de téléphone, boutons App Store et getmonarcapp.com (pas de Google Play).
 3. Parcours : frise chronologique (formation, expériences, projets académiques, jobs étudiants), reprise du CV.
 4. Compétences et langues, reprises du CV.
 5. Contact : e-mail avec bouton pour le copier, téléphone, LinkedIn.
@@ -54,6 +55,7 @@ Avant de coder avec Astro, GSAP, Netlify ou les images de partage, lire `docs/re
 - Pensé d'abord pour le téléphone. Score Lighthouse mobile supérieur à 90. Images optimisées.
 - Balises Open Graph soignées (LinkedIn, e-mail), avec une image de partage au nom de Youri.
 - Favicon aux initiales YK.
+- Hébergement : Vercel (plan Hobby gratuit). Le domaine yourikaramyan.com sera acheté sur Vercel à l'étape 7. Code sur GitHub, compte `YouriK11`, dépôt privé.
 - `sources/` contient les fichiers d'origine (dont des captures non floutées d'autres utilisateurs) : il n'est pas versionné dans git et ne doit jamais être publié. Seules les versions floutées vont dans `src/assets/`.
 
 ## Commandes utiles

@@ -1,0 +1,77 @@
+# Suivi du projet
+
+Ce fichier garde les décisions de Youri, les contenus validés, les éléments en attente et l'avancement.
+À relire au début de chaque session, et à mettre à jour à la fin de chaque étape.
+
+## Avancement
+
+| Étape | Contenu | État |
+|---|---|---|
+| 0 | Installation (Astro 7, GSAP, sitemap), dossier hors OneDrive, git | Terminée le 19/10/2026 |
+| 1 | Fondations : couleurs, polices, menu, pied de page, favicon YK | À faire |
+| 2 | Accueil et effet signature | À faire |
+| 3 | Étude de cas MonArc | À faire |
+| 4 | Parcours, compétences, contact | À faire |
+| 5 | Page /col-macarthur et système de duplication | À faire |
+| 6 | Finitions : images de partage, accessibilité, Lighthouse mobile, compteur de visites | À faire |
+| 7 | Mise en ligne sur yourikaramyan.com (GitHub + Netlify) | À faire |
+
+## Décisions validées par Youri (19/10/2026)
+
+- Plan, structure des fichiers et effet signature « le nom qui prend de l'ampleur » : validés.
+- Condition sur l'effet signature : pendant l'animation, le nom ne pousse jamais le contenu en dessous. Sa place finale est réservée dès le chargement. Aucun décalage de mise en page.
+- Le projet vit dans `C:\Users\youri\Projets\yourikaramyan-site` (hors OneDrive). L'ancien dossier OneDrive reste une sauvegarde.
+- Captures de l'app : flouter les photos de profil ET les prénoms des autres utilisateurs. Le profil de Youri reste net.
+- Marque : écrire « Col&McArthur » sur la page. Adresse : `/col-macarthur`.
+- « IA générative » reste dans les compétences, mot pour mot comme dans le CV.
+- Hébergement : Netlify.
+- Compteur de visites : oui, avec une solution gratuite et sans cookies.
+
+## Chiffres validés (à afficher arrondis)
+
+MonArc (donnés par Youri et dans le CV) :
+- plus de 500 inscrits le jour du lancement, le 1er octobre 2026 ;
+- plus de 1 700 inscrits dans la base e-mail ;
+- une vidéo TikTok publiée chaque jour, publications régulières sur Instagram.
+
+TikTok @monarc_app (captures du 17/10/2026, validés par Youri) :
+- 6 578 abonnés : afficher « plus de 6 500 abonnés » ;
+- 172,8 K j'aime sur le profil : afficher « plus de 170 000 j'aime » ;
+- sur 60 jours (19 août au 17 octobre 2026) : 1,9 M de vues de publications, 12,6 K partages, 3 K commentaires. Afficher « 1,9 million de vues en 60 jours », « plus de 12 000 partages », « 3 000 commentaires ».
+
+Boutique e-commerce 2022, Shopify (capture, validés par Youri) :
+- 21 844,88 € de ventes du 1er mars 2022 au 29 janvier 2023 : afficher « plus de 21 000 € de ventes » ;
+- taux de conversion 1,55 % : afficher « 1,5 % » ou la valeur exacte.
+
+Chiffres NON validés, à ne pas utiliser :
+- les preuves photo publiées par jour (Instagram) : pas de réponse de Youri.
+
+## Contenus validés : page /col-macarthur
+
+Les 3 idées retenues (ordre d'affichage). Texte validé, ajustements de forme possibles.
+
+**Idée 1. Une vidéo courte à chaque date anniversaire**
+Chaque montre porte une date de l'Histoire. Ces dates forment un calendrier éditorial tout prêt. Le jour de l'anniversaire, une vidéo verticale de 30 secondes raconte l'événement et montre le fragment authentique intégré à la montre. Elle est publiée sur Instagram, TikTok et YouTube Shorts. La même histoire part le jour même par e-mail. Les trois prochaines dates tombent avant Noël : le 9 novembre (Berlin 1989), le 11 novembre (Armistice 1918) et le 5 décembre (Hallyday 2017).
+Lien avec Youri : une vidéo TikTok publiée chaque jour pour MonArc.
+
+**Idée 2. Une newsletter qui parle à chaque collectionneur**
+Votre newsletter promet « Récits, nouveautés et accès privilégié à nos éditions limitées ». Une seule question à l'inscription permet de tenir cette promesse au plus près : quel univers vous passionne ? Chaque nouvel inscrit reçoit ensuite trois e-mails automatiques. Le premier raconte une pièce de son univers. Le deuxième montre les coulisses de fabrication. Le troisième lui ouvre l'accès anticipé à la prochaine édition numérotée. Chaque lancement touche ainsi d'abord les collectionneurs les plus concernés.
+Lien avec Youri : base e-mail de plus de 1 700 inscrits, automatisation des leads dans le projet CRM Odoo.
+
+**Idée 3. Un guide cadeau en trois questions**
+Pour qui ? Quelle passion ? Quel budget ? Trois questions mènent à la bonne montre et rappellent le paiement en trois fois sans frais. Ce guide sert à Noël, puis à la fête des pères.
+
+Faits vérifiés sur Col&McArthur (octobre 2026) :
+- fondée en 2013 par Sébastien Colen ; vente uniquement en ligne ; premier espace éphémère à Liège du 29/11 au 27/12/2025 ; clients aux Émirats, en Italie, au Groenland ; 8 personnes (DH, 14/12/2025) ;
+- 7 univers (Icônes, Performance, Battlefront, Milestones, Visionnaires, Interstellar, Signature), montres à partir de 499 €, note 4,8/5 sur 1 139 avis, newsletter, programme de fidélité, paiement en 3 fois avec Alma, site en 4 langues ; réseaux liés : Facebook, Instagram, LinkedIn (colandmacarthur.com) ;
+- collection Céline Dion lancée le 3/10/2026, 2 026 exemplaires (FashionUnited).
+
+## En attente de Youri
+
+- [ ] Photo en bonne qualité. En attendant : `sources/photo-cv.jpg` (640 × 768, extraite du CV).
+- [ ] Lien App Store de MonArc. En attendant : emplacement signalé.
+- [ ] Lien Google Play de MonArc, et confirmation que l'app y est publiée. En attendant : emplacement signalé.
+- [ ] Nom de la boutique 2022 (facultatif). En attendant : ne pas la nommer.
+- [ ] Chiffres Instagram (preuves photo par jour) : oui ou non.
+- [ ] Domaine yourikaramyan.com : déjà acheté ? chez qui ?
+- [ ] Compte GitHub : existe ou à créer ?

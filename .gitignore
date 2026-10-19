@@ -1,0 +1,27 @@
+# build output
+dist/
+# generated types
+.astro/
+
+# dependencies
+node_modules/
+
+# logs
+npm-debug.log*
+
+# environment variables
+.env
+.env.production
+
+# editors and systems
+.DS_Store
+.idea/
+Thumbs.db
+
+# Original files (CV, raw screenshots).
+# The app screenshots show other users' names and profile photos:
+# only the blurred versions in src/assets/ are versioned and published.
+sources/
+
+# Verification screenshots
+captures/

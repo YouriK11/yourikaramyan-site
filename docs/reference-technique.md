@@ -88,6 +88,26 @@ Condition de Youri : le nom ne pousse jamais le contenu en dessous. Le Cumulativ
 - **Sens de la loupe, à trancher visuellement** : les cases sont réservées à l'état maximal (800/100). Pour tenir la promesse faite à Youri (« les lettres proches du curseur gonflent, les éloignées s'affinent »), les lettres éloignées s'affinent sous l'état maximal et laissent un petit espace à droite de leur glyphe. Doser l'amincissement pour que l'espacement reste beau.
 - Implémentation de référence : `docs/recherche/gsap-effet-signature.md`, F13 à F15.
 
+### Ce qui est en place (étape 2, `src/components/Accueil.astro`)
+
+- **Largeurs des cases** mesurées sur notre fichier (identiques au fichier Google v9). Mesure correcte : début de la lettre suivante moins début de la lettre, dans le mot crénelé, avec une `Range` par caractère. La différence de largeur des préfixes attribue le crénage à la mauvaise lettre.
+- **Animation des axes** par `font-weight: var(--wght)` et `font-stretch: calc(var(--wdth) * 1%)` (pas de `font-variation-settings`). La police de secours reçoit ainsi une graisse sensée.
+- **Attente de la police** : `document.fonts.load()` uniquement sur la **première** famille de la liste calculée, avec `.catch()`. La liste contient des polices locales absentes (BlinkMacSystemFont sur Windows) qui font rejeter la promesse. Bug réel trouvé en test : sans ce correctif, l'intro ne démarrait jamais.
+- **Aucun espace dans les cases des lettres** : écrire chaque `<span class="lettre">` sur une seule ligne.
+- **Valeurs** : départ 200/75, repos 800/100, lettres éloignées de la loupe 560/88. Vague 0,9 s avec décalage `x × 0,6`. Trait abricot 1,5 s. Fondu de la photo et des boutons à 0,45 s.
+- **Paliers** : la vague d'entrée avance par pas de 20 (graisse) et 5 (largeur), la loupe par pas de 10 et 2,5. Chaque nouvelle paire crée une instance de police. Avec les pas fins pendant la vague, Lighthouse mesurait jusqu'à 300 ms de blocage (score 92). Avec les pas larges : 99 sur 4 mesures, blocage de 3 à 13 ms.
+- **Visibles dès le premier affichage** : la phrase de présentation et la ligne de preuve MonArc. Ce sont les plus grands textes sur téléphone ; les cacher retardait le LCP à 1,9 s. Seuls la photo et les boutons arrivent en fondu.
+- **Photo** : deux recadrages (`youri-visage.jpg` carré pour téléphone, `youri-portrait.jpg` 4:5 pour ordinateur), tous deux en `loading="lazy"` : celui qui est masqué n'est jamais téléchargé. Le bloc abricot décalé est dessiné dans le cadre (padding) pour ne pas dépasser la colonne.
+- **Délais** : l'attente de la police se compte depuis l'ouverture de la page (2,5 s au maximum). Si le script lui-même arrive après 3 s, l'entrée est sautée et l'état final s'affiche.
+- **Loupe souris** : une seule image demandée (`requestAnimationFrame`) quand la souris bouge, défile ou que la taille change. Pas d'écouteur permanent sur `gsap.ticker`, sinon GSAP ne s'endort jamais.
+- **Écrans bas** (min-width 64em et max-height 52em) : le nom rétrécit pour garder les boutons et la ligne de preuve au-dessus de la ligne de flottaison.
+- **Mesures** (build de production, 19/10/2026) :
+  - CLS 0 pour le nom, police d'affichage retardée de 1,2 s comprise, et pendant la souris et le défilement ;
+  - compromis accepté : si la police du texte (Instrument Sans) arrive tard, la phrase de présentation peut changer de coupure de ligne à certaines largeurs. CLS mesuré : environ 0 à 360, 390, 393, 412 et 430 px ; 0,016 à 375 px ; jusqu'à 0,09 à 405 ou 465 px. Tout reste sous le seuil de 0,1. La seule parade (`display: 'optional'`) ferait perdre la police du texte à la plupart des premiers visiteurs sur mobile ;
+  - Lighthouse mobile : performance 94 à 99, accessibilité 100, bonnes pratiques 100 ;
+  - aucun débordement de 360 à 1920 px.
+- **Tests** : `page.clock.install()` de Playwright permet de photographier la vague à des instants précis. Contexte `isMobile: true, hasTouch: true` pour la loupe au défilement.
+
 ## Compteurs (étape 3)
 
 Modèle `Counter.astro` dans `docs/recherche/gsap-effet-signature.md`, F27 :

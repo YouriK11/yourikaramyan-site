@@ -1,33 +1,14 @@
 ---
 import Base from '../layouts/Base.astro';
 import Entete from '../components/Entete.astro';
+import Accueil from '../components/Accueil.astro';
 import PiedDePage from '../components/PiedDePage.astro';
-import IconeTelechargement from '../components/IconeTelechargement.astro';
-import { PROFIL } from '../data/profil';
 ---
 
 <Base>
   <Entete />
   <main id="contenu">
-    <!-- Step 1: static hero. Step 2 adds the signature effect and the photo. -->
-    <section class="accueil" aria-labelledby="titre-accueil">
-      <div class="conteneur">
-        <h1 id="titre-accueil" class="accueil__nom">
-          <span>Youri</span>{' '}<span>Karamyan</span>
-        </h1>
-        <div class="accueil__texte">
-          <p class="accueil__role">Étudiant en 3e bachelier E-Business à la HEPL, à Liège.</p>
-          <p class="texte-secondaire">{PROFIL.identite.recherche}</p>
-        </div>
-        <div class="accueil__actions">
-          <a class="bouton" href={PROFIL.cv.fichier} download={PROFIL.cv.nomTelechargement}>
-            <IconeTelechargement />
-            Télécharger mon CV
-          </a>
-          <a class="bouton bouton--contour" href="#contact">Me contacter</a>
-        </div>
-      </div>
-    </section>
+    <Accueil />
 
     <section id="monarc" class="section sur-nuit" aria-labelledby="titre-monarc">
       <div class="conteneur">
@@ -61,60 +42,6 @@ import { PROFIL } from '../data/profil';
 </Base>
 
 <style>
-  .accueil {
-    container-type: inline-size;
-    padding-block: clamp(2.5rem, 1rem + 6vw, 6rem) clamp(3rem, 2rem + 5vw, 6rem);
-  }
-
-  .accueil__nom {
-    font-family: var(--police-titre);
-    font-size: min(calc(100cqi / 5), 12rem);
-    font-weight: 800;
-    line-height: 0.95;
-    letter-spacing: -0.01em;
-  }
-
-  .accueil__nom span {
-    display: block;
-    white-space: nowrap;
-  }
-
-  .accueil__nom::after {
-    content: '';
-    display: block;
-    width: 100%;
-    max-width: 4.6em;
-    height: clamp(6px, 0.08em, 14px);
-    margin-top: 0.12em;
-    border-radius: 999px;
-    background: var(--abricot);
-  }
-
-  .accueil__texte {
-    display: grid;
-    gap: 0.25rem;
-    margin-top: clamp(1.5rem, 1rem + 2vw, 2.5rem);
-    font-size: var(--texte-l);
-  }
-
-  .accueil__role {
-    font-weight: 600;
-  }
-
-  .accueil__actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.75rem;
-    margin-top: 2rem;
-  }
-
-  /* On phones the two buttons stack: give them the same full width. */
-  @media (max-width: 35.99em) {
-    .accueil__actions .bouton {
-      flex: 1 1 100%;
-    }
-  }
-
   .a-venir {
     margin-top: 2rem;
   }

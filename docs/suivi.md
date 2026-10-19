@@ -9,7 +9,7 @@ Ce fichier garde les décisions de Youri, les contenus validés, les éléments 
 |---|---|---|
 | 0 | Installation (Astro 7, GSAP, sitemap), dossier hors OneDrive, git | Terminée le 19/10/2026 |
 | 1 | Fondations : couleurs, polices, menu, pied de page, favicon YK | Terminée le 19/10/2026 |
-| 2 | Accueil et effet signature | À faire |
+| 2 | Accueil et effet signature | Terminée le 19/10/2026 |
 | 3 | Étude de cas MonArc | À faire |
 | 4 | Parcours, compétences, contact | À faire |
 | 5 | Page /col-macarthur et système de duplication | À faire |
@@ -78,5 +78,10 @@ Faits vérifiés sur Col&McArthur (octobre 2026) :
 
 ## En attente de Youri
 
-- [ ] Rôle exact de Youri sur MonArc. La fiche App Store affiche le développeur « Anaelle Grambras ». Projet à deux ? Qui a fait quoi ? (à régler avant l'étape 3)
-- [ ] **Bloquant pour l'étape 7** : la ligne MonArc du CV mentionne Google Play, et les boutons « Télécharger mon CV » distribuent ce PDF. Ne pas passer `SITE.enConstruction` à false tant que Youri n'a pas fourni un CV corrigé. Remplacer alors `sources/CV_Youri_Karamyan.pdf` et `public/Youri-Karamyan-CV.pdf` ensemble.
+- [ ] **Google Play** : MonArc est en test fermé, validation attendue le 19-20/10/2026 (Youri). Dès que l'app est publique, demander le lien Google Play, ajouter le bouton (`PROFIL.monarc.googlePlay`) et remettre « Google Play » dans la ligne MonArc de `profil.ts`. Le CV deviendra exact tel quel.
+- [ ] **Bloquant pour l'étape 7** : tant que l'app n'est pas publique sur Google Play, le CV téléchargeable est inexact. Ne pas passer `SITE.enConstruction` à false avant que l'un des deux soit vrai : app publique sur Google Play, ou CV corrigé fourni par Youri (remplacer alors `sources/CV_Youri_Karamyan.pdf` et `public/Youri-Karamyan-CV.pdf` ensemble).
+- [ ] Domaine yourikaramyan.com : Youri l'achète lui-même avant l'étape 7.
+
+## Précisions de Youri (19/10/2026)
+
+- MonArc : Youri a conçu, développé et lancé l'application **seul**. Le développeur affiché sur l'App Store (« Anaelle Grambras ») vient uniquement du compte développeur Apple utilisé pour la publication. À expliquer sobrement dans l'étude de cas (étape 3), pour qu'un recruteur qui clique sur le lien ne soit pas surpris.

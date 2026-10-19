@@ -1,0 +1,569 @@
+---
+// Home hero: the one animated moment of the site.
+// The name is split into letters at build time. Each letter sits in a box exactly as wide as its kerned
+// advance in the final state (weight 800, width 100), and its glyph is aligned to the start of the box.
+// Animating the variable axes therefore changes glyph shapes only: no letter and no content below ever moves.
+import { Picture } from 'astro:assets';
+import portrait from '../assets/photos/youri-portrait.jpg';
+import visage from '../assets/photos/youri-visage.jpg';
+import IconeTelechargement from './IconeTelechargement.astro';
+import { PROFIL } from '../data/profil';
+
+// Box width of each letter, in em. Measured in Chromium on src/assets/fonts/bricolage-grotesque-latin-opsz96.woff2
+// as "start of the next letter minus start of this one" in the kerned word. Measure again if the font file changes.
+const LIGNES = [
+  { texte: 'Youri', largeurs: [0.506, 0.567, 0.557, 0.4, 0.234] },
+  { texte: 'Karamyan', largeurs: [0.611, 0.543, 0.383, 0.543, 0.86, 0.539, 0.543, 0.562] },
+];
+
+const somme = (valeurs: number[]) => valeurs.reduce((a, b) => a + b, 0);
+const largeurNom = +Math.max(...LIGNES.map((ligne) => somme(ligne.largeurs))).toFixed(3);
+
+// x: horizontal center of each letter, from 0 (left edge) to 1 (end of the longest line). Drives the wave and the lens.
+const lignes = LIGNES.map(({ texte, largeurs }) => {
+  let depart = 0;
+  return [...texte].map((lettre, i) => {
+    const centre = depart + largeurs[i] / 2;
+    depart += largeurs[i];
+    return { lettre, largeur: largeurs[i], x: +(centre / largeurNom).toFixed(4) };
+  });
+});
+---
+
+<section class="accueil" data-accueil aria-labelledby="titre-accueil">
+  <div class="conteneur accueil__grille">
+    <div class="accueil__identite">
+      <script is:inline>
+        // Runs before the name is painted: the name starts thin, unless the visitor asked for less motion.
+        // Safety net: without the animation script, everything returns to its final state after 4 s.
+        if (matchMedia('(prefers-reduced-motion: no-preference)').matches) {
+          document.documentElement.classList.add('accueil-intro');
+          setTimeout(function () {
+            document.documentElement.classList.remove('accueil-intro');
+          }, 4000);
+        }
+      </script>
+      <h1 id="titre-accueil" class="nom" data-nom style={`--largeur-nom: ${largeurNom}`}>
+        <span class="sr-only">Youri Karamyan</span>
+        <span class="nom__visuel" aria-hidden="true">
+          {
+            lignes.map((ligne) => (
+              <span class="nom__ligne">
+                {/* One line per letter span: no whitespace may end up inside the boxes. */}
+                {ligne.map((l) => <span class="lettre" style={`--l: ${l.largeur}em`} data-x={l.x}>{l.lettre}</span>)}
+              </span>
+            ))
+          }
+          <span class="nom__trait" data-trait></span>
+        </span>
+      </h1>
+    </div>
+
+    <div class="accueil__portrait" data-apparition>
+      <Picture
+        class="portrait portrait--vignette"
+        src={visage}
+        formats={['avif', 'webp']}
+        widths={[96, 160, 240]}
+        sizes="5rem"
+        alt="Portrait de Youri Karamyan"
+        loading="lazy"
+      />
+      <Picture
+        class="portrait portrait--grand"
+        src={portrait}
+        formats={['avif', 'webp']}
+        widths={[320, 480, 640, 800]}
+        sizes="20rem"
+        alt="Portrait de Youri Karamyan"
+        loading="lazy"
+      />
+    </div>
+
+    <div class="accueil__texte">
+      <p class="accueil__role">
+        Étudiant en 3e bachelier <span class="insecable">E-Business</span> à la HEPL&nbsp;(Liège).
+      </p>
+      <p class="texte-secondaire">
+        Je cherche un stage en marketing digital et <span class="insecable">e-commerce</span>.
+      </p>
+    </div>
+
+    <div class="accueil__actions" data-apparition>
+      <a class="bouton" href={PROFIL.cv.fichier} download={PROFIL.cv.nomTelechargement}>
+        <IconeTelechargement />
+        Télécharger mon CV
+      </a>
+      <a class="bouton bouton--contour" href="#contact">Me contacter</a>
+    </div>
+
+    <!-- Visible from the first paint: it is the largest text on phones, so fading it would delay LCP. -->
+    <p class="accueil__preuve">
+      MonArc, l'application que j'ai créée, a dépassé 500&nbsp;inscrits le jour de son lancement.
+      <a class="lien" href="#monarc">Lire l'étude de cas</a>
+    </p>
+  </div>
+</section>
+
+<script>
+  import { gsap } from 'gsap';
+
+  type Axes = { w: number; d: number };
+
+  const REPOS: Axes = { w: 800, d: 100 }; // final state, also the CSS default
+  const FIN: Axes = { w: 200, d: 75 }; // thinnest state: start of the intro
+  const DETENTE: Axes = { w: 560, d: 88 }; // letters far from the lens
+
+  const arrondiW = gsap.utils.snap(10);
+  const arrondiD = gsap.utils.snap(2.5);
+  const lisse = (t: number) => t * t * (3 - 2 * t);
+  const proximite = (distance: number, rayon: number) => lisse(Math.max(0, 1 - distance / rayon));
+
+  // k: 1 right at the lens, 0 far from it. actif: 0 = whole name at rest, 1 = lens on.
+  const cible = (k: number, actif: number): Axes => {
+    const t = actif * (1 - k);
+    return {
+      w: arrondiW(REPOS.w - (REPOS.w - DETENTE.w) * t),
+      d: arrondiD(REPOS.d - (REPOS.d - DETENTE.d) * t),
+    };
+  };
+
+  const accueil = document.querySelector<HTMLElement>('[data-accueil]');
+  const nom = accueil?.querySelector<HTMLElement>('[data-nom]');
+  if (accueil && nom) demarrer(accueil, nom);
+
+  function demarrer(accueil: HTMLElement, nom: HTMLElement) {
+    const html = document.documentElement;
+    const lettres = Array.from(nom.querySelectorAll<HTMLElement>('.lettre'));
+    const trait = nom.querySelector<HTMLElement>('[data-trait]');
+    const apparitions = Array.from(accueil.querySelectorAll<HTMLElement>('[data-apparition]'));
+    if (!lettres.length) return;
+
+    // The fallback font has no width axis: wait for the real font before animating, until 2.5 s after
+    // navigation at most (counted from navigation, so a late script and a late font do not add up).
+    // Load the first family only: the list also names local() fallbacks (e.g. BlinkMacSystemFont),
+    // and a missing one makes document.fonts.load() reject. Never let that block the entrance.
+    const famille = getComputedStyle(lettres[0]).fontFamily.split(',')[0].trim();
+    const policePrete = Promise.race([
+      document.fonts.load(`800 1em ${famille}`).catch(() => undefined),
+      new Promise((resolve) => setTimeout(resolve, Math.max(0, 2500 - performance.now()))),
+    ]);
+
+    const mm = gsap.matchMedia();
+    let introTerminee: Promise<unknown> = Promise.resolve();
+
+    // 1. Entrance: a wave thickens the letters from left to right, the apricot stroke grows under the name,
+    //    then the photo, the buttons and the proof line appear.
+    mm.add('(prefers-reduced-motion: no-preference)', () => {
+      // Safety net already fired, or the script itself arrived late: show the final state at once.
+      if (!html.classList.contains('accueil-intro') || performance.now() > 3000) {
+        html.classList.remove('accueil-intro');
+        return;
+      }
+      const tl = gsap.timeline({ paused: true });
+      tl.fromTo(
+        lettres,
+        { '--wght': FIN.w, '--wdth': FIN.d },
+        {
+          '--wght': REPOS.w,
+          '--wdth': REPOS.d,
+          duration: 0.9,
+          ease: 'power2.inOut',
+          // Coarser steps than the lens: each new weight/width pair makes the browser build a new font
+          // instance, and during the wave every letter changes at once (keeps Total Blocking Time low).
+          snap: { '--wght': 20, '--wdth': 5 },
+          stagger: (_i: number, el: HTMLElement) => Number(el.dataset.x) * 0.6,
+        },
+        0,
+      );
+      if (trait) {
+        tl.fromTo(trait, { scaleX: 0 }, { scaleX: 1, duration: 1.5, ease: 'power2.inOut' }, 0);
+        // Hidden until it starts growing: a scaled-to-zero rounded bar still shows a 1px tick.
+        tl.fromTo(trait, { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.1 }, 0);
+      }
+      if (apparitions.length) {
+        tl.fromTo(
+          apparitions,
+          { autoAlpha: 0, y: 12 },
+          { autoAlpha: 1, y: 0, duration: 0.5, ease: 'power2.out', stagger: 0.08 },
+          0.45,
+        );
+      }
+      html.classList.remove('accueil-intro'); // the start values are now inline
+
+      let terminer: (valeur?: unknown) => void = () => {};
+      introTerminee = new Promise((resolve) => (terminer = resolve));
+      tl.eventCallback('onComplete', terminer);
+      policePrete.then(() => tl.play());
+      // If the intro is reverted early (reduced motion turned on), never leave the lens waiting.
+      return () => terminer();
+    });
+
+    // 2. After the entrance: the letters react to the mouse, or to scrolling on touch screens.
+    mm.add(
+      { mouvement: '(prefers-reduced-motion: no-preference)', souris: '(hover: hover) and (pointer: fine)' },
+      (ctx) => {
+        const { mouvement, souris } = ctx.conditions ?? {};
+        if (!mouvement) return;
+        let vivant = true;
+        let arreter = () => {};
+        const lancer = ctx.add('lancer', () => {
+          arreter = souris ? lentilleSouris(accueil, nom, lettres) : lentilleDefilement(nom, lettres);
+        });
+        introTerminee.then(() => vivant && lancer());
+        return () => {
+          vivant = false;
+          arreter();
+        };
+      },
+    );
+  }
+
+  // Desktop: while the pointer is over the hero, letters near it stay full and the others thin out.
+  function lentilleSouris(accueil: HTMLElement, nom: HTMLElement, lettres: HTMLElement[]) {
+    const vers = lettres.map((el) => ({
+      w: gsap.quickTo(el, '--wght', { duration: 0.5, ease: 'power3', snap: { '--wght': 10 } }),
+      d: gsap.quickTo(el, '--wdth', { duration: 0.5, ease: 'power3', snap: { '--wdth': 2.5 } }),
+      cle: '',
+    }));
+    let centres: { x: number; y: number }[] = [];
+    let rayon = 200;
+    let px = -1e5;
+    let py = -1e5;
+    // One frame is scheduled only when something changed, so GSAP's ticker can sleep when the page is idle.
+    let image = 0;
+    const planifier = () => {
+      if (!image) image = requestAnimationFrame(tic);
+    };
+
+    const mesurer = () => {
+      rayon = parseFloat(getComputedStyle(nom).fontSize) * 1.5;
+      // offsetLeft/offsetTop are relative to the h1, which is position: relative.
+      centres = lettres.map((el) => ({ x: el.offsetLeft + el.offsetWidth / 2, y: el.offsetTop + el.offsetHeight / 2 }));
+      planifier();
+    };
+    const surMouvement = (e: PointerEvent) => {
+      if (e.pointerType === 'touch') return;
+      px = e.clientX;
+      py = e.clientY;
+      planifier();
+    };
+    const surSortie = (e: MouseEvent) => {
+      if (!e.relatedTarget) {
+        px = py = -1e5;
+        planifier();
+      }
+    };
+    const surDefilement = () => planifier(); // the name moves under a still pointer
+
+    function tic() {
+      image = 0;
+      const zone = accueil.getBoundingClientRect();
+      const dedans = px >= zone.left && px <= zone.right && py >= zone.top && py <= zone.bottom;
+      const r = nom.getBoundingClientRect();
+      centres.forEach((c, i) => {
+        const k = dedans ? proximite(Math.hypot(r.left + c.x - px, r.top + c.y - py), rayon) : 1;
+        const { w, d } = cible(Math.round(k * 50) / 50, dedans ? 1 : 0);
+        const v = vers[i];
+        const cle = `${w}/${d}`;
+        if (cle === v.cle) return;
+        v.cle = cle;
+        v.w(w);
+        v.d(d);
+      });
+    }
+
+    const ro = new ResizeObserver(mesurer);
+    ro.observe(nom);
+    mesurer();
+    addEventListener('pointermove', surMouvement, { passive: true });
+    addEventListener('scroll', surDefilement, { passive: true });
+    document.addEventListener('mouseout', surSortie);
+
+    return () => {
+      removeEventListener('pointermove', surMouvement);
+      removeEventListener('scroll', surDefilement);
+      document.removeEventListener('mouseout', surSortie);
+      cancelAnimationFrame(image);
+      ro.disconnect();
+      vers.forEach((v) => {
+        v.w.tween.kill();
+        v.d.tween.kill();
+      });
+      lettres.forEach((el) => {
+        el.style.removeProperty('--wght');
+        el.style.removeProperty('--wdth');
+      });
+    };
+  }
+
+  // Touch screens: as the page scrolls, the name relaxes and a full-weight lens travels from the first
+  // to the last letter. Scrolling back up runs it backwards, and the name is full again at the top.
+  function lentilleDefilement(nom: HTMLElement, lettres: HTMLElement[]) {
+    const xs = lettres.map((el) => Number(el.dataset.x));
+    const ecrireW = lettres.map((el) => gsap.quickSetter(el, '--wght'));
+    const ecrireD = lettres.map((el) => gsap.quickSetter(el, '--wdth'));
+    const derniers = lettres.map(() => '');
+    const etat = { p: 0 };
+
+    const dessiner = () => {
+      const p = etat.p;
+      const actif = lisse(gsap.utils.clamp(0, 1, p / 0.12));
+      const centre = gsap.utils.mapRange(0.05, 0.9, -0.15, 1.15, p);
+      xs.forEach((x, i) => {
+        const { w, d } = cible(proximite(Math.abs(x - centre), 0.24), actif);
+        const cle = `${w}/${d}`;
+        if (cle === derniers[i]) return;
+        derniers[i] = cle;
+        ecrireW[i](w);
+        ecrireD[i](d);
+      });
+    };
+    const vers = gsap.quickTo(etat, 'p', { duration: 0.35, ease: 'power2.out', onUpdate: dessiner });
+
+    // Progress 0 -> 1 while the name scrolls up and disappears under the sticky header.
+    let course = 1;
+    let derniereP = -1;
+    const surDefilement = () => {
+      const p = gsap.utils.clamp(0, 1, scrollY / course);
+      if (p === derniereP) return;
+      derniereP = p;
+      vers(p);
+    };
+    const mesurer = () => {
+      const entete = document.querySelector<HTMLElement>('.entete')?.offsetHeight ?? 64;
+      course = Math.max(1, nom.getBoundingClientRect().bottom + scrollY - entete);
+      derniereP = -1;
+      surDefilement();
+    };
+
+    const ro = new ResizeObserver(mesurer);
+    ro.observe(nom);
+    mesurer();
+    addEventListener('scroll', surDefilement, { passive: true });
+
+    return () => {
+      removeEventListener('scroll', surDefilement);
+      ro.disconnect();
+      vers.tween.kill();
+      // quickSetter writes are not recorded by gsap.matchMedia: clear them by hand.
+      lettres.forEach((el) => {
+        el.style.removeProperty('--wght');
+        el.style.removeProperty('--wdth');
+      });
+    };
+  }
+</script>
+
+<style>
+  .accueil {
+    padding-block: clamp(1.75rem, 0.75rem + 4vw, 4.5rem) clamp(3rem, 2rem + 4vw, 6rem);
+  }
+
+  /* Phones: name on top, then thumbnail beside the text, then buttons and proof line. */
+  .accueil__grille {
+    display: grid;
+    grid-template-columns: 5rem minmax(0, 1fr);
+    grid-template-areas:
+      'identite identite'
+      'portrait texte'
+      'actions actions'
+      'preuve preuve';
+    column-gap: 1.125rem;
+    align-items: center;
+  }
+
+  .accueil__identite {
+    grid-area: identite;
+    container-type: inline-size;
+  }
+
+  /* Name */
+  .nom {
+    position: relative; /* reference box for the letters' offsetLeft/offsetTop */
+    font-family: var(--police-titre);
+    /* "Karamyan" exactly fills the column. */
+    font-size: min(calc(100cqi / (var(--largeur-nom) + 0.02)), 11rem);
+    font-weight: 800;
+    line-height: 0.92;
+  }
+
+  .nom__visuel {
+    display: block;
+  }
+
+  .nom__ligne {
+    display: block;
+    white-space: nowrap;
+  }
+
+  .lettre {
+    display: inline-block;
+    width: var(--l);
+    text-align: start;
+    /* Animated through two registered custom properties (see global.css). font-weight and font-stretch
+       drive the wght and wdth axes, and give the fallback font a sensible weight too. */
+    font-weight: var(--wght, 800);
+    font-stretch: calc(var(--wdth, 100) * 1%);
+  }
+
+  :global(html.accueil-intro) .lettre {
+    --wght: 200;
+    --wdth: 75;
+  }
+
+  .nom__trait {
+    display: block;
+    width: calc(var(--largeur-nom) * 1em);
+    height: max(6px, 0.075em);
+    margin-top: 0.17em;
+    border-radius: 999px;
+    background: var(--abricot);
+    transform-origin: left center;
+  }
+
+  :global(html.accueil-intro) .nom__trait {
+    transform: scaleX(0);
+    visibility: hidden;
+  }
+
+  :global(html.accueil-intro) [data-apparition] {
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  /* Portrait: rounded photo over an offset apricot block, as on the CV.
+     The offset lives inside the box (padding), so nothing overflows the column. */
+  .accueil__portrait {
+    --decalage: 7px;
+    grid-area: portrait;
+    position: relative;
+    align-self: start;
+    width: 5rem;
+    aspect-ratio: 1;
+    margin-top: 1.75rem;
+    padding: 0 var(--decalage) var(--decalage) 0;
+  }
+
+  .accueil__portrait::before {
+    content: '';
+    position: absolute;
+    inset: var(--decalage) 0 0 var(--decalage);
+    border-radius: 12px;
+    background: var(--abricot);
+  }
+
+  .portrait {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 12px;
+    background: var(--brume);
+  }
+
+  .portrait--grand {
+    display: none;
+  }
+
+  /* Text */
+  .accueil__texte {
+    grid-area: texte;
+    display: grid;
+    gap: 0.25rem;
+    margin-top: 1.75rem;
+    font-size: var(--texte-l);
+    line-height: 1.45;
+  }
+
+  .accueil__role {
+    font-weight: 600;
+  }
+
+  .accueil__actions {
+    grid-area: actions;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 2rem;
+  }
+
+  .accueil__preuve {
+    grid-area: preuve;
+    max-width: 38rem;
+    margin-top: 1.75rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--trait);
+    color: var(--ardoise);
+  }
+
+  .accueil__preuve .lien {
+    color: var(--nuit);
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  /* On phones the two buttons stack: give them the same full width. */
+  @media (max-width: 35.99em) {
+    .accueil__actions .bouton {
+      flex: 1 1 100%;
+    }
+  }
+
+  /* Desktop: name and text on the left, large portrait on the right. */
+  @media (min-width: 64em) {
+    .accueil__grille {
+      grid-template-columns: minmax(0, 1fr) 20rem;
+      grid-template-rows: auto auto auto 1fr;
+      grid-template-areas:
+        'identite portrait'
+        'texte portrait'
+        'actions portrait'
+        'preuve portrait';
+      column-gap: clamp(3rem, 5vw, 5rem);
+      align-items: start;
+    }
+
+    /* Same proportions as the CV photo: offset about 10 % and corner radius about 15 % of the width. */
+    .accueil__portrait {
+      --decalage: 1.75rem;
+      width: 20rem;
+      aspect-ratio: auto;
+      margin-top: 0.5rem;
+    }
+
+    .accueil__portrait::before {
+      border-radius: 2.75rem;
+    }
+
+    .portrait {
+      border-radius: 2.75rem;
+    }
+
+    .portrait--vignette {
+      display: none;
+    }
+
+    .portrait--grand {
+      display: block;
+      aspect-ratio: 4 / 5;
+      height: auto;
+    }
+
+    .accueil__texte {
+      margin-top: 2rem;
+    }
+  }
+
+  /* Short laptop screens (1366x768, 1920x1080 at 125-150 %): shrink the name so the buttons and the
+     MonArc proof line stay above the fold. Fixed from the first paint, so nothing shifts. */
+  @media (min-width: 64em) and (max-height: 52em) {
+    .accueil {
+      padding-top: 2rem;
+    }
+
+    .nom {
+      font-size: min(calc(100cqi / (var(--largeur-nom) + 0.02)), 11rem, max(5.5rem, calc((100vh - 25rem) / 2.1)));
+    }
+  }
+</style>

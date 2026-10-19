@@ -34,6 +34,20 @@
   --rayon-s: 10px;
 }
 
+/* Variable font axes animated by the home hero. Registered so GSAP can tween them as numbers;
+   the initial values are the final state, so any revert lands on the full-weight name. */
+@property --wght {
+  syntax: '<number>';
+  inherits: false;
+  initial-value: 800;
+}
+
+@property --wdth {
+  syntax: '<number>';
+  inherits: false;
+  initial-value: 100;
+}
+
 /* Reset */
 *,
 *::before,
@@ -173,6 +187,11 @@ button {
 
 .texte-secondaire {
   color: var(--ardoise);
+}
+
+/* Hyphenated words that must not break at the hyphen ("E-Business", "e-commerce") */
+.insecable {
+  white-space: nowrap;
 }
 
 .sur-nuit {

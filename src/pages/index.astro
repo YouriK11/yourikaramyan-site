@@ -2,6 +2,7 @@
 import Base from '../layouts/Base.astro';
 import Entete from '../components/Entete.astro';
 import Accueil from '../components/Accueil.astro';
+import EtudeDeCas from '../components/EtudeDeCas.astro';
 import PiedDePage from '../components/PiedDePage.astro';
 ---
 
@@ -9,13 +10,7 @@ import PiedDePage from '../components/PiedDePage.astro';
   <Entete />
   <main id="contenu">
     <Accueil />
-
-    <section id="monarc" class="section sur-nuit" aria-labelledby="titre-monarc">
-      <div class="conteneur">
-        <h2 id="titre-monarc" class="titre-section">Étude de cas&nbsp;: MonArc</h2>
-        <p class="a-venir texte-secondaire">Cette section arrive à l'étape 3.</p>
-      </div>
-    </section>
+    <EtudeDeCas />
 
     <section id="parcours" class="section" aria-labelledby="titre-parcours">
       <div class="conteneur">

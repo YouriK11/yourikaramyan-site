@@ -11,6 +11,10 @@ export default defineConfig({
   // Pages are built as /page/index.html and served as /page/.
   trailingSlash: 'always',
   integrations: [sitemap()],
+  // The whole stylesheet is a few KB: inline it so no CSS request blocks the first paint.
+  build: {
+    inlineStylesheets: 'always',
+  },
   image: {
     responsiveStyles: true,
   },

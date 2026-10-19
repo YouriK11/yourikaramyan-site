@@ -3,6 +3,18 @@
 Ce fichier garde les décisions de Youri, les contenus validés, les éléments en attente et l'avancement.
 À relire au début de chaque session, et à mettre à jour à la fin de chaque étape.
 
+## Session de nuit du 19 au 20/10/2026 (Youri absent, aucune question possible)
+
+Consignes de Youri pour cette nuit :
+- Travailler seul jusqu'à 3 h (vérifier l'heure avec `Get-Date`). Objectif : terminer les étapes 3, 4, 5 et 6.
+- Ne poser aucune question. Pour chaque décision : choisir l'option la plus sûre et la plus fidèle à CLAUDE.md, puis la noter dans `docs/rapport-nuit.md`.
+- Information incertaine : la laisser de côté, ne rien inventer. Pas de Google Play sans lien.
+- Après chaque étape : captures 390 et 1440 px, corrections, relecture indépendante, commit git avec un message clair, mise à jour de ce fichier.
+- Lighthouse mobile toujours au-dessus de 90. Abandonner toute idée qui le fait baisser.
+- Interdit : mise en ligne, envoi vers GitHub, achat, création de compte. Ne rien modifier ni supprimer dans `sources/`. Ne pas toucher au fond des photos (déjà détourées).
+- Un seul effet signature (l'accueil). Le reste : précis, calme, haut de gamme.
+- À 3 h ou à la fin de l'étape 6 : écrire `docs/rapport-nuit.md` (étapes terminées avec numéros de commit, décisions prises seul, liens vers les captures finales, reste à faire, questions pour Youri).
+
 ## Avancement
 
 | Étape | Contenu | État |
@@ -84,4 +96,8 @@ Faits vérifiés sur Col&McArthur (octobre 2026) :
 
 ## Précisions de Youri (19/10/2026)
 
-- MonArc : Youri a conçu, développé et lancé l'application **seul**. Le développeur affiché sur l'App Store (« Anaelle Grambras ») vient uniquement du compte développeur Apple utilisé pour la publication. À expliquer sobrement dans l'étude de cas (étape 3), pour qu'un recruteur qui clique sur le lien ne soit pas surpris.
+- **Rôle sur MonArc, phrase imposée** : « J'ai conçu le produit et piloté son développement. » La reprendre mot pour mot, sans citer d'outil d'IA. (Le développeur affiché sur l'App Store, « Anaelle Grambras », vient du compte développeur Apple utilisé pour la publication. Ne pas citer ce nom sur le site.)
+- **Liste d'attente** : les 1 700 inscrits forment une liste d'attente constituée avant le lancement.
+- **Winter Arc** (consigne du 19/10/2026 au soir, qui remplace la précédente) : écrire seulement « Winter Arc 2026, lancé le 1er octobre ». Aucune date de fin, aucune saison suivante.
+- **TikTok** : une vidéo par jour, construite à partir des preuves photo des utilisateurs. Ne mettre en avant aucune vidéo en particulier.
+- Youri accepte les deux choix de l'étape 2 : phrase et ligne de preuve visibles dès le départ, léger recalage possible du texte si la police du texte arrive tard.

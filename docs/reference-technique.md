@@ -108,13 +108,24 @@ Condition de Youri : le nom ne pousse jamais le contenu en dessous. Le Cumulativ
   - aucun débordement de 360 à 1920 px.
 - **Tests** : `page.clock.install()` de Playwright permet de photographier la vague à des instants précis. Contexte `isMobile: true, hasTouch: true` pour la loupe au défilement.
 
-## Compteurs (étape 3)
+## Étude de cas et compteurs (étape 3)
 
-Modèle `Counter.astro` dans `docs/recherche/gsap-effet-signature.md`, F27 :
-- un double invisible réserve la largeur finale ;
-- remise à 0 au démarrage si les animations sont permises (sinon on voit « 1 700 », puis 0, puis le comptage) ;
-- `IntersectionObserver` ;
-- espaces U+00A0.
+- **Compteurs** (`src/components/Compteur.astro`) :
+  - un double invisible réserve la largeur finale ;
+  - remise à 0 au démarrage si les animations sont permises ;
+  - `IntersectionObserver`, puis une boucle `requestAnimationFrame` de 1,6 s ;
+  - pas de GSAP, pour que GSAP reste dans le seul paquet de l'accueil.
+- **Ne jamais utiliser `Intl.NumberFormat` au chargement** : sa première création charge les données de langue. Mesuré : environ 110 ms de blocage (442 ms avec le processeur ralenti 4 fois), soit une tâche longue de plus pour Lighthouse. Utiliser `formaterNombre()` de `src/data/nombres.ts`.
+- **Typographie** : `typo()` de `src/data/typographie.ts` (avec `set:html`, chaînes écrites dans `src/` uniquement) rend les mots à trait d'union insécables et met « 1er » en exposant. Les polices n'ont pas de U+2011 (trait d'union insécable).
+- **CSS intégré** : `build.inlineStylesheets: 'always'`. Le CSS fait quelques Ko, et un second fichier CSS bloquant retardait le premier affichage.
+- **`content-visibility: auto`** :
+  - sur les sections sous l'accueil (`.section--differee`) ;
+  - sur les trois blocs de l'étude de cas (captures, récit, résultats), car le haut de l'étude de cas dépasse dans le premier écran du téléphone et la section entière était calculée au chargement (LCP retardé à 2,1 s) ;
+  - `contain-intrinsic-size: auto <estimation>` garde la vraie hauteur une fois rendu.
+- **Carrousel des captures** : les images `lazy` cachées à droite ne se chargent qu'au glissement. Un petit script les passe en `eager` quand la rangée approche de l'écran.
+- **Captures floutées** : flou fort (pixellisation puis flou gaussien) sur les photos de profil et les prénoms des autres participants, avec Pillow, à partir de `sources/monarc/`. Résultat dans `src/assets/monarc/`. Les grades, les points et l'habitude restent lisibles.
+- **Badge App Store** : non utilisé. La licence d'Apple est réservée au titulaire du compte développeur. Boutons texte à la place.
+- **Mesurer Lighthouse en A/B alterné** (ancienne version, nouvelle version, et ainsi de suite) : la charge de la machine fait varier un même build de 86 à 99. Résultat de l'étape 3 : médiane 99, blocage médian 43 ms, LCP 1,95 s.
 
 ## Images de partage (étape 6)
 

@@ -124,6 +124,15 @@ a {
   color: inherit;
 }
 
+/* "1er": small superscript that does not open up the line spacing */
+sup {
+  position: relative;
+  top: -0.45em;
+  font-size: 0.68em;
+  line-height: 0;
+  vertical-align: baseline;
+}
+
 button {
   font: inherit;
   color: inherit;
@@ -208,6 +217,10 @@ button {
   padding-block: var(--section);
 }
 
+/* content-visibility: auto was tried on the sections below the hero and removed: Chrome leaves skipped
+   sections out of the accessibility tree until they are scrolled into view (Parcours, Contact... could not
+   be reached by heading navigation). Measured on 19/10/2026. */
+
 .section--brume {
   background: var(--brume);
 }
@@ -291,6 +304,17 @@ button {
 .bouton--contour:hover {
   background: var(--brume);
   border-color: var(--nuit);
+}
+
+/* Outline button on midnight blue sections */
+.sur-nuit .bouton--contour {
+  border-color: rgb(255 255 255 / 0.6);
+  color: var(--blanc);
+}
+
+.sur-nuit .bouton--contour:hover {
+  border-color: var(--blanc);
+  background: rgb(255 255 255 / 0.08);
 }
 
 .bouton--abricot {

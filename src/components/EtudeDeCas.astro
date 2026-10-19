@@ -1,0 +1,448 @@
+---
+// Case study: MonArc. Every fact and figure comes from docs/suivi.md (validated by Youri).
+// Other users' photos and first names are blurred in src/assets/monarc (originals stay in sources/).
+import Telephone from './Telephone.astro';
+import Compteur from './Compteur.astro';
+import { PROFIL } from '../data/profil';
+import { typo } from '../data/typographie';
+
+import ecranFil from '../assets/monarc/app-fil.jpg';
+import ecranClassement from '../assets/monarc/app-classement.jpg';
+import ecranProfil from '../assets/monarc/app-profil.jpg';
+import grilleInstagram from '../assets/monarc/instagram-grille.jpg';
+import statsTiktok from '../assets/monarc/tiktok-stats.jpg';
+
+const ecrans = [
+  {
+    src: ecranFil,
+    alt: "Écran Fil de MonArc : la preuve photo d'une séance de musculation publiée par un participant.",
+    legende: 'Le fil des preuves photo',
+  },
+  {
+    src: ecranClassement,
+    alt: 'Écran Classement de MonArc : le classement de la semaine, avec le grade et les points de chaque participant.',
+    legende: 'Le classement de la semaine',
+  },
+  {
+    src: ecranProfil,
+    alt: 'Écran Profil de MonArc : grade Apprenti, 940 points et progression vers le grade suivant.',
+    legende: 'Le profil, les points et les grades',
+  },
+  {
+    src: grilleInstagram,
+    alt: 'Grille Instagram du compte @monarc_app : les publications des jours 11 à 18 du Winter Arc.',
+    legende: 'Les preuves du jour sur Instagram',
+  },
+];
+
+const etapes = [
+  {
+    titre: 'Concevoir le produit',
+    // Youri's role sentence is in the header just above: it appears once in the section.
+    texte: ["L'application combine la preuve en photo, un classement chaque semaine, six grades et des arcs privés."],
+  },
+  {
+    titre: "Constituer la liste d'attente",
+    texte: [
+      "Avant le lancement, j'ai constitué une liste d'attente de plus de 1 700 inscrits.",
+      'Je gère cette base clients par e-mail.',
+    ],
+  },
+  {
+    titre: "Lancer l'application",
+    texte: [
+      "MonArc est sortie le 1er octobre 2026 sur l'App Store et en version web.",
+      'Plus de 500 personnes se sont inscrites le jour même.',
+    ],
+  },
+  {
+    titre: 'Animer la communauté chaque jour',
+    texte: [
+      'Je publie une vidéo TikTok par jour, construite à partir des preuves photo des utilisateurs.',
+      'Sur Instagram, des publications régulières présentent les preuves du jour.',
+    ],
+  },
+];
+---
+
+<section id="monarc" class="section sur-nuit etude" aria-labelledby="titre-monarc">
+  <div class="conteneur">
+    <header class="etude__entete">
+      <h2 id="titre-monarc" class="titre-section">Étude de cas&nbsp;: MonArc</h2>
+      <p class="etude__chapo">
+        MonArc est une application de suivi d'habitudes. J'ai conçu le produit et piloté son développement.
+      </p>
+      <div class="etude__liens">
+        <a class="bouton bouton--abricot" href={PROFIL.monarc.appStore}>Voir MonArc sur l'App Store</a>
+        <a class="bouton bouton--contour" href={PROFIL.monarc.site}>Ouvrir {PROFIL.monarc.siteAffiche}</a>
+      </div>
+      <p class="etude__note texte-secondaire">Sur Android, l'application s'installe depuis le site.</p>
+    </header>
+
+    <div class="etude__ecrans" role="region" aria-label="Captures de MonArc" tabindex="0">
+      {ecrans.map((ecran) => <Telephone src={ecran.src} alt={ecran.alt} legende={ecran.legende} />)}
+    </div>
+    <p class="etude__floutage texte-secondaire">
+      Les photos de profil et les prénoms des autres participants sont floutés.
+    </p>
+
+    <div class="etude__recit">
+      <div class="etude__contexte">
+        <h3 class="etude__soustitre">Le contexte</h3>
+        <!-- Mechanics as described on the App Store listing (checked 19/10/2026). -->
+        <p>
+          MonArc aide à tenir ses habitudes. Chaque participant choisit trois habitudes et leur rythme. Chaque jour, il
+          valide ce qu'il a fait. Une preuve en photo lui rapporte tous les points. Un classement le compare aux autres
+          participants.
+        </p>
+        <dl class="faits">
+          <div>
+            <dt>Saison en cours</dt>
+            <dd>Winter Arc 2026, lancé le 1<sup>er</sup>&nbsp;octobre</dd>
+          </div>
+          <div>
+            <dt>Plateformes</dt>
+            <dd>App Store et version web</dd>
+          </div>
+        </dl>
+      </div>
+
+      <div class="etude__actions">
+        <h3 class="etude__soustitre">Ce que j'ai fait</h3>
+        <ol class="etapes" role="list">
+          {
+            etapes.map((etape, i) => (
+              <li class="etape">
+                <span class="etape__numero" aria-hidden="true">
+                  {i + 1}
+                </span>
+                <h4 class="etape__titre">{etape.titre}</h4>
+                {etape.texte.map((phrase) => (
+                  <p set:html={typo(phrase)} />
+                ))}
+              </li>
+            ))
+          }
+        </ol>
+      </div>
+    </div>
+
+    <div class="etude__resultats">
+      <div>
+        <h3 class="etude__soustitre">Les résultats</h3>
+        <ul class="chiffres" role="list">
+          <li>
+            <span class="chiffre__valeur"><Compteur valeur={500} prefixe="+" /></span>
+            <span class="chiffre__libelle">inscrits le jour du lancement</span>
+          </li>
+          <li>
+            <span class="chiffre__valeur"><Compteur valeur={1700} prefixe="+" /></span>
+            <span class="chiffre__libelle">inscrits sur la liste d'attente, avant le lancement</span>
+          </li>
+          <li>
+            <span class="chiffre__valeur"><Compteur valeur={1.9} decimales={1} suffixe=" M" /></span>
+            <span class="chiffre__libelle">vues sur TikTok en 60&nbsp;jours</span>
+          </li>
+          <li>
+            <span class="chiffre__valeur"><Compteur valeur={6500} prefixe="+" /></span>
+            <span class="chiffre__libelle">abonnés sur TikTok</span>
+          </li>
+          <li>
+            <span class="chiffre__valeur"><Compteur valeur={170000} prefixe="+" /></span>
+            <span class="chiffre__libelle">j'aime sur le compte TikTok</span>
+          </li>
+          <li>
+            <span class="chiffre__valeur">7j/7</span>
+            <span class="chiffre__libelle">une vidéo TikTok publiée chaque jour</span>
+          </li>
+        </ul>
+        <p class="etude__periode texte-secondaire">
+          Du 19&nbsp;août au 17&nbsp;octobre 2026, les vidéos TikTok ont aussi réuni plus de 12&nbsp;000 partages et
+          3&nbsp;000 commentaires. Chiffres TikTok relevés le 17&nbsp;octobre 2026.
+        </p>
+      </div>
+      <div class="etude__preuve">
+        <Telephone
+          src={statsTiktok}
+          alt="Statistiques TikTok du compte @monarc_app, du 19 août au 17 octobre 2026 : 1,9 million de vues de publications."
+          legende="Les statistiques TikTok sur 60 jours"
+          camera={false}
+          sizes="(min-width: 64em) 16rem, min(62vw, 16rem)"
+        />
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  // Lazy images hidden to the right of the swipeable row only load once swiped into view, which
+  // shows an empty frame for a moment. Load the whole row as soon as it nears the screen.
+  const rangee = document.querySelector<HTMLElement>('.etude__ecrans');
+  if (rangee) {
+    // The row only scrolls on narrow screens: be a keyboard stop only there.
+    const large = matchMedia('(min-width: 64em)');
+    const majTabulation = () => (large.matches ? rangee.removeAttribute('tabindex') : (rangee.tabIndex = 0));
+    majTabulation();
+    large.addEventListener('change', majTabulation);
+
+    const observateur = new IntersectionObserver(
+      (entrees) => {
+        if (!entrees.some((entree) => entree.isIntersecting)) return;
+        rangee.querySelectorAll<HTMLImageElement>('img[loading="lazy"]').forEach((img) => (img.loading = 'eager'));
+        observateur.disconnect();
+      },
+      { rootMargin: '300px 0px' },
+    );
+    observateur.observe(rangee);
+  }
+</script>
+
+<style>
+  /* Header */
+  .etude__chapo {
+    max-width: 40ch;
+    margin-top: 2rem;
+    font-size: var(--texte-l);
+    line-height: 1.45;
+  }
+
+  .etude__liens {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 2rem;
+  }
+
+  .etude__note {
+    margin-top: 0.875rem;
+    font-size: var(--texte-s);
+  }
+
+  /* On phones the two buttons stack: same full width, as in the hero. */
+  @media (max-width: 35.99em) {
+    .etude__liens .bouton {
+      flex: 1 1 100%;
+    }
+  }
+
+  /* No content-visibility here on purpose: Chrome leaves skipped blocks out of the accessibility tree
+     until they are scrolled into view, so screen reader users could not reach these headings. */
+
+  /* Screens: swipeable row on phones, four columns on desktop */
+  .etude__ecrans {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: min(62vw, 15rem);
+    gap: 1.25rem;
+    margin-top: 3.5rem;
+    margin-inline: calc(-1 * var(--gouttiere));
+    padding: 0.25rem var(--gouttiere) 1rem;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: var(--gouttiere);
+    scrollbar-color: var(--brume-sur-nuit) transparent; /* 9.3:1 on the midnight blue */
+  }
+
+  /* Ring drawn inside the row, so all four sides stay visible despite the overflow */
+  .etude__ecrans:focus-visible {
+    outline-offset: -3px;
+  }
+
+  .etude__ecrans > :global(*) {
+    scroll-snap-align: start;
+  }
+
+  .etude__floutage {
+    margin-top: 0.5rem;
+    font-size: var(--texte-s);
+  }
+
+  /* Context and steps */
+  .etude__recit {
+    display: grid;
+    gap: 3.5rem;
+    margin-top: clamp(3.5rem, 2.5rem + 4vw, 6rem);
+  }
+
+  .etude__soustitre {
+    font-family: var(--police-titre);
+    font-size: clamp(1.625rem, 1.3rem + 1.4vw, 2.25rem);
+    font-weight: 740;
+    font-stretch: 92%;
+    line-height: 1.1;
+  }
+
+  .etude__contexte > p {
+    max-width: 52ch;
+    margin-top: 1.25rem;
+  }
+
+  .faits {
+    display: grid;
+    gap: 1rem;
+    margin-top: 1.75rem;
+  }
+
+  .faits > div {
+    padding-top: 1rem;
+    border-top: 1px solid rgb(255 255 255 / 0.14);
+  }
+
+  .faits dt {
+    color: var(--brume-sur-nuit);
+    font-size: var(--texte-s);
+  }
+
+  .faits dd {
+    margin: 0.125rem 0 0;
+    font-weight: 600;
+  }
+
+  .etapes {
+    display: grid;
+    gap: 2rem;
+    margin-top: 1.75rem;
+  }
+
+  .etape {
+    display: grid;
+    grid-template-columns: 2.25rem minmax(0, 1fr);
+    align-content: start; /* steps side by side share a height: never stretch the rows */
+    column-gap: 0.75rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid rgb(255 255 255 / 0.14);
+  }
+
+  .etape > :not(.etape__numero) {
+    grid-column: 2;
+  }
+
+  .etape__numero {
+    grid-row: 1 / span 3;
+    color: var(--abricot);
+    font-family: var(--police-titre);
+    font-size: 1.75rem;
+    font-weight: 760;
+    line-height: 1;
+  }
+
+  .etape__titre {
+    font-size: 1.125rem;
+    font-weight: 650;
+    line-height: 1.3;
+  }
+
+  .etape p {
+    margin-top: 0.375rem;
+    color: var(--brume-sur-nuit);
+  }
+
+  /* Results */
+  .etude__resultats {
+    display: grid;
+    gap: 3rem;
+    margin-top: clamp(3.5rem, 2.5rem + 4vw, 6rem);
+  }
+
+  .chiffres {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.75rem 1.25rem;
+    margin-top: 1.75rem;
+  }
+
+  .chiffres li {
+    display: grid;
+    align-content: start;
+    gap: 0.375rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgb(255 255 255 / 0.14);
+  }
+
+  .chiffre__valeur {
+    color: var(--abricot);
+    font-family: var(--police-titre);
+    font-size: clamp(2.25rem, 1.6rem + 2.6vw, 3.75rem);
+    font-weight: 780;
+    font-stretch: 90%;
+    line-height: 1;
+    letter-spacing: -0.01em;
+    white-space: nowrap;
+  }
+
+  .chiffre__libelle {
+    color: var(--brume-sur-nuit);
+    font-size: var(--texte-s);
+    line-height: 1.4;
+  }
+
+  .etude__periode {
+    max-width: 60ch;
+    margin-top: 2rem;
+    font-size: var(--texte-s);
+  }
+
+  .etude__preuve {
+    width: min(62vw, 16rem);
+  }
+
+  @media (min-width: 64em) {
+    .etude__entete {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      column-gap: 3rem;
+      align-items: end;
+    }
+
+    .etude__entete .titre-section {
+      grid-column: 1 / -1;
+    }
+
+    .etude__liens {
+      grid-column: 2;
+      grid-row: 2;
+      justify-content: flex-end;
+    }
+
+    .etude__note {
+      grid-column: 2;
+      text-align: end;
+    }
+
+    .etude__ecrans {
+      grid-auto-flow: row;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 2rem;
+      margin-inline: 0;
+      padding: 0;
+      overflow: visible;
+    }
+
+    .etude__recit {
+      grid-template-columns: minmax(0, 4fr) minmax(0, 7fr);
+      gap: 5rem;
+    }
+
+    .etapes {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 2.5rem 2rem;
+    }
+
+    .etude__resultats {
+      grid-template-columns: minmax(0, 1fr) 16rem;
+      gap: 5rem;
+      align-items: end;
+    }
+
+    /* Three columns when there is room (1440px), two on small laptops: "170 000+" never collides. */
+    .chiffres {
+      grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+      gap: 2.5rem 2rem;
+    }
+
+    .etude__preuve {
+      width: 16rem;
+    }
+  }
+</style>

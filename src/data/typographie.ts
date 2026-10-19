@@ -20,6 +20,8 @@ export function typo(texte: string): string {
       .replace(/[\p{L}\d]+(?:-[\p{L}\d]+)+/gu, (mot) => `<span class="insecable">${mot}</span>`)
       // 1er, 1re, kept with the next word ("1er octobre")
       .replace(/\b1(er|re)\b( ?)/g, (_m, fin: string, espace: string) => `1<sup>${fin}</sup>${espace ? NBSP : ''}`)
+      // "mars 2022": a month stays with its year
+      .replace(/(janvier|février|mars|avril|mai|juin|juillet|août|septembre|octobre|novembre|décembre) (\d{4})/g, `$1${NBSP}$2`)
       // A number stays with the word or unit that follows ("60 jours", "500 personnes", "21 000 €")
       .replace(/(\d) (?=[\p{Ll}€%])/gu, `$1${NBSP}`)
   );

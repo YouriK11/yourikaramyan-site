@@ -22,8 +22,8 @@ Consignes de Youri pour cette nuit :
 | 0 | Installation (Astro 7, GSAP, sitemap), dossier hors OneDrive, git | Terminée le 19/10/2026 |
 | 1 | Fondations : couleurs, polices, menu, pied de page, favicon YK | Terminée le 19/10/2026 |
 | 2 | Accueil et effet signature | Terminée le 19/10/2026 |
-| 3 | Étude de cas MonArc | À faire |
-| 4 | Parcours, compétences, contact | À faire |
+| 3 | Étude de cas MonArc | Terminée le 19/10/2026 (nuit), commit a5b5e9d |
+| 4 | Parcours, compétences, contact | Terminée le 19/10/2026 (nuit) |
 | 5 | Page /col-macarthur et système de duplication | À faire |
 | 6 | Finitions : images de partage, accessibilité, Lighthouse mobile, compteur de visites | À faire |
 | 7 | Mise en ligne sur yourikaramyan.com (GitHub + Vercel, achat du domaine sur Vercel) | À faire |

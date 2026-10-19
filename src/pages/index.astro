@@ -3,6 +3,9 @@ import Base from '../layouts/Base.astro';
 import Entete from '../components/Entete.astro';
 import Accueil from '../components/Accueil.astro';
 import EtudeDeCas from '../components/EtudeDeCas.astro';
+import Parcours from '../components/Parcours.astro';
+import Competences from '../components/Competences.astro';
+import Contact from '../components/Contact.astro';
 import PiedDePage from '../components/PiedDePage.astro';
 ---
 
@@ -11,33 +14,9 @@ import PiedDePage from '../components/PiedDePage.astro';
   <main id="contenu">
     <Accueil />
     <EtudeDeCas />
-
-    <section id="parcours" class="section" aria-labelledby="titre-parcours">
-      <div class="conteneur">
-        <h2 id="titre-parcours" class="titre-section">Parcours</h2>
-        <p class="a-venir texte-secondaire">Cette section arrive à l'étape 4.</p>
-      </div>
-    </section>
-
-    <section id="competences" class="section section--brume" aria-labelledby="titre-competences">
-      <div class="conteneur">
-        <h2 id="titre-competences" class="titre-section">Compétences et langues</h2>
-        <p class="a-venir texte-secondaire">Cette section arrive à l'étape 4.</p>
-      </div>
-    </section>
-
-    <section id="contact" class="section sur-nuit" aria-labelledby="titre-contact">
-      <div class="conteneur">
-        <h2 id="titre-contact" class="titre-section">Contact</h2>
-        <p class="a-venir texte-secondaire">Cette section arrive à l'étape 4.</p>
-      </div>
-    </section>
+    <Parcours />
+    <Competences />
+    <Contact />
   </main>
   <PiedDePage />
 </Base>
-
-<style>
-  .a-venir {
-    margin-top: 2rem;
-  }
-</style>

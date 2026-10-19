@@ -1,0 +1,335 @@
+---
+// Timeline of every CV line (education, experience, academic projects, student jobs), most recent first,
+// grouped by starting year. Content comes from src/data/profil.ts only.
+import { PROFIL } from '../data/profil';
+import { typo } from '../data/typographie';
+
+type Categorie = 'formation' | 'experience' | 'academique' | 'job';
+
+interface Entree {
+  categorie: Categorie;
+  titre: string;
+  lieu: string;
+  periode: string;
+  debut: number;
+  fin: number | null;
+  textes: string[];
+  resultats: string[];
+  lien?: { href: string; texte: string };
+}
+
+const LIBELLES: Record<Categorie, string> = {
+  formation: 'Formation',
+  experience: 'Expérience',
+  academique: 'Projet académique',
+  job: 'Job étudiant',
+};
+
+const majuscule = (texte: string) => texte.charAt(0).toUpperCase() + texte.slice(1);
+
+const entrees: Entree[] = [
+  ...PROFIL.formation.map((f) => ({
+    categorie: 'formation' as const,
+    titre: f.titre,
+    lieu: f.lieu,
+    periode: f.periode,
+    debut: f.debut,
+    fin: f.fin,
+    textes: [],
+    resultats: [],
+  })),
+  ...PROFIL.experiences.map((e) => ({
+    categorie: 'experience' as const,
+    titre: e.titre,
+    lieu: [e.structure, e.detail].filter(Boolean).join(', '),
+    periode: e.periode,
+    debut: e.debut,
+    fin: e.fin,
+    textes: [...e.points],
+    resultats: 'resultats' in e ? [...e.resultats] : [],
+    lien: e.structure === 'MonArc' ? { href: '#monarc', texte: "Lire l'étude de cas" } : undefined,
+  })),
+  ...PROFIL.projetsAcademiques.map((p) => ({
+    categorie: 'academique' as const,
+    titre: p.titre,
+    lieu: p.lieu,
+    periode: p.periode,
+    debut: p.debut,
+    fin: p.fin,
+    textes: [p.texte],
+    resultats: [],
+  })),
+  ...PROFIL.jobs.map((j) => ({
+    categorie: 'job' as const,
+    titre: j.employeur,
+    lieu: '',
+    periode: j.periode,
+    debut: j.debut,
+    fin: j.fin,
+    textes: [majuscule(j.texte)],
+    resultats: [],
+  })),
+];
+
+// Most recent first: starting year, then whatever is still ongoing or ended later.
+entrees.sort((a, b) => b.debut - a.debut || (b.fin ?? 9999) - (a.fin ?? 9999));
+
+const groupes = [...new Set(entrees.map((e) => e.debut))].map((annee) => ({
+  annee,
+  entrees: entrees.filter((e) => e.debut === annee),
+}));
+---
+
+<section id="parcours" class="section parcours" aria-labelledby="titre-parcours">
+  <div class="conteneur">
+    <div class="parcours__entete">
+      <h2 id="titre-parcours" class="titre-section">Parcours</h2>
+      <ul class="legende" role="list" aria-label="Légende de la frise">
+        {
+          (Object.keys(LIBELLES) as Categorie[]).map((c) => (
+            <li>
+              <span class={`pastille pastille--${c}`} aria-hidden="true" />
+              {LIBELLES[c]}
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+
+    <ol class="frise" role="list">
+      {
+        groupes.map((groupe) => (
+          <li class="frise__annee">
+            <h3 class="frise__repere">{groupe.annee}</h3>
+            <ol class="frise__entrees" role="list">
+              {groupe.entrees.map((e) => (
+                <li class="entree">
+                  <span class={`pastille pastille--${e.categorie} entree__pastille`} aria-hidden="true" />
+                  <h4 class="entree__titre" set:html={typo(e.titre)} />
+                  {e.lieu && <p class="entree__lieu" set:html={typo(e.lieu)} />}
+                  <p class="entree__meta">
+                    <span class="entree__categorie">{LIBELLES[e.categorie]}</span>
+                    <span class="entree__periode" set:html={typo(e.periode)} />
+                  </p>
+                  {e.textes.length > 0 && (
+                    <ul class="entree__textes" role="list">
+                      {e.textes.map((t) => (
+                        <li set:html={typo(t)} />
+                      ))}
+                    </ul>
+                  )}
+                  {e.resultats.length > 0 && (
+                    <ul class="entree__resultats" role="list">
+                      {e.resultats.map((r) => (
+                        <li set:html={typo(r)} />
+                      ))}
+                    </ul>
+                  )}
+                  {e.lien && (
+                    <a class="lien entree__lien" href={e.lien.href}>
+                      {e.lien.texte}
+                    </a>
+                  )}
+                </li>
+              ))}
+            </ol>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</section>
+
+<style>
+  .parcours__entete {
+    display: grid;
+    gap: 1.75rem;
+  }
+
+  /* Legend and markers: shape and colour both encode the category, and every entry also names it. */
+  .legende {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.625rem 1.5rem;
+    color: var(--ardoise);
+    font-size: var(--texte-s);
+  }
+
+  .legende li {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .pastille {
+    display: inline-block;
+    flex: none;
+    width: 0.875rem;
+    height: 0.875rem;
+    border: 2px solid var(--nuit);
+    border-radius: 50%;
+    background: var(--nuit);
+  }
+
+  .pastille--experience {
+    border-color: var(--abricot);
+    background: var(--abricot);
+  }
+
+  .pastille--academique {
+    background: var(--blanc);
+  }
+
+  .pastille--job {
+    border-radius: 3px;
+    border-color: var(--ardoise);
+    background: var(--ardoise);
+    transform: scale(0.8) rotate(45deg);
+  }
+
+  /* Timeline */
+  .frise {
+    margin-top: clamp(2.5rem, 2rem + 2vw, 4rem);
+  }
+
+  .frise__annee + .frise__annee {
+    margin-top: 0.5rem;
+  }
+
+  .frise__repere {
+    font-family: var(--police-titre);
+    font-size: clamp(1.75rem, 1.4rem + 1.6vw, 2.75rem);
+    font-weight: 760;
+    font-stretch: 90%;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .frise__entrees {
+    position: relative;
+    display: grid;
+    gap: 2rem;
+    margin-top: 1.25rem;
+    padding: 0.25rem 0 2.25rem 2rem;
+  }
+
+  /* The rail */
+  .frise__entrees::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0.375rem;
+    width: 2px;
+    border-radius: 1px;
+    background: var(--trait);
+  }
+
+  .frise__annee:last-child .frise__entrees {
+    padding-bottom: 0;
+  }
+
+  .entree {
+    position: relative;
+    max-width: 44rem;
+  }
+
+  .entree__pastille {
+    position: absolute;
+    top: 0.3rem;
+    left: calc(-2rem + 0.375rem + 1px - 0.4375rem);
+  }
+
+  .entree__titre {
+    font-size: 1.125rem;
+    font-weight: 650;
+    line-height: 1.35;
+  }
+
+  .entree__lieu {
+    margin-top: 0.125rem;
+  }
+
+  .entree__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 1rem;
+    margin-top: 0.375rem;
+    color: var(--ardoise);
+    font-size: var(--texte-s);
+  }
+
+  .entree__categorie {
+    font-weight: 600;
+  }
+
+  .entree__textes,
+  .entree__resultats {
+    display: grid;
+    gap: 0.375rem;
+    margin-top: 0.75rem;
+  }
+
+  .entree__textes li,
+  .entree__resultats li {
+    position: relative;
+    padding-left: 1.125rem;
+  }
+
+  /* Small apricot square, as the CV's bullets */
+  .entree__textes li::before,
+  .entree__resultats li::before {
+    content: '';
+    position: absolute;
+    top: 0.62em;
+    left: 0;
+    width: 0.375rem;
+    height: 0.375rem;
+    border-radius: 1px;
+    background: var(--abricot);
+  }
+
+  .entree__resultats li {
+    font-weight: 600;
+  }
+
+  .entree__lien {
+    display: inline-block;
+    margin-top: 0.75rem;
+    font-weight: 600;
+  }
+
+  /* Desktop: years in their own column, kept in view while their entries scroll by. */
+  @media (min-width: 48em) {
+    .parcours__entete {
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: end;
+    }
+
+    .frise__annee {
+      display: grid;
+      grid-template-columns: 9rem minmax(0, 1fr);
+    }
+
+    .frise__repere {
+      position: sticky;
+      top: calc(var(--hauteur-entete) + 1.5rem);
+      align-self: start;
+      padding-top: 0.125rem;
+    }
+
+    .frise__annee + .frise__annee {
+      margin-top: 0; /* one continuous rail from year to year */
+    }
+
+    .frise__entrees {
+      margin-top: 0;
+      padding-left: 2.5rem;
+      padding-bottom: 2.75rem;
+    }
+
+    .entree__pastille {
+      left: calc(-2.5rem + 0.375rem + 1px - 0.4375rem);
+    }
+  }
+</style>

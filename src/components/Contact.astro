@@ -1,0 +1,200 @@
+---
+// Contact: e-mail with a one-click copy button, phone, LinkedIn, CV.
+import { PROFIL } from '../data/profil';
+import IconeTelechargement from './IconeTelechargement.astro';
+import { typo } from '../data/typographie';
+
+interface Props {
+  /** Subject of the e-mail opened by the address link (company pages). */
+  objet?: string;
+}
+
+const { objet } = Astro.props;
+const { email, telephone, telephoneLien, linkedin, linkedinAffiche } = PROFIL.contact;
+const lienEmail = objet ? `mailto:${email}?subject=${encodeURIComponent(objet)}` : `mailto:${email}`;
+---
+
+<section id="contact" class="section sur-nuit contact" aria-labelledby="titre-contact">
+  <div class="conteneur contact__grille">
+    <div class="contact__intro">
+      <h2 id="titre-contact" class="titre-section">Contact</h2>
+      <p class="contact__chapo" set:html={typo(`${PROFIL.identite.recherche} Écrivez-moi ou appelez-moi.`)} />
+    </div>
+
+    <div class="contact__moyens">
+      <div class="contact__email">
+        <p class="contact__libelle">E-mail</p>
+        <a class="contact__adresse" href={lienEmail}>{email}</a>
+        <div class="contact__copie">
+          <!-- Shown by the script only when the browser can copy to the clipboard. -->
+          <button class="bouton bouton--abricot" type="button" data-copier={email} hidden>
+            <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="8" y="8" width="12" height="12" rx="2"></rect>
+              <path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"></path>
+            </svg>
+            <span data-copier-texte>Copier l'adresse</span>
+          </button>
+          <!-- Announced to screen readers only: the button label itself shows the result. -->
+          <p class="sr-only" role="status" data-copier-statut></p>
+        </div>
+      </div>
+
+      <dl class="contact__liste">
+        <div>
+          <dt>Téléphone</dt>
+          <dd><a href={telephoneLien}>{telephone}</a></dd>
+        </div>
+        <div>
+          <dt>LinkedIn</dt>
+          <dd><a href={linkedin} rel="me">{linkedinAffiche}</a></dd>
+        </div>
+        <div>
+          <dt>Lieu</dt>
+          <dd>
+            {PROFIL.identite.lieu}
+            <span class="contact__precision">{PROFIL.identite.mobilite}</span>
+          </dd>
+        </div>
+      </dl>
+
+      <a class="bouton bouton--contour contact__cv" href={PROFIL.cv.fichier} download={PROFIL.cv.nomTelechargement}>
+        <IconeTelechargement />
+        Télécharger mon CV
+      </a>
+    </div>
+  </div>
+</section>
+
+<script>
+  const bouton = document.querySelector<HTMLButtonElement>('[data-copier]');
+  const statut = document.querySelector<HTMLElement>('[data-copier-statut]');
+  const texte = bouton?.querySelector<HTMLElement>('[data-copier-texte]');
+
+  if (bouton && statut && texte && navigator.clipboard && window.isSecureContext) {
+    bouton.hidden = false;
+    let minuterie = 0;
+    bouton.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(bouton.dataset.copier ?? '');
+        texte.textContent = 'Adresse copiée';
+        statut.textContent = "L'adresse e-mail est copiée.";
+      } catch {
+        texte.textContent = 'Copie impossible';
+        statut.textContent = "La copie a échoué. L'adresse est sélectionnée : copiez-la avec Ctrl+C.";
+        // Select the address so it can be copied by hand
+        const adresse = document.querySelector('.contact__adresse');
+        if (adresse) getSelection()?.selectAllChildren(adresse);
+      }
+      clearTimeout(minuterie);
+      minuterie = window.setTimeout(() => {
+        texte.textContent = "Copier l'adresse";
+        if (statut.textContent?.includes('copiée')) statut.textContent = '';
+      }, 4000);
+    });
+  }
+</script>
+
+<style>
+  .contact__grille {
+    display: grid;
+    gap: clamp(2.5rem, 2rem + 2vw, 3.5rem);
+  }
+
+  .contact__chapo {
+    max-width: 30ch;
+    margin-top: 2rem;
+    font-size: var(--texte-l);
+    line-height: 1.45;
+  }
+
+  .contact__libelle {
+    color: var(--brume-sur-nuit);
+    font-size: var(--texte-s);
+  }
+
+  .contact__adresse {
+    display: inline-block;
+    margin-top: 0.25rem;
+    font-family: var(--police-titre);
+    font-size: clamp(1.375rem, 0.9rem + 3.4vw, 2.75rem);
+    font-weight: 720;
+    font-stretch: 92%;
+    line-height: 1.15;
+    overflow-wrap: anywhere;
+    text-decoration-line: underline;
+    text-decoration-color: var(--abricot);
+    text-decoration-thickness: 3px;
+    text-underline-offset: 0.18em;
+  }
+
+  .contact__copie {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem 1rem;
+    margin-top: 1.25rem;
+  }
+
+  .contact__liste {
+    display: grid;
+    margin-top: 2.25rem;
+  }
+
+  .contact__liste > div {
+    display: grid;
+    gap: 0.125rem;
+    padding-block: 0.875rem;
+    border-top: 1px solid rgb(255 255 255 / 0.14);
+  }
+
+  .contact__liste dt {
+    color: var(--brume-sur-nuit);
+    font-size: var(--texte-s);
+  }
+
+  .contact__liste dd {
+    margin: 0;
+    font-size: 1.125rem;
+    font-weight: 600;
+  }
+
+  .contact__precision {
+    display: block;
+    color: var(--brume-sur-nuit);
+    font-size: var(--texte-s);
+    font-weight: 400;
+  }
+
+  .contact__liste a {
+    display: inline-block;
+    padding-block: 0.25rem;
+    overflow-wrap: anywhere;
+    text-decoration-line: underline;
+    text-decoration-color: var(--abricot);
+    text-decoration-thickness: 2px;
+    text-underline-offset: 0.22em;
+  }
+
+  .contact__cv {
+    margin-top: 1.5rem;
+  }
+
+  @media (min-width: 64em) {
+    .contact__grille {
+      grid-template-columns: minmax(0, 4fr) minmax(0, 7fr);
+      column-gap: clamp(3rem, 6vw, 6rem);
+      align-items: start;
+    }
+
+    /* Three full-width rows: label on the left, value on the right */
+    .contact__liste > div {
+      grid-template-columns: 7.5rem minmax(0, 1fr);
+      column-gap: 1.5rem;
+      align-items: baseline;
+    }
+
+    .contact__liste a {
+      white-space: nowrap;
+    }
+  }
+</style>

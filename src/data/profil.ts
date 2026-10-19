@@ -29,10 +29,11 @@ export const PROFIL = {
     nomTelechargement: 'Youri-Karamyan-CV.pdf',
   },
 
+  // debut / fin: years used to order the timeline (fin: null = still ongoing). periode: text shown, as on the CV.
   formation: [
-    { titre: 'Bachelier en E-Business', lieu: 'HEPL, Liège', periode: "2024 à aujourd'hui" },
-    { titre: 'Bachelier en Sciences de gestion', lieu: 'HEC Liège', periode: '2022-2024' },
-    { titre: 'CESS, finalité économique', lieu: 'Collège Saint-Servais, Liège', periode: '2016-2022' },
+    { titre: 'Bachelier en E-Business', lieu: 'HEPL, Liège', periode: "2024 à aujourd'hui", debut: 2024, fin: null },
+    { titre: 'Bachelier en Sciences de gestion', lieu: 'HEC Liège', periode: '2022-2024', debut: 2022, fin: 2024 },
+    { titre: 'CESS, finalité économique', lieu: 'Collège Saint-Servais, Liège', periode: '2016-2022', debut: 2016, fin: 2022 },
   ],
 
   experiences: [
@@ -41,6 +42,8 @@ export const PROFIL = {
       structure: 'MonArc',
       detail: 'getmonarcapp.com',
       periode: '2026',
+      debut: 2026,
+      fin: 2026,
       points: [
         // The CV also says "Google Play": the app is not there yet (Youri, 19/10/2026), so the site leaves it out.
         "Conception et lancement d'une application de suivi d'habitudes sur l'App Store et en version web.",
@@ -53,6 +56,8 @@ export const PROFIL = {
       structure: 'Indépendant',
       detail: 'clients particuliers et professionnels',
       periode: '2020-2023',
+      debut: 2020,
+      fin: 2023,
       points: [
         'Sites web, supports marketing, montage photo et vidéo, sous-titrage.',
         "Traduction de documents entre le français, l'anglais et l'arménien.",
@@ -63,7 +68,14 @@ export const PROFIL = {
       structure: 'Projet personnel',
       detail: '',
       periode: '2022',
+      debut: 2022,
+      fin: 2022,
       points: [`Création et gestion de A à Z${NBSP}: site, sourcing produits, réseaux sociaux, commandes et service après-vente.`],
+      // Validated by Youri (Shopify capture, docs/suivi.md). Not on the CV; the shop's name stays private.
+      resultats: [
+        `Plus de 21${NBSP}000${NBSP}€ de ventes de mars 2022 à janvier 2023.`,
+        `Taux de conversion${NBSP}: 1,55${NBSP}%.`,
+      ],
     },
   ],
 
@@ -72,20 +84,24 @@ export const PROFIL = {
       titre: "Implémentation d'un CRM Odoo",
       lieu: 'HEPL',
       periode: '2026',
+      debut: 2026,
+      fin: 2026,
       texte: 'Automatisation des leads, du pipeline commercial et du SAV.',
     },
     {
       titre: 'Young Enterprise Project',
       lieu: 'HEPL',
       periode: '2025',
+      debut: 2025,
+      fin: 2025,
       texte: `Création d'une entreprise étudiante${NBSP}: étude de marché, modèle financier, stratégie marketing et go-to-market.`,
     },
   ],
 
   jobs: [
-    { employeur: 'Quick Herstal', texte: 'équipier polyvalent sur cinq postes, service client.', periode: 'depuis 2023' },
-    { employeur: 'Atlas Agency', texte: 'vente directe pour des associations caritatives.', periode: '2023' },
-    { employeur: 'Chemin Faisant / Métaphore', texte: "agent d'entretien.", periode: '2020-2022' },
+    { employeur: 'Quick Herstal', texte: 'équipier polyvalent sur cinq postes, service client.', periode: 'depuis 2023', debut: 2023, fin: null },
+    { employeur: 'Atlas Agency', texte: 'vente directe pour des associations caritatives.', periode: '2023', debut: 2023, fin: 2023 },
+    { employeur: 'Chemin Faisant / Métaphore', texte: "agent d'entretien.", periode: '2020-2022', debut: 2020, fin: 2022 },
   ],
 
   competences: [

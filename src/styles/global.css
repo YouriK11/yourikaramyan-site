@@ -138,6 +138,11 @@ button {
   color: inherit;
 }
 
+/* The hidden attribute always wins, even over components that set display (e.g. .bouton) */
+[hidden] {
+  display: none !important;
+}
+
 :focus-visible {
   outline: 3px solid var(--nuit);
   outline-offset: 3px;

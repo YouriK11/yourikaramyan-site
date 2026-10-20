@@ -32,8 +32,8 @@ Avant de coder avec Astro, GSAP, Vercel ou les images de partage, lire `docs/ref
 - Aucun lien vers youri-digital-edge.base44.app (ancien site).
 
 ## Structure du site
-1. Accueil : nom en très grand, une phrase de présentation, boutons « Télécharger mon CV » et « Me contacter ». Effet signature : le seul grand moment animé du site.
-2. Étude de cas MonArc : contexte, actions (conception, lancement, promotion, gestion de la base clients), résultats en compteurs animés, captures dans des maquettes de téléphone, boutons App Store et getmonarcapp.com (pas de Google Play).
+1. Accueil : nom en très grand, une phrase de présentation, boutons « Télécharger mon CV » et « Me contacter ». Sur ordinateur, l'accueil occupe toute la hauteur de l'écran. Effet signature : le premier grand moment animé du site.
+2. Étude de cas MonArc : rangée de résultats en très grand avec compteurs animés, téléphones en éventail (deuxième et dernier moment animé du site : ils s'écartent une fois à l'apparition), contexte, actions (conception, lancement, promotion, gestion de la base clients), boutons App Store et getmonarcapp.com (pas de Google Play).
 3. Parcours : frise chronologique (formation, expériences, projets académiques, jobs étudiants), reprise du CV.
 4. Compétences et langues, reprises du CV.
 5. Contact : e-mail avec bouton pour le copier, téléphone, LinkedIn.
@@ -46,7 +46,7 @@ Avant de coder avec Astro, GSAP, Vercel ou les images de partage, lire `docs/ref
 - L'abricot ne sert jamais de couleur de texte sur fond blanc (contraste insuffisant). Il sert de trait, de décor, ou de texte sur fond bleu nuit.
 - Polices : Bricolage Grotesque pour les titres, Instrument Sans pour le texte.
 - Utiliser la skill frontend-design. Le site a une vraie personnalité et ne ressemble à aucun template.
-- GSAP autorisé. Le reste du site reste calme et précis, pour que l'effet de l'accueil marque les esprits.
+- GSAP autorisé. Deux moments animés seulement : le nom de l'accueil, puis l'éventail de téléphones de l'étude de cas. Le reste du site reste calme et précis.
 - Effet signature : le nom ne pousse jamais le contenu en dessous pendant l'animation. Sa place finale est réservée dès le chargement (aucun décalage de mise en page).
 - Respecter `prefers-reduced-motion`.
 

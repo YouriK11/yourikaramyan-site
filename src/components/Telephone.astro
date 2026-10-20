@@ -15,8 +15,8 @@ interface Props {
   camera?: boolean;
 }
 
-// Desktop: a quarter of the 72rem container minus the gaps, about 251px wide.
-const { src, alt, legende, sizes = '(min-width: 64em) 16rem, min(62vw, 15rem)', camera = true } = Astro.props;
+// Default: the size of the social-network captures (17rem side by side, one per row on phones).
+const { src, alt, legende, sizes = '(min-width: 36em) 17rem, min(62vw, 15rem)', camera = true } = Astro.props;
 ---
 
 <figure class="telephone">
@@ -67,8 +67,8 @@ const { src, alt, legende, sizes = '(min-width: 64em) 16rem, min(62vw, 15rem)', 
     border-radius: 1.75rem;
   }
 
-  /* Desktop hover: the phone lifts by a few pixels (transform only, nothing else moves).
-     From 64em only: below, the swipeable row clips anything that rises above it. */
+  /* Desktop hover: the phone lifts by a few pixels (transform only, nothing else moves). From 64em only,
+     where a mouse is most likely; on narrow screens the fan's scene clips anything that rises past its edges. */
   @media (hover: hover) and (min-width: 64em) and (prefers-reduced-motion: no-preference) {
     .telephone__cadre {
       transition: transform 0.35s cubic-bezier(0.2, 0.7, 0.2, 1);

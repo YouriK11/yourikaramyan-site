@@ -465,10 +465,6 @@ button {
     visibility: visible !important;
   }
 
-  .titre-section::after {
-    transform: none !important;
-  }
-
   .section {
     padding-block: 1.5rem;
   }

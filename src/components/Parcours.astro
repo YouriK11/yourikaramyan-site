@@ -183,7 +183,16 @@ const groupes = [...new Set(entrees.map((e) => e.debut))].map((annee) => {
       const complete = frise.classList.toggle('frise--complete');
       bouton.setAttribute('aria-expanded', String(complete));
       bouton.textContent = complete ? 'Réduire le parcours' : 'Voir tout le parcours';
-      if (!complete) bouton.scrollIntoView({ block: 'nearest' });
+      if (complete) {
+        // Keyboard and screen reader users continue from the first unfolded year, already on screen.
+        const cible = frise.querySelector<HTMLElement>('[data-secondaire] .frise__repere');
+        if (cible) {
+          cible.tabIndex = -1;
+          cible.focus({ preventScroll: true });
+        }
+      } else {
+        bouton.scrollIntoView({ block: 'nearest' });
+      }
     });
   }
 </script>
@@ -294,11 +303,22 @@ const groupes = [...new Set(entrees.map((e) => e.debut))].map((annee) => {
     line-height: 1.35;
   }
 
-  /* Folding: only once JavaScript can unfold it again */
-  :global(html.js) .frise:not(.frise--complete) [data-secondaire],
-  :global(html.js) .frise.frise--complete [data-resume],
+  /* Folding: on screen only, and only once JavaScript can unfold it again. Paper always gets everything. */
+  @media screen {
+    :global(html.js) .frise:not(.frise--complete) [data-secondaire],
+    :global(html.js) .frise.frise--complete [data-resume] {
+      display: none;
+    }
+  }
+
   :global(html:not(.js)) [data-resume] {
     display: none;
+  }
+
+  @media print {
+    [data-resume] {
+      display: none;
+    }
   }
 
   /* Student jobs */

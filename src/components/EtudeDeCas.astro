@@ -49,7 +49,7 @@ const eventail = [
 
 // Rendered width of the fanned phones (see --largeur-tel below), for the browser to pick the right file.
 const TAILLES_EVENTAIL =
-  '(min-width: 90em) 22rem, (min-width: 80em) 21rem, (min-width: 64em) 19rem, (min-width: 48em) 15rem, 13.5rem';
+  '(min-width: 90em) 22rem, (min-width: 80em) 21rem, (min-width: 64em) 19rem, (min-width: 48em) 17rem, 15rem';
 
 const etapes = [
   {
@@ -191,14 +191,14 @@ const etapes = [
           src={grilleInstagram}
           alt="Grille Instagram du compte @monarc_app : les publications des jours 11 à 18 du Winter Arc."
           legende="Les preuves du jour sur Instagram"
-          sizes="(min-width: 64em) 17rem, 42vw"
+          sizes="(min-width: 36em) 17rem, min(62vw, 15rem)"
         />
         <Telephone
           src={statsTiktok}
           alt="Statistiques TikTok du compte @monarc_app, du 19 août au 17 octobre 2026 : 1,9 million de vues de publications."
           legende="Les statistiques TikTok sur 60 jours"
           camera={false}
-          sizes="(min-width: 64em) 17rem, 42vw"
+          sizes="(min-width: 36em) 17rem, min(62vw, 15rem)"
         />
       </div>
     </div>
@@ -310,7 +310,7 @@ const etapes = [
 
   /* Fan of phones */
   .eventail {
-    --largeur-tel: clamp(13.5rem, 8rem + 14vw, 22rem);
+    --largeur-tel: clamp(15rem, 8rem + 14vw, 22rem); /* never smaller than the old 240 px screens */
     --ecart: 46%;
     --angle: 7deg;
     --recul: 0.86;
@@ -333,12 +333,13 @@ const etapes = [
     position: absolute;
     top: 50%;
     left: 50%;
-    width: min(150vw, 70rem);
-    aspect-ratio: 1.5;
+    width: min(170vw, 80rem);
+    aspect-ratio: 1.25;
     background: radial-gradient(
       closest-side,
-      rgb(238 241 248 / 0.3),
-      rgb(238 241 248 / 0.13) 45%,
+      rgb(238 241 248 / 0.32),
+      rgb(238 241 248 / 0.18) 50%,
+      rgb(238 241 248 / 0.07) 78%,
       rgb(238 241 248 / 0)
     );
     transform: translate(-50%, -50%);
@@ -499,11 +500,19 @@ const etapes = [
     margin-top: clamp(4rem, 3rem + 4vw, 7rem);
   }
 
+  /* Phones: one capture under the other, as large as before the pass. From 36em: side by side. */
   .reseaux__telephones {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 1rem;
+    grid-template-columns: min(62vw, 15rem);
+    gap: 2.5rem;
+    align-items: end; /* both captions on one line despite the different screenshot heights */
     margin-top: 2rem;
+  }
+
+  @media (min-width: 36em) {
+    .reseaux__telephones {
+      grid-template-columns: repeat(2, minmax(0, 17rem));
+    }
   }
 
   @media (min-width: 48em) {
@@ -582,8 +591,6 @@ const etapes = [
     }
 
     .reseaux__telephones {
-      grid-template-columns: repeat(2, minmax(0, 17rem));
-      gap: 2.5rem;
       margin-top: 0;
     }
   }

@@ -28,6 +28,8 @@ Consignes de Youri pour cette nuit :
 | 6 | Finitions : images de partage, accessibilité, Lighthouse mobile, compteur de visites | Terminée le 20/10/2026, commit c51d1f6 (compteur prêt, inactif sans compte GoatCounter) |
 | 7 | Mise en ligne sur yourikaramyan.com (GitHub + Vercel, achat du domaine sur Vercel) | À faire |
 
+Passe visuelle « whaou » (20/10/2026) : sur la branche git `passe-whaou`, en attente de la validation de Youri. Détail dans `docs/rapport-passe-whaou.md`.
+
 ## Décisions validées par Youri (19/10/2026)
 
 - Plan, structure des fichiers et effet signature « le nom qui prend de l'ampleur » : validés.

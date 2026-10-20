@@ -238,8 +238,13 @@ const lignes = LIGNES.map(({ texte, largeurs }) => {
 
     const mesurer = () => {
       rayon = parseFloat(getComputedStyle(nom).fontSize) * 1.5;
-      // offsetLeft/offsetTop are relative to the h1, which is position: relative.
-      centres = lettres.map((el) => ({ x: el.offsetLeft + el.offsetWidth / 2, y: el.offsetTop + el.offsetHeight / 2 }));
+      // Letter centres relative to the h1. Rects, not offsetLeft/offsetTop: on desktop each line is positioned
+      // (it passes in front of the portrait), which would make offsetTop relative to the line.
+      const base = nom.getBoundingClientRect();
+      centres = lettres.map((el) => {
+        const r = el.getBoundingClientRect();
+        return { x: r.left - base.left + r.width / 2, y: r.top - base.top + r.height / 2 };
+      });
       planifier();
     };
     const surMouvement = (e: PointerEvent) => {
@@ -380,7 +385,7 @@ const lignes = LIGNES.map(({ texte, largeurs }) => {
 
   /* Name */
   .nom {
-    position: relative; /* reference box for the letters' offsetLeft/offsetTop */
+    position: relative; /* reference box for the letters (lens) and the stroke */
     font-family: var(--police-titre);
     /* "Karamyan" exactly fills the column. */
     font-size: min(calc(100cqi / (var(--largeur-nom) + 0.02)), 11rem);
@@ -550,6 +555,7 @@ const lignes = LIGNES.map(({ texte, largeurs }) => {
       /* As wide as the content allows, but never taller than the first screen leaves room for. */
       font-size: min(
         calc(100cqi / (var(--largeur-nom) + 0.02)),
+        14rem,
         max(5.5rem, calc((100svh - var(--hauteur-entete) - 23rem) / 2.1))
       );
     }
@@ -561,7 +567,7 @@ const lignes = LIGNES.map(({ texte, largeurs }) => {
       grid-row: 1 / span 4;
       width: var(--portrait);
       aspect-ratio: auto;
-      margin-top: 0.75rem;
+      margin-top: -0.25rem;
     }
 
     .accueil__texte {
@@ -599,6 +605,28 @@ const lignes = LIGNES.map(({ texte, largeurs }) => {
 
     .accueil__texte {
       margin-top: 2rem;
+    }
+  }
+
+  /* Short laptop windows (1366x768, 1536x730, 1920x1080 at 125 %): tighter spacing below the name,
+     so the name can stay large while the buttons and the MonArc line remain in the first screen. */
+  @media (min-width: 80em) and (max-height: 50em) {
+    .accueil__texte,
+    .accueil__actions {
+      margin-top: 1.25rem;
+    }
+
+    .accueil__preuve {
+      margin-top: 1rem;
+      padding-top: 0.875rem;
+    }
+
+    .nom {
+      font-size: min(
+        calc(100cqi / (var(--largeur-nom) + 0.02)),
+        14rem,
+        max(5.5rem, calc((100svh - var(--hauteur-entete) - 20.5rem) / 2.1))
+      );
     }
   }
 </style>

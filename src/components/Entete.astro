@@ -90,14 +90,26 @@ const liens = [
       liensSections.forEach((a) =>
         a.hash === `#${id}` ? a.setAttribute('aria-current', 'location') : a.removeAttribute('aria-current'),
       );
+    // At the bottom of the page (footer in view), the last section counts as current: on tall screens it never
+    // reaches the band.
+    let finDePage = false;
+    const choisir = () =>
+      marquer(finDePage ? sections[sections.length - 1].id : sections.find((section) => visibles.get(section.id))?.id);
     const observateur = new IntersectionObserver(
       (entrees) => {
         entrees.forEach((entree) => visibles.set(entree.target.id, entree.isIntersecting));
-        marquer(sections.find((section) => visibles.get(section.id))?.id);
+        choisir();
       },
       { rootMargin: '-35% 0px -60% 0px' },
     );
     sections.forEach((section) => observateur.observe(section));
+    const pied = document.querySelector('.pied');
+    if (pied) {
+      new IntersectionObserver(([entree]) => {
+        finDePage = entree.isIntersecting;
+        choisir();
+      }).observe(pied);
+    }
   }
 
   const menu = document.getElementById('menu-mobile');

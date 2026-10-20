@@ -27,7 +27,7 @@ const reperes = Array.from({ length: 12 }, (_, i) => ({ angle: i * 30, long: i =
 
     <div class="elegance__cadran">
       <svg class="elegance__anneau" viewBox="0 0 200 200" aria-hidden="true">
-        <circle class="elegance__cercle" cx="100" cy="100" r="98" pathLength="100"></circle>
+        <circle class="elegance__cercle" cx="100" cy="100" r="98" pathLength="100" transform="rotate(-90 100 100)"></circle>
         {
           reperes.map((r, i) => (
             <line
@@ -137,7 +137,7 @@ const reperes = Array.from({ length: 12 }, (_, i) => ({ angle: i * 30, long: i =
 
   .elegance__photo {
     position: absolute;
-    inset: 3%;
+    inset: 6.5%; /* the lower hour marks stay on the midnight blue, off the white shirt */
     overflow: hidden;
     border-radius: 50%;
     background: radial-gradient(circle at 50% 38%, #26306a, var(--nuit) 70%);
@@ -219,13 +219,17 @@ const reperes = Array.from({ length: 12 }, (_, i) => ({ angle: i * 30, long: i =
 
     .elegance__grille {
       --cadran: min(30rem, 36vw, calc((100svh - var(--hauteur-entete)) * 0.62));
-      grid-template-columns: minmax(0, 1fr) var(--cadran);
+      /* The name column is exactly as wide as the name (or the text block): no gap before the dial */
+      grid-template-columns:
+        minmax(0, max(40rem, calc(3.48 * min(16rem, max(5.5rem, (100svh - var(--hauteur-entete) - 22rem) / 1.85)))))
+        var(--cadran);
+      justify-content: center;
       align-items: center;
       column-gap: clamp(2rem, 3vw, 3.5rem);
     }
 
     .elegance__nom {
-      font-size: min(calc(100cqi / var(--mot)), 16rem, calc((100svh - var(--hauteur-entete) - 22rem) / 1.85));
+      font-size: min(calc(100cqi / var(--mot)), 16rem, max(5.5rem, calc((100svh - var(--hauteur-entete) - 22rem) / 1.85)));
     }
 
     .elegance__cadran {

@@ -35,7 +35,8 @@ const lignes = LIGNES.map(({ texte, largeurs }) => {
   <div class="conteneur accueil__grille">
     <div class="accueil__identite">
       <script is:inline>
-        // Runs before the name is painted: the name starts thin, unless the visitor asked for less motion.
+        // Runs before the name is painted: the letters start low and invisible (always at full weight, so they
+        // stay tight), unless the visitor asked for less motion.
         // Safety net: without the animation script, everything returns to its final state after 4 s.
         if (matchMedia('(prefers-reduced-motion: no-preference)').matches) {
           document.documentElement.classList.add('accueil-intro');

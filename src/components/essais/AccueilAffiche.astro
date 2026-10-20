@@ -12,16 +12,12 @@ import TexteEssai from './TexteEssai.astro';
     <Picture
       src={photo}
       formats={['avif', 'webp']}
-      widths={[320, 480, 640, 800]}
-      sizes="(min-width: 64em) 40rem, 72vw"
+      widths={[320, 480, 640, 800, 1000]}
+      sizes="(min-width: 64em) calc((100vh - 4rem) * 0.61), 72vw"
       alt="Portrait de Youri Karamyan"
       loading="eager"
       fetchpriority="high"
     />
-  </div>
-
-  <div class="conteneur affiche__haut">
-    <TexteEssai class="affiche__texte" />
   </div>
 
   <h1 id="titre-affiche" class="affiche__nom">
@@ -31,6 +27,11 @@ import TexteEssai from './TexteEssai.astro';
       <span class="affiche__ligne">Karamyan</span>
     </span>
   </h1>
+
+  <div class="conteneur affiche__haut">
+    <TexteEssai class="affiche__texte" />
+  </div>
+
 </section>
 
 <style>
@@ -70,12 +71,19 @@ import TexteEssai from './TexteEssai.astro';
     margin-top: 1.5rem;
   }
 
+  /* Fades out downwards under the name, and at the cut of the right shoulder */
   .affiche__photo :global(img) {
     display: block;
     width: 100%;
     height: auto;
-    -webkit-mask-image: linear-gradient(to bottom, #000 45%, transparent 88%);
-    mask-image: linear-gradient(to bottom, #000 45%, transparent 88%);
+    -webkit-mask-image:
+      linear-gradient(to bottom, #000 45%, transparent 88%),
+      linear-gradient(to left, transparent, #000 16%);
+    -webkit-mask-composite: source-in;
+    mask-image:
+      linear-gradient(to bottom, #000 45%, transparent 88%),
+      linear-gradient(to left, transparent, #000 16%);
+    mask-composite: intersect;
   }
 
   .affiche__nom {
@@ -131,11 +139,11 @@ import TexteEssai from './TexteEssai.astro';
     .affiche__nom {
       order: 0;
       grid-row: 3;
-      margin-top: 0;
+      margin-top: clamp(1rem, 4svh, 2.5rem);
       /* Room for the "y" descender below the last line */
       padding-bottom: calc(0.16em + clamp(0.5rem, 1.5svh, 1.25rem));
       /* Never taller than about half the screen */
-      font-size: min(calc((100vw - 2 * var(--gouttiere)) / var(--mot)), calc(var(--hauteur) * 0.3));
+      font-size: min(calc((100vw - 2 * var(--gouttiere)) / var(--mot)), calc(var(--hauteur) * 0.27));
     }
 
     .affiche__haut {
@@ -155,6 +163,11 @@ import TexteEssai from './TexteEssai.astro';
       width: auto;
       height: calc(var(--hauteur) * 0.94);
       margin: 0;
+    }
+
+    /* The <picture> wrapper needs the height too, otherwise the image takes its size from "sizes" */
+    .affiche__photo :global(picture) {
+      height: 100%;
     }
 
     .affiche__photo :global(img) {

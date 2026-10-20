@@ -26,7 +26,7 @@ import TexteEssai from './TexteEssai.astro';
         src={photo}
         formats={['avif', 'webp']}
         widths={[320, 480, 640, 800]}
-        sizes="(min-width: 64em) 30rem, 78vw"
+        sizes="(min-width: 64em) calc((100vh - 4rem) * 0.48), 78vw"
         alt="Portrait de Youri Karamyan"
         loading="eager"
         fetchpriority="high"
@@ -172,8 +172,12 @@ import TexteEssai from './TexteEssai.astro';
       --largeur: 80rem;
     }
 
+    /* The name column is exactly as wide as the name (or the text block, 40rem at least): no gap before the photo */
     .nuit__grille {
-      grid-template-columns: minmax(0, 1fr) auto;
+      grid-template-columns:
+        minmax(0, max(40rem, calc(3.3 * min(17rem, max(5.5rem, (100svh - var(--hauteur-entete) - 23rem) / 1.8)))))
+        auto;
+      justify-content: center;
       align-items: end;
     }
 
@@ -184,13 +188,19 @@ import TexteEssai from './TexteEssai.astro';
 
     .nuit__nom,
     .nuit__trait {
-      font-size: min(calc(100cqi / var(--mot)), 17rem, calc((100svh - var(--hauteur-entete) - 23rem) / 1.8));
+      /* Never below 5.5rem: on a short window the hero simply grows taller than the screen */
+      font-size: min(calc(100cqi / var(--mot)), 17rem, max(5.5rem, calc((100svh - var(--hauteur-entete) - 23rem) / 1.8)));
     }
 
     .nuit__photo {
       width: auto;
       height: calc((100svh - var(--hauteur-entete)) * 0.74);
       margin: 0;
+    }
+
+    /* The <picture> wrapper needs the height too, otherwise the image takes its size from "sizes" */
+    .nuit__photo :global(picture) {
+      height: 100%;
     }
 
     .nuit__photo :global(img) {

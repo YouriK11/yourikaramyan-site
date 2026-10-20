@@ -11,6 +11,8 @@ import { PROFIL } from '../data/profil';
 import { SITE } from '../data/site';
 
 // Structured profile (schema.org Person) read by search engines. Facts from the CV only.
+// schema.org expects language codes (BCP 47) and the locality without the province.
+const CODES_LANGUES: Record<string, string> = { Arménien: 'hy', Français: 'fr', Anglais: 'en', Allemand: 'de' };
 const personne = {
   '@context': 'https://schema.org',
   '@type': 'Person',
@@ -24,10 +26,10 @@ const personne = {
     name: 'HEPL',
     address: { '@type': 'PostalAddress', addressLocality: 'Liège', addressCountry: 'BE' },
   },
-  address: { '@type': 'PostalAddress', addressLocality: PROFIL.identite.lieu, addressCountry: 'BE' },
+  address: { '@type': 'PostalAddress', addressLocality: 'Vivegnis', addressRegion: 'Liège', addressCountry: 'BE' },
   email: `mailto:${PROFIL.contact.email}`,
   sameAs: [PROFIL.contact.linkedin],
-  knowsLanguage: PROFIL.langues.map((l) => l.langue),
+  knowsLanguage: PROFIL.langues.map((l) => CODES_LANGUES[l.langue] ?? l.langue),
 };
 ---
 

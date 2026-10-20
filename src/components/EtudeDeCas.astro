@@ -445,4 +445,16 @@ const etapes = [
       width: 16rem;
     }
   }
+
+  /* Paper: the four screens side by side, never a scrolling row */
+  @media print {
+    .etude__ecrans {
+      grid-auto-flow: row;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      margin-inline: 0;
+      padding-inline: 0;
+      overflow: visible;
+      scroll-snap-type: none;
+    }
+  }
 </style>

@@ -26,6 +26,10 @@ description: >-
   [À COMPLÉTER : Trois idées concrètes pour l'e-commerce de NOM, proposées par Youri Karamyan,
   étudiant en 3e bachelier E-Business à la HEPL.]
 
+# Facultatif : la ligne sous le nom de l'entreprise sur l'image de partage (40 signes au maximum).
+# Sans cette ligne, l'image dit « Trois idées pour votre e-commerce ». Pour la changer, enlève le « # » :
+# apercu: 'Trois idées pour votre agence'
+
 # La lettre d'accroche adressée à l'équipe. Un « - >- » par paragraphe.
 accroche:
   - >-

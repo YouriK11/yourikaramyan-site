@@ -33,6 +33,7 @@ Ouvre ta copie. Remplace chaque texte `[À COMPLÉTER ...]`, crochets compris.
 - `nom` : le nom exact de l'entreprise. Le titre de la page devient « Bonjour à l'équipe de Nom ». Devant une voyelle, l'élision est automatique : « Bonjour à l'équipe d'Ice-Watch ».
 - `salutation` (facultatif) : le titre complet, si le titre automatique sonne faux. Exemple : `salutation: 'Bonjour à l''équipe du Petit Atelier'`.
 - `description` : une phrase. Elle s'affiche dans l'aperçu du lien sur LinkedIn.
+- `apercu` (facultatif) : la ligne courte sous le nom de l'entreprise, sur l'image de partage. Sans elle, l'image dit « Trois idées pour votre e-commerce ». Pour une entreprise sans boutique en ligne, écris par exemple `apercu: 'Trois idées pour votre agence'` (40 signes au maximum).
 - `accroche` : ta lettre à l'équipe, un paragraphe par bloc `- >-`. Garde le premier paragraphe tel quel.
 - `idees` : exactement 3 idées. Chacune a un `titre`, un ou plusieurs paragraphes dans `texte`, et ton `experience` liée. L'expérience s'affiche après « Mon expérience : » : commence-la par une minuscule.
 - `objetEmail` : l'objet de l'e-mail qui s'ouvre quand on clique sur « M'écrire ».

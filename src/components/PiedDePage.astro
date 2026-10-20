@@ -1,6 +1,7 @@
 ---
 // Site footer. Kept short: the contact section above it carries the full details.
 import { PROFIL } from '../data/profil';
+import { SITE } from '../data/site';
 
 const annee = new Date().getFullYear();
 ---
@@ -13,8 +14,26 @@ const annee = new Date().getFullYear();
       <li><a href={`mailto:${PROFIL.contact.email}`}>E-mail</a></li>
       <li><a href="#haut">Haut de page</a></li>
     </ul>
+    {
+      SITE.goatcounter && (
+        <p class="pied__confidentialite">
+          Ce site compte les visites avec GoatCounter, sans cookie et sans donnée personnelle.
+        </p>
+      )
+    }
   </div>
 </footer>
+
+{
+  SITE.goatcounter && (
+    <script
+      is:inline
+      data-goatcounter={`https://${SITE.goatcounter}.goatcounter.com/count`}
+      async
+      src="https://gc.zgo.at/count.js"
+    />
+  )
+}
 
 <style>
   .pied {
@@ -39,6 +58,10 @@ const annee = new Date().getFullYear();
     display: flex;
     flex-wrap: wrap;
     gap: 0.5rem 1.5rem;
+  }
+
+  .pied__confidentialite {
+    flex-basis: 100%;
   }
 
   .pied__liens a {

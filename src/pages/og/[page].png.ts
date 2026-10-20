@@ -14,8 +14,11 @@ const BRUME_SUR_NUIT = '#C3C9DF';
 export const getStaticPaths = (async () => {
   const entreprises = await getCollection('entreprises');
   return [
-    { params: { page: 'accueil' }, props: { pour: null } },
-    ...entreprises.map((entree) => ({ params: { page: entree.id }, props: { pour: entree.data.nom } })),
+    { params: { page: 'accueil' }, props: { pour: null, apercu: null } },
+    ...entreprises.map((entree) => ({
+      params: { page: entree.id },
+      props: { pour: entree.data.nom, apercu: entree.data.apercu },
+    })),
   ];
 }) satisfies GetStaticPaths;
 
@@ -31,7 +34,7 @@ const photoUrl = `data:image/jpeg;base64,${photo.toString('base64')}`;
 type Noeud = { type: string; props: Record<string, unknown> };
 const div = (style: Record<string, unknown>, children?: unknown): Noeud => ({ type: 'div', props: { style, children } });
 
-function image(pour: string | null): Noeud {
+function image(pour: string | null, apercu: string | null): Noeud {
   const texte = pour
     ? [
         // Long company names get a smaller size so they stay on one line
@@ -39,7 +42,7 @@ function image(pour: string | null): Noeud {
           { display: 'flex', flexShrink: 0, marginTop: 34, color: ABRICOT, fontFamily: 'Bricolage', fontSize: pour.length > 18 ? 40 : 50, lineHeight: 1.05 },
           `pour ${pour}`,
         ),
-        div({ display: 'flex', flexShrink: 0, marginTop: 18, color: BRUME_SUR_NUIT, fontSize: 30 }, 'Trois idées pour votre e-commerce'),
+        div({ display: 'flex', flexShrink: 0, marginTop: 18, color: BRUME_SUR_NUIT, fontSize: 30 }, apercu ?? ''),
       ]
     : [
         div({ display: 'flex', marginTop: 34, color: BLANC, fontSize: 34 }, 'Étudiant en E-Business à la HEPL (Liège)'),
@@ -81,9 +84,9 @@ function image(pour: string | null): Noeud {
   );
 }
 
-export const GET: APIRoute<{ pour: string | null }> = async ({ props }) => {
+export const GET: APIRoute<{ pour: string | null; apercu: string | null }> = async ({ props }) => {
   // satori expects a React-like element tree; plain objects with type/props are accepted.
-  const svg = await satori(image(props.pour) as unknown as Parameters<typeof satori>[0], {
+  const svg = await satori(image(props.pour, props.apercu) as unknown as Parameters<typeof satori>[0], {
     width: 1200,
     height: 630,
     fonts: [

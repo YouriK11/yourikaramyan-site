@@ -40,6 +40,13 @@ const entreprises = defineCollection({
     salutation: texte.optional(),
     // One sentence for search results and link previews (the page itself is never indexed).
     description: texte,
+    // Optional: the short line under the company name on the share image (one line, 40 characters at most).
+    apercu: z
+      .string()
+      .trim()
+      .min(1)
+      .max(40, { error: "L'aperçu de l'image de partage tient sur une ligne : 40 signes au maximum." })
+      .default('Trois idées pour votre e-commerce'),
     // Short letter addressed to the team: one paragraph per item.
     accroche: z.array(texte).min(1),
     // Exactly three ideas, validated by Youri before publication.

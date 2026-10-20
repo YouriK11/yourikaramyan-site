@@ -61,8 +61,10 @@ html {
   scroll-padding-top: calc(var(--hauteur-entete) + 1rem);
 }
 
+/* Smooth scrolling for in-page links only. The class is added after load (Base.astro), so arriving
+   from another page on /#contact jumps straight there instead of scrolling through the whole page. */
 @media (prefers-reduced-motion: no-preference) {
-  html {
+  html.defilement-doux {
     scroll-behavior: smooth;
   }
 }
@@ -346,5 +348,138 @@ button {
 
   .bouton:active {
     transform: none;
+  }
+}
+
+/* ------------------------------------------------------------------------------------------
+   Finishing touches (step 6). Quiet on purpose: the hero stays the only animated moment.
+   ------------------------------------------------------------------------------------------ */
+
+@media (prefers-reduced-motion: no-preference) {
+  /* Links: the apricot underline thickens smoothly */
+  .lien {
+    transition:
+      text-decoration-thickness 0.15s ease,
+      text-underline-offset 0.15s ease;
+  }
+
+  .lien:hover {
+    text-underline-offset: 0.26em;
+  }
+
+  /* Download buttons: the arrow drops one notch */
+  .icone-telechargement .fleche {
+    transition: transform 0.2s ease;
+  }
+
+  /* Mouse only: on touch screens a tapped download link would keep its hover state */
+  @media (hover: hover) {
+    a:hover > .icone-telechargement .fleche {
+      transform: translateY(2px);
+    }
+  }
+
+  /* Section titles: the apricot marker draws itself once, when the title comes into view.
+     html.titres-anim is set before the first paint by Base.astro, and removed if the script never runs. */
+  html.titres-anim .titre-section::after {
+    transform: scaleX(0);
+    transform-origin: left center;
+    transition: transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+
+  html.titres-anim .titre-section.est-visible::after {
+    transform: none;
+  }
+
+  /* Page to page: a short cross-fade, the header stays put */
+  @view-transition {
+    navigation: auto;
+  }
+
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation-duration: 0.2s;
+  }
+}
+
+.entete {
+  view-transition-name: entete;
+}
+
+/* Print: a clean black-on-white CV, counters at their final value */
+@media print {
+  /* Navigation and buttons are useless on paper (and browsers drop their background colour) */
+  .entete,
+  .lien-evitement,
+  .menu-mobile,
+  .contact__copie,
+  .etude__liens,
+  .accueil__actions,
+  .bouton {
+    display: none !important;
+  }
+
+  .sur-nuit,
+  .section--brume {
+    background: none !important;
+    color: #000 !important;
+  }
+
+  /* Secondary text written for the midnight blue background turns slate grey on paper */
+  :root {
+    --brume-sur-nuit: var(--ardoise);
+  }
+
+  .sur-nuit .texte-secondaire,
+  .chiffre__valeur,
+  .etape__numero,
+  .idee__numero,
+  .idee__experience > span:first-child {
+    color: #000 !important;
+  }
+
+  /* Timeline markers, list bullets and apricot strokes are drawn as backgrounds: keep them on paper */
+  .pastille,
+  .titre-section::after,
+  .nom__trait,
+  .groupe__elements li::before,
+  .entree__textes li::before,
+  .entree__resultats li::before {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* Timeline years sit at the top of their group, whatever the scroll position */
+  .frise__repere {
+    position: static !important;
+  }
+
+  /* The hero name prints at its final state, whatever the scroll or the intro was doing */
+  .lettre {
+    --wght: 800 !important;
+    --wdth: 100 !important;
+  }
+
+  .nom__trait,
+  [data-apparition] {
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: none !important;
+  }
+
+  .compteur__valeur {
+    visibility: hidden;
+  }
+
+  .compteur__fantome {
+    visibility: visible !important;
+  }
+
+  .titre-section::after {
+    transform: none !important;
+  }
+
+  .section {
+    padding-block: 1.5rem;
   }
 }

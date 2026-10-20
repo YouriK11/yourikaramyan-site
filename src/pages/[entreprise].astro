@@ -20,7 +20,7 @@ export const getStaticPaths = (async () => {
 
 type Props = InferGetStaticPropsType<typeof getStaticPaths>;
 const { entree } = Astro.props;
-const { nom, salutation, description, accroche, idees, objetEmail } = entree.data;
+const { nom, salutation, description, apercu, accroche, idees, objetEmail } = entree.data;
 
 // "l'équipe de Col&McArthur", "l'équipe d'Ice-Watch": elision before a vowel. The optional
 // "salutation" field replaces the whole greeting when this rule reads wrong (articles, "h", ...).
@@ -53,7 +53,7 @@ const cv = [
   titre={`Youri Karamyan pour ${nom}`}
   description={description}
   image={`/og/${entree.id}.png`}
-  imageAlt={`Youri Karamyan pour ${nom} : trois idées pour votre e-commerce.`}
+  imageAlt={`Youri Karamyan pour ${nom}. ${apercu}.`}
   noindex
 >
   <Entete />

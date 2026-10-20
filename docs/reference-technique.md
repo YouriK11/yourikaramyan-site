@@ -118,19 +118,37 @@ Condition de Youri : le nom ne pousse jamais le contenu en dessous. Le Cumulativ
 - **Ne jamais utiliser `Intl.NumberFormat` au chargement** : sa première création charge les données de langue. Mesuré : environ 110 ms de blocage (442 ms avec le processeur ralenti 4 fois), soit une tâche longue de plus pour Lighthouse. Utiliser `formaterNombre()` de `src/data/nombres.ts`.
 - **Typographie** : `typo()` de `src/data/typographie.ts` (avec `set:html`, chaînes écrites dans `src/` uniquement) rend les mots à trait d'union insécables et met « 1er » en exposant. Les polices n'ont pas de U+2011 (trait d'union insécable).
 - **CSS intégré** : `build.inlineStylesheets: 'always'`. Le CSS fait quelques Ko, et un second fichier CSS bloquant retardait le premier affichage.
-- **`content-visibility: auto`** :
-  - sur les sections sous l'accueil (`.section--differee`) ;
-  - sur les trois blocs de l'étude de cas (captures, récit, résultats), car le haut de l'étude de cas dépasse dans le premier écran du téléphone et la section entière était calculée au chargement (LCP retardé à 2,1 s) ;
-  - `contain-intrinsic-size: auto <estimation>` garde la vraie hauteur une fois rendu.
+- **`content-visibility: auto` : retiré partout (étape 4)**. Vérifié avec l'arbre d'accessibilité de Chrome (CDP `Accessibility.getFullAXTree`) : les sections pas encore affichées en sortent, donc un lecteur d'écran ne trouve pas Parcours, Compétences ni Contact au chargement. Sans lui, Lighthouse mobile reste à 98 (médiane A/B) et l'accessibilité à 100. Ne pas le remettre.
 - **Carrousel des captures** : les images `lazy` cachées à droite ne se chargent qu'au glissement. Un petit script les passe en `eager` quand la rangée approche de l'écran.
 - **Captures floutées** : flou fort (pixellisation puis flou gaussien) sur les photos de profil et les prénoms des autres participants, avec Pillow, à partir de `sources/monarc/`. Résultat dans `src/assets/monarc/`. Les grades, les points et l'habitude restent lisibles.
 - **Badge App Store** : non utilisé. La licence d'Apple est réservée au titulaire du compte développeur. Boutons texte à la place.
 - **Mesurer Lighthouse en A/B alterné** (ancienne version, nouvelle version, et ainsi de suite) : la charge de la machine fait varier un même build de 86 à 99. Résultat de l'étape 3 : médiane 99, blocage médian 43 ms, LCP 1,95 s.
 
+## Pages entreprises (étape 5)
+
+- **Nom du fichier = adresse** : `generateId` du chargeur `glob` (`src/content.config.ts`) refuse tout nom qui n'est pas en minuscules sans accent, chiffres et tirets, ainsi que `404` et `accueil` (déjà pris). Sans ce contrôle, Astro transforme le nom en silence (« Atelier Dubois » devient `atelier-dubois`).
+- **Plan du site** : filtre en liste blanche, l'accueil seulement (`new URL(page).pathname === '/'`). Aucun risque d'y voir une page entreprise, quel que soit le nom du fichier.
+- **Titre** : « Bonjour à l'équipe de/d' + nom », élision automatique devant une voyelle. Champ facultatif `salutation` pour les autres cas (article, « h »).
+- **Garde-fous** testés dans une copie du projet : nom de fichier invalide, « [À COMPLÉTER » oublié et nombre d'idées différent de 3 arrêtent la construction avec un message en français.
+
 ## Images de partage (étape 6)
 
+- Champ facultatif `apercu` (40 signes au maximum) dans un fichier entreprise : la ligne sous le nom sur l'image. Par défaut : « Trois idées pour votre e-commerce ». `flexShrink: 0` sur chaque bloc, et un nom de plus de 18 signes passe en 40 px, pour qu'un nom long ne tasse pas le trait abricot.
 - satori 0.63.0 épinglé + sharp. Lire les polices avec des chemins relatifs à la racine du projet (`import.meta.url` pointe dans `dist/` et échoue). `boxSizing: 'border-box'` sur la racine, `display: 'flex'` sur chaque div à plusieurs enfants. Échapper `&` (Col&McArthur).
 - LinkedIn : 1200 × 630, URL absolue en https, `og:image:width`, `og:image:height`, `og:image:type`, `og:image:alt`. Rafraîchir avec le Post Inspector après chaque changement. Gmail n'affiche aucun aperçu : le texte de l'e-mail doit se suffire.
+
+## Finitions (étape 6)
+
+- **Un seul effet signature** : le nom de l'accueil. Ailleurs, seulement des détails discrets, coupés par `prefers-reduced-motion` : soulignement des liens, flèche de téléchargement au survol, trait du menu dessiné au survol (fond en `background-size`, rien ne bouge), téléphones soulevés de 6 px au survol.
+- **Survol réservé à la souris** : `@media (hover: hover)` autour de chaque `:hover` qui change l'aspect. Sinon, sur téléphone et tablette, l'état reste collé après un appui (lien de téléchargement, menu). Le soulèvement des téléphones ne s'applique qu'à partir de 64em : en dessous, la rangée défilante coupe ce qui dépasse.
+- **Défilement doux après le chargement seulement** : `scroll-behavior: smooth` est posé sur `html.defilement-doux`, classe ajoutée au `load` par `Base.astro`. Sans cela, un lien `/#contact` depuis une autre page fait défiler tout l'accueil (1,4 s) et déclenche tous les traits de titres en route.
+- **Trait abricot des titres de section** : il se dessine une fois quand le titre entre à l'écran. `html.titres-anim` est posé avant le premier affichage par un script en ligne dans `Base.astro`, puis retiré au bout de 4 s si le script principal ne tourne pas : le trait n'est jamais perdu. Animation en `transform` seulement : aucun décalage de mise en page.
+- **Transitions entre pages** : `@view-transition { navigation: auto; }`, fondu de 0,2 s, l'en-tête reste en place. Sans effet dans les navigateurs qui ne le gèrent pas.
+- **Attribut `hidden`** : `[hidden] { display: none !important; }` dans `global.css`, sinon `.bouton { display: inline-flex }` l'emporte et un bouton caché reste visible.
+- **Impression** : en-tête, menu et boutons masqués (les navigateurs n'impriment pas les couleurs de fond par défaut, un bouton bleu nuit deviendrait un cadre vide). Fonds retirés, texte en noir, `--brume-sur-nuit` remplacé par `--ardoise`, compteurs à leur valeur finale, nom de l'accueil forcé à son état final (`--wght: 800`, `--wdth: 100` en `!important`, plus fort que les styles posés par GSAP). Repères de la frise, puces et traits abricot gardés avec `print-color-adjust: exact`. Les quatre captures MonArc côte à côte (plus de rangée défilante), un téléphone jamais coupé entre deux pages, années de la frise en `position: static`.
+- **Captures pleine page** : Chrome ne dépasse pas environ 16 384 pixels de haut. À 390 px en ×2, l'accueil (9 500 px) dépasse : la capture repart du haut de la page. Faire deux captures avec `clip`.
+- **Page 404** : « 404 » décoratif en `::before { content: '404' / ''; }` (texte alternatif vide : ignoré par les lecteurs d'écran et par le contrôle de contraste d'axe).
+- **Outil d'édition** : les outils Edit et Write de Claude transforment l'échappement ` ` en vrai caractère U+00A0. C'est accepté : le caractère est le bon.
 
 ## Compteur de visites (étape 6)
 

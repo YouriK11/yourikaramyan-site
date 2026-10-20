@@ -156,19 +156,29 @@ const liens = [
     gap: 1.75rem;
   }
 
+  /* Hover: an apricot stroke draws itself under the link (drawn as a background, so nothing moves) */
   .entete__nav ul a {
     display: inline-block;
     padding: 0.375rem 0.5rem;
     margin-inline: -0.5rem;
     font-weight: 500;
     text-decoration: none;
-    text-decoration-color: var(--abricot);
-    text-decoration-thickness: 2px;
-    text-underline-offset: 0.35em;
+    background: linear-gradient(var(--abricot), var(--abricot)) no-repeat left bottom / 0 2px;
+    background-origin: content-box;
+    background-clip: content-box;
   }
 
-  .entete__nav ul a:hover {
-    text-decoration-line: underline;
+  /* Mouse only: after a tap on a tablet, the stroke would stay under the link */
+  @media (hover: hover) {
+    .entete__nav ul a:hover {
+      background-size: 100% 2px;
+    }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .entete__nav ul a {
+      transition: background-size 0.25s ease;
+    }
   }
 
   .entete__menu {

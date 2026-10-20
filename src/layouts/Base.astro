@@ -62,10 +62,39 @@ const indexable = !noindex && !SITE.enConstruction;
 
     <Font cssVariable="--font-display" preload />
     <Font cssVariable="--font-body" preload />
+    <script is:inline>
+      // Section titles draw their apricot marker when they come into view (global.css).
+      // Set before the first paint; removed after 4 s if the script below never runs.
+      if (matchMedia('(prefers-reduced-motion: no-preference)').matches && 'IntersectionObserver' in window) {
+        document.documentElement.classList.add('titres-anim');
+        setTimeout(function () {
+          if (!window.titresPrets) document.documentElement.classList.remove('titres-anim');
+        }, 4000);
+      }
+    </script>
     <slot name="head" />
   </head>
   <body id="haut">
     <a class="lien-evitement" href="#contenu">Aller au contenu</a>
     <slot />
+    <script>
+      const html = document.documentElement;
+      // Smooth scrolling starts after load (global.css): a jump to /#contact from another page stays instant
+      addEventListener('load', () => requestAnimationFrame(() => html.classList.add('defilement-doux')), { once: true });
+      if (html.classList.contains('titres-anim')) {
+        (window as Window & { titresPrets?: boolean }).titresPrets = true;
+        const observateur = new IntersectionObserver(
+          (entrees) => {
+            for (const entree of entrees) {
+              if (!entree.isIntersecting) continue;
+              entree.target.classList.add('est-visible');
+              observateur.unobserve(entree.target);
+            }
+          },
+          { rootMargin: '0px 0px -12% 0px' },
+        );
+        document.querySelectorAll('.titre-section').forEach((titre) => observateur.observe(titre));
+      }
+    </script>
   </body>
 </html>

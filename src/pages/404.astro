@@ -2,17 +2,42 @@
 import Base from '../layouts/Base.astro';
 import Entete from '../components/Entete.astro';
 import PiedDePage from '../components/PiedDePage.astro';
+import IconeTelechargement from '../components/IconeTelechargement.astro';
+import { PROFIL } from '../data/profil';
+
+const raccourcis = [
+  { href: '/#monarc', texte: "L'étude de cas MonArc" },
+  { href: '/#parcours', texte: 'Mon parcours' },
+  { href: '/#contact', texte: 'Mes coordonnées' },
+];
 ---
 
 <Base titre="Page introuvable | Youri Karamyan" noindex canonical={false}>
   <Entete />
   <main id="contenu" class="introuvable">
-    <div class="conteneur">
-      <h1 class="titre-section">Page introuvable</h1>
-      <p class="mesure introuvable__texte">
-        Le lien est peut-être incomplet. L'accueil présente mon profil, mon étude de cas et mes coordonnées.
-      </p>
-      <a class="bouton" href="/">Revenir à l'accueil</a>
+    <div class="conteneur introuvable__grille">
+      <div>
+        <h1 class="titre-section">Page introuvable</h1>
+        <p class="mesure introuvable__texte">Le lien est peut-être incomplet. Voici les pages les plus utiles.</p>
+        <ul class="introuvable__liens" role="list">
+          {
+            raccourcis.map((r) => (
+              <li>
+                <a class="lien" href={r.href}>
+                  {r.texte}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+        <div class="introuvable__actions">
+          <a class="bouton" href="/">Revenir à l'accueil</a>
+          <a class="bouton bouton--contour" href={PROFIL.cv.fichier} download={PROFIL.cv.nomTelechargement}>
+            <IconeTelechargement />
+            Télécharger mon CV
+          </a>
+        </div>
+      </div>
     </div>
   </main>
   <PiedDePage />
@@ -23,8 +48,60 @@ import PiedDePage from '../components/PiedDePage.astro';
     padding-block: var(--section);
   }
 
+  .introuvable__grille {
+    display: grid;
+    gap: 1rem;
+  }
+
+  /* Decorative "404" in the same heavy display cut as the name on the home page.
+     Generated content with empty alternative text: hidden from screen readers, outside contrast rules. */
+  .introuvable__grille::before {
+    content: '404' / '';
+    color: var(--trait);
+    font-family: var(--police-titre);
+    font-size: clamp(6rem, 3rem + 16vw, 15rem);
+    font-weight: 800;
+    line-height: 0.85;
+    letter-spacing: -0.02em;
+    user-select: none;
+  }
+
   .introuvable__texte {
-    margin-block: 1.5rem 2rem;
+    margin-top: 1.5rem;
     font-size: var(--texte-l);
+  }
+
+  .introuvable__liens {
+    display: grid;
+    gap: 0.5rem;
+    margin-top: 1.5rem;
+    font-weight: 600;
+  }
+
+  .introuvable__liens a {
+    display: inline-block;
+    padding-block: 0.25rem;
+  }
+
+  .introuvable__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 2rem;
+  }
+
+  /* On phones the two buttons stack: same full width, as in the hero. */
+  @media (max-width: 35.99em) {
+    .introuvable__actions .bouton {
+      flex: 1 1 100%;
+    }
+  }
+
+  @media (min-width: 64em) {
+    .introuvable__grille {
+      grid-template-columns: auto minmax(0, 1fr);
+      column-gap: clamp(3rem, 6vw, 6rem);
+      align-items: center;
+    }
   }
 </style>

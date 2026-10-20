@@ -25,7 +25,7 @@ Consignes de Youri pour cette nuit :
 | 3 | Étude de cas MonArc | Terminée le 19/10/2026 (nuit), commit a5b5e9d |
 | 4 | Parcours, compétences, contact | Terminée le 19/10/2026 (nuit), commit 90c7403 |
 | 5 | Page /col-macarthur et système de duplication | Terminée le 20/10/2026, commit 630918b |
-| 6 | Finitions : images de partage, accessibilité, Lighthouse mobile, compteur de visites | Terminée le 20/10/2026 (compteur prêt, inactif sans compte GoatCounter) |
+| 6 | Finitions : images de partage, accessibilité, Lighthouse mobile, compteur de visites | Terminée le 20/10/2026, commit c51d1f6 (compteur prêt, inactif sans compte GoatCounter) |
 | 7 | Mise en ligne sur yourikaramyan.com (GitHub + Vercel, achat du domaine sur Vercel) | À faire |
 
 ## Décisions validées par Youri (19/10/2026)

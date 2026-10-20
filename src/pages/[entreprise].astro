@@ -77,8 +77,8 @@ const cv = [
             class="lettre__photo"
             src={portrait}
             formats={['avif', 'webp']}
-            widths={[240, 320, 480, 640]}
-            sizes="(min-width: 64em) 17rem, 7.5rem"
+            widths={[240, 320, 480, 640, 800]}
+            sizes="(min-width: 64em) 24rem, 7.5rem"
             alt="Portrait de Youri Karamyan"
             loading="eager"
           />
@@ -177,7 +177,7 @@ const cv = [
   .lettre__titre {
     max-width: 16ch;
     font-family: var(--police-titre);
-    font-size: clamp(2.5rem, 1.6rem + 4.2vw, 5rem);
+    font-size: clamp(2.5rem, 1.6rem + 4.2vw, 6.5rem);
     font-weight: 780;
     font-stretch: 92%;
     line-height: 1;
@@ -268,14 +268,14 @@ const cv = [
   .idee__numero {
     color: var(--abricot);
     font-family: var(--police-titre);
-    font-size: 1.125rem;
+    font-size: clamp(1.125rem, 0.9rem + 0.5vw, 1.5rem);
     font-weight: 760;
   }
 
   .idee__titre {
     margin-top: 0.5rem;
     font-family: var(--police-titre);
-    font-size: clamp(1.5rem, 1.2rem + 1.3vw, 2.125rem);
+    font-size: clamp(1.5rem, 1.1rem + 1.4vw, 2.75rem);
     font-weight: 740;
     font-stretch: 92%;
     line-height: 1.1;
@@ -342,7 +342,7 @@ const cv = [
 
   .profil__valeur {
     font-family: var(--police-titre);
-    font-size: clamp(1.875rem, 1.4rem + 2vw, 3rem);
+    font-size: clamp(1.875rem, 0.9rem + 3.6vw, 4.5rem); /* "+21 000 €" fits its column up to 1920 px */
     font-weight: 780;
     font-stretch: 90%;
     line-height: 1;
@@ -390,15 +390,17 @@ const cv = [
   }
 
   @media (min-width: 64em) {
+    /* The portrait grows with the screen, like the home page's (17rem at 1024 px, 24rem at 1920 px) */
     .lettre__grille {
-      grid-template-columns: minmax(0, 1fr) 17rem;
+      --portrait: clamp(17rem, 7rem + 13vw, 24rem);
+      grid-template-columns: minmax(0, 1fr) var(--portrait);
       column-gap: clamp(3rem, 6vw, 6rem);
       align-items: start;
     }
 
     .lettre__portrait {
       order: 0;
-      width: 17rem;
+      width: var(--portrait);
       padding: 0 1.5rem 1.5rem 0;
       margin-top: 0.5rem;
     }
@@ -426,6 +428,11 @@ const cv = [
 
     .profil__chiffres {
       margin-top: 0.5rem;
+      row-gap: 2.5rem;
+    }
+
+    .profil__libelle {
+      font-size: var(--texte-m);
     }
   }
 </style>

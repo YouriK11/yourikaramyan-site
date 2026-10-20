@@ -24,7 +24,7 @@ Consignes de Youri pour cette nuit :
 | 2 | Accueil et effet signature | Terminée le 19/10/2026 |
 | 3 | Étude de cas MonArc | Terminée le 19/10/2026 (nuit), commit a5b5e9d |
 | 4 | Parcours, compétences, contact | Terminée le 19/10/2026 (nuit) |
-| 5 | Page /col-macarthur et système de duplication | À faire |
+| 5 | Page /col-macarthur et système de duplication | Terminée le 20/10/2026 |
 | 6 | Finitions : images de partage, accessibilité, Lighthouse mobile, compteur de visites | À faire |
 | 7 | Mise en ligne sur yourikaramyan.com (GitHub + Vercel, achat du domaine sur Vercel) | À faire |
 
@@ -73,7 +73,7 @@ Chiffres refusés, à ne pas utiliser :
 Les 3 idées retenues (ordre d'affichage). Texte validé, ajustements de forme possibles.
 
 **Idée 1. Une vidéo courte à chaque date anniversaire**
-Chaque montre porte une date de l'Histoire. Ces dates forment un calendrier éditorial tout prêt. Le jour de l'anniversaire, une vidéo verticale de 30 secondes raconte l'événement et montre le fragment authentique intégré à la montre. Elle est publiée sur Instagram, TikTok et YouTube Shorts. La même histoire part le jour même par e-mail. Les trois prochaines dates tombent avant Noël : le 9 novembre (Berlin 1989), le 11 novembre (Armistice 1918) et le 5 décembre (Hallyday 2017).
+Chaque montre porte une date de l'Histoire. Ces dates forment un calendrier éditorial tout prêt. Le jour de l'anniversaire, une vidéo verticale de 30 secondes raconte l'événement et présente la montre qui lui rend hommage. *(Ajustement de forme du 20/10/2026 : « montre le fragment authentique intégré à la montre » n'était pas vérifiable pour la montre Armistice 1918.)* Elle est publiée sur Instagram, TikTok et YouTube Shorts. La même histoire part le jour même par e-mail. Les trois prochaines dates tombent avant Noël : le 9 novembre (Berlin 1989), le 11 novembre (Armistice 1918) et le 5 décembre (Hallyday 2017).
 Lien avec Youri : une vidéo TikTok publiée chaque jour pour MonArc.
 
 **Idée 2. Une newsletter qui parle à chaque collectionneur**

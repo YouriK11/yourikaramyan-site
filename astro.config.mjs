@@ -10,7 +10,8 @@ export default defineConfig({
   compressHTML: true,
   // Pages are built as /page/index.html and served as /page/.
   trailingSlash: 'always',
-  integrations: [sitemap()],
+  // The home page is the only page meant for search engines: company pages never appear in the sitemap.
+  integrations: [sitemap({ filter: (page) => new URL(page).pathname === '/' })],
   // The whole stylesheet is a few KB: inline it so no CSS request blocks the first paint.
   build: {
     inlineStylesheets: 'always',

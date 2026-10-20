@@ -1,0 +1,11 @@
+---
+// Trial page, never indexed: home variant C "Élégance". Delete once Youri has chosen.
+import { Font } from 'astro:assets';
+import PageEssai from '../components/essais/PageEssai.astro';
+import AccueilElegance from '../components/essais/AccueilElegance.astro';
+---
+
+<PageEssai titre="Essai C, Élégance">
+  <Font cssVariable="--font-serif" preload slot="head" />
+  <AccueilElegance />
+</PageEssai>

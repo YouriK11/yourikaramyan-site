@@ -1,0 +1,174 @@
+---
+// Trial B, "Affiche": midnight blue, the name across the whole width of the screen in Archivo, extra wide and
+// black. The cut-out photo stands behind the name and fades out towards the bottom, so the white letters stay
+// legible where they cross it. Entrance: the name widens from narrow to extra wide (the letters stay tight).
+import { Picture } from 'astro:assets';
+import photo from '../../assets/photos/youri-chemise-detouree.png';
+import TexteEssai from './TexteEssai.astro';
+---
+
+<section class="essai-accueil affiche sur-nuit" aria-labelledby="titre-affiche">
+  <div class="affiche__photo">
+    <Picture
+      src={photo}
+      formats={['avif', 'webp']}
+      widths={[320, 480, 640, 800]}
+      sizes="(min-width: 64em) 40rem, 72vw"
+      alt="Portrait de Youri Karamyan"
+      loading="eager"
+      fetchpriority="high"
+    />
+  </div>
+
+  <div class="conteneur affiche__haut">
+    <TexteEssai class="affiche__texte" />
+  </div>
+
+  <h1 id="titre-affiche" class="affiche__nom">
+    <span class="sr-only">Youri Karamyan</span>
+    <span aria-hidden="true">
+      <span class="affiche__ligne">Youri</span>
+      <span class="affiche__ligne">Karamyan</span>
+    </span>
+  </h1>
+</section>
+
+<style>
+  .affiche {
+    position: relative;
+    display: grid;
+    overflow: clip;
+    background: var(--nuit);
+  }
+
+  /* The name spans the screen: "Karamyan" (--mot em wide in the extra-wide black cut) fills the width */
+  .affiche__nom {
+    --mot: 6.5;
+    position: relative;
+    z-index: 2;
+    padding-inline: var(--gouttiere);
+    color: var(--blanc);
+    font-family: var(--font-archivo), var(--police-titre);
+    font-size: calc((100vw - 2 * var(--gouttiere)) / var(--mot));
+    font-weight: 900;
+    font-stretch: 125%;
+    line-height: 0.84;
+    letter-spacing: -0.02em;
+  }
+
+  .affiche__ligne {
+    display: block;
+    white-space: nowrap;
+  }
+
+  /* Phones: the photo first, the name crossing its faded bottom, then the text */
+  .affiche__photo {
+    position: relative;
+    z-index: 1;
+    justify-self: center;
+    width: min(72vw, 21rem);
+    margin-top: 1.5rem;
+  }
+
+  .affiche__photo :global(img) {
+    display: block;
+    width: 100%;
+    height: auto;
+    -webkit-mask-image: linear-gradient(to bottom, #000 45%, transparent 88%);
+    mask-image: linear-gradient(to bottom, #000 45%, transparent 88%);
+  }
+
+  .affiche__nom {
+    order: 2;
+    margin-top: -0.95em;
+  }
+
+  .affiche__haut {
+    order: 3;
+    position: relative;
+    z-index: 2;
+    padding-block: 1.75rem 3rem;
+  }
+
+  /* Entrance: the name widens from narrow to extra wide and gains weight, line after line.
+     Only the shapes change: the letters stay tight and nothing around them moves. */
+  @media (prefers-reduced-motion: no-preference) {
+    .affiche__ligne {
+      animation: affiche-elargir 1.3s cubic-bezier(0.65, 0, 0.2, 1) both;
+    }
+
+    .affiche__ligne + .affiche__ligne {
+      animation-delay: 0.12s;
+    }
+
+    .affiche__photo {
+      animation: affiche-photo 1.4s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+    }
+  }
+
+  @keyframes affiche-elargir {
+    from {
+      font-stretch: 62%;
+      font-weight: 600;
+    }
+  }
+
+  @keyframes affiche-photo {
+    from {
+      transform: translateY(3%) scale(1.03);
+    }
+  }
+
+  /* Desktop: a poster on the whole first screen. Text at the top left, the photo behind the name on the right,
+     the name across the bottom of the screen. */
+  @media (min-width: 64em) {
+    .affiche {
+      --hauteur: calc(100svh - var(--hauteur-entete));
+      min-height: var(--hauteur);
+      grid-template-rows: auto 1fr auto;
+    }
+
+    .affiche__nom {
+      order: 0;
+      grid-row: 3;
+      margin-top: 0;
+      /* Room for the "y" descender below the last line */
+      padding-bottom: calc(0.16em + clamp(0.5rem, 1.5svh, 1.25rem));
+      /* Never taller than about half the screen */
+      font-size: min(calc((100vw - 2 * var(--gouttiere)) / var(--mot)), calc(var(--hauteur) * 0.3));
+    }
+
+    .affiche__haut {
+      order: 0;
+      grid-row: 1;
+      padding-block: clamp(1.5rem, 5svh, 3.5rem) 0;
+    }
+
+    .affiche__haut :global(.affiche__texte) {
+      max-width: 40rem;
+    }
+
+    .affiche__photo {
+      position: absolute;
+      right: max(var(--gouttiere), calc((100vw - 82rem) / 2));
+      bottom: 0;
+      width: auto;
+      height: calc(var(--hauteur) * 0.94);
+      margin: 0;
+    }
+
+    .affiche__photo :global(img) {
+      width: auto;
+      height: 100%;
+      /* Fades out downwards under the name, and at the cut of the right shoulder */
+      -webkit-mask-image:
+        linear-gradient(to bottom, #000 40%, rgb(0 0 0 / 0.35) 72%, transparent 92%),
+        linear-gradient(to left, transparent, #000 16%);
+      -webkit-mask-composite: source-in;
+      mask-image:
+        linear-gradient(to bottom, #000 40%, rgb(0 0 0 / 0.35) 72%, transparent 92%),
+        linear-gradient(to left, transparent, #000 16%);
+      mask-composite: intersect;
+    }
+  }
+</style>

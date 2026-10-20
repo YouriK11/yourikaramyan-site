@@ -30,6 +30,8 @@ Consignes de Youri pour cette nuit :
 
 Passe visuelle « whaou » (20/10/2026) : sur la branche git `passe-whaou`, en attente de la validation de Youri. Détail dans `docs/rapport-passe-whaou.md`.
 
+Soirée du 20/10/2026 (même branche) : lettres du nom toujours serrées, trois variantes de l'accueil sur `/essai-a`, `/essai-b`, `/essai-c` (**en attente du choix de Youri**, comparatif dans `docs/variantes.md`), puis améliorations sur grand écran. Détail dans `docs/rapport-soiree.md`.
+
 ## Décisions validées par Youri (19/10/2026)
 
 - Plan, structure des fichiers et effet signature « le nom qui prend de l'ampleur » : validés.

@@ -162,6 +162,17 @@ Condition de Youri : le nom ne pousse jamais le contenu en dessous. Le Cumulativ
 - **Page 404** : « 404 » décoratif en `::before { content: '404' / ''; }` (texte alternatif vide : ignoré par les lecteurs d'écran et par le contrôle de contraste d'axe).
 - **Outil d'édition** : les outils Edit et Write de Claude transforment l'échappement ` ` en vrai caractère U+00A0. C'est accepté : le caractère est le bon.
 
+## Soirée du 20/10/2026 : variantes et grands écrans
+
+- **Variantes de l'accueil** (en attente du choix de Youri) : pages `/essai-a`, `/essai-b`, `/essai-c` (`src/components/essais/`). `PageEssai.astro` assombrit l'en-tête avec `:root:has(.essai)`, qui ne touche jamais les vraies pages. Le bloc de texte commun (`TexteEssai.astro`) reçoit une classe de chaque variante : la styler avec `:global()` depuis la variante (les styles scopés d'Astro n'atteignent pas la racine d'un autre composant).
+- **Largeur mesurée de « Karamyan »** (en em, `letter-spacing` compris) : Bricolage 800/75 = 3,26 ; Archivo 900/125 = 6,44 ; Instrument Serif = 3,43. Le nom remplit sa colonne avec `font-size: min(100cqi / largeur, …)`.
+- **Anneau SVG dessiné** (variante C) : `pathLength="100"` et `stroke-dasharray: 100`, sans `vector-effect: non-scaling-stroke` (Chrome ignore alors `pathLength` pour les tirets et l'anneau reste incomplet).
+- **Entrée élargie** (variante B) : animer `font-stretch` et `font-weight` d'une ligne de texte simple (un seul nœud texte, aligné à gauche) ne crée aucun décalage de mise en page et garde les lettres serrées.
+- **Photo détourée** : `src/assets/photos/youri-chemise-detouree.png` (copie de `photo_youri_chemise_transparent.png` du dossier Téléchargements, fond intact). Ses bords coupés (épaule droite, taille) sont adoucis par `mask-image`.
+- **Adresse e-mail du contact** : sur ordinateur, `font-size: min(3.75rem, 8.4cqi)` dans `.contact__moyens` (conteneur) ; l'adresse fait environ 11,1 em, elle ne déborde jamais.
+- **Section en cours dans le menu** : `IntersectionObserver` avec `rootMargin: '-35% 0px -60% 0px'` (une bande fine au tiers de l'écran), `aria-current="location"` sur les liens, accueil seulement.
+- **Données structurées** : `schema.org/Person` en JSON-LD dans `index.astro`, construit à partir de `src/data/profil.ts` uniquement.
+
 ## Compteur de visites (étape 6)
 
 - **GoatCounter** : gratuit pour un site personnel, sans cookies, hébergé en Finlande et en Allemagne, vues par page et par jour, sources des visites.

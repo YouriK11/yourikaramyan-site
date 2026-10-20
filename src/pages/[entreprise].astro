@@ -419,6 +419,20 @@ const cv = [
       gap: 2.5rem;
     }
 
+    /* The three "Mon expérience" boxes share one bottom line, whatever the length of each idea */
+    .idee {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .idee__experience {
+      margin-top: auto;
+    }
+
+    .idee__texte:has(+ .idee__experience) {
+      margin-bottom: 1.25rem;
+    }
+
     .profil__grille,
     .cv__grille {
       grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);

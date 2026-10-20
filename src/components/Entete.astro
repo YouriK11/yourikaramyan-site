@@ -78,6 +78,28 @@ const liens = [
 </header>
 
 <script>
+  // Home page: the link of the section in view is marked (aria-current), with the same fixed apricot stroke as on
+  // hover. A section counts as "in view" when it crosses a thin band a third of the way down the screen.
+  const liensSections = Array.from(document.querySelectorAll<HTMLAnchorElement>('.entete a[href^="/#"]'));
+  const sections = [...new Set(liensSections.map((a) => a.hash.slice(1)))]
+    .map((id) => document.getElementById(id))
+    .filter((el): el is HTMLElement => el !== null);
+  if (location.pathname === '/' && sections.length && 'IntersectionObserver' in window) {
+    const visibles = new Map<string, boolean>();
+    const marquer = (id: string | undefined) =>
+      liensSections.forEach((a) =>
+        a.hash === `#${id}` ? a.setAttribute('aria-current', 'location') : a.removeAttribute('aria-current'),
+      );
+    const observateur = new IntersectionObserver(
+      (entrees) => {
+        entrees.forEach((entree) => visibles.set(entree.target.id, entree.isIntersecting));
+        marquer(sections.find((section) => visibles.get(section.id))?.id);
+      },
+      { rootMargin: '-35% 0px -60% 0px' },
+    );
+    sections.forEach((section) => observateur.observe(section));
+  }
+
   const menu = document.getElementById('menu-mobile');
   if (menu && 'hidePopover' in menu) {
     // Close the mobile panel when a section link is chosen.
@@ -175,6 +197,11 @@ const liens = [
     }
   }
 
+  /* The section in view (home page): the stroke stays */
+  .entete__nav ul a[aria-current] {
+    background-size: 100% 2px;
+  }
+
   @media (prefers-reduced-motion: no-preference) {
     .entete__nav ul a {
       transition: background-size 0.25s ease;
@@ -268,6 +295,14 @@ const liens = [
     font-stretch: 92%;
     line-height: 1.1;
     text-decoration: none;
+  }
+
+  /* The section in view (home page): an apricot underline, as in the desktop menu */
+  .menu-mobile__liens a[aria-current] {
+    text-decoration-line: underline;
+    text-decoration-color: var(--abricot);
+    text-decoration-thickness: 4px;
+    text-underline-offset: 0.18em;
   }
 
   .menu-mobile__bas {

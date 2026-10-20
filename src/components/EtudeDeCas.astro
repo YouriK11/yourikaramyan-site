@@ -526,6 +526,11 @@ const etapes = [
       gap: 3rem 2rem;
     }
 
+    .etapes {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 2.5rem 2rem;
+    }
+
     /* One caption under each phone: left, centre, right */
     .eventail__ecrans {
       grid-template-columns: minmax(0, 1fr) var(--largeur-tel) minmax(0, 1fr);

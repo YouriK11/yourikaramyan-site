@@ -7,9 +7,32 @@ import Parcours from '../components/Parcours.astro';
 import Competences from '../components/Competences.astro';
 import Contact from '../components/Contact.astro';
 import PiedDePage from '../components/PiedDePage.astro';
+import { PROFIL } from '../data/profil';
+import { SITE } from '../data/site';
+
+// Structured profile (schema.org Person) read by search engines. Facts from the CV only.
+const personne = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: `${PROFIL.identite.prenom} ${PROFIL.identite.nom}`,
+  url: `${SITE.url}/`,
+  image: `${SITE.url}/og/accueil.png`,
+  description: SITE.description,
+  jobTitle: PROFIL.identite.titre,
+  affiliation: {
+    '@type': 'CollegeOrUniversity',
+    name: 'HEPL',
+    address: { '@type': 'PostalAddress', addressLocality: 'Liège', addressCountry: 'BE' },
+  },
+  address: { '@type': 'PostalAddress', addressLocality: PROFIL.identite.lieu, addressCountry: 'BE' },
+  email: `mailto:${PROFIL.contact.email}`,
+  sameAs: [PROFIL.contact.linkedin],
+  knowsLanguage: PROFIL.langues.map((l) => l.langue),
+};
 ---
 
 <Base>
+  <script is:inline type="application/ld+json" slot="head" set:html={JSON.stringify(personne)} />
   <Entete />
   <main id="contenu">
     <Accueil />

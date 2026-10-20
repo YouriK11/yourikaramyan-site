@@ -74,7 +74,7 @@ const lignes = LIGNES.map(({ texte, largeurs }) => {
         src={portrait}
         formats={['avif', 'webp']}
         widths={[320, 480, 640, 800]}
-        sizes="20rem"
+        sizes="26rem"
         alt="Portrait de Youri Karamyan"
         loading="lazy"
       />
@@ -510,26 +510,73 @@ const lignes = LIGNES.map(({ texte, largeurs }) => {
     }
   }
 
-  /* Desktop: name and text on the left, large portrait on the right. */
+  /* Desktop: the hero fills the first screen. The name runs across the whole width, as on a poster;
+     the large portrait sits at the right, beside "Youri", and the end of "Karamyan" passes in front of it.
+     Both sizes follow the screen height too, so the buttons and the MonArc line stay in the first screen.
+     Everything is fixed from the first paint: nothing shifts. */
   @media (min-width: 64em) {
+    .accueil {
+      display: grid;
+      align-content: center;
+      min-height: calc(100svh - var(--hauteur-entete));
+      padding-block: clamp(1.5rem, 4svh, 3.5rem);
+    }
+
     .accueil__grille {
-      grid-template-columns: minmax(0, 1fr) 20rem;
+      --portrait: min(26rem, 30vw, calc((100svh - var(--hauteur-entete)) * 0.5));
+      grid-template-columns: minmax(0, 1fr) var(--portrait);
       grid-template-rows: auto auto auto 1fr;
-      grid-template-areas:
-        'identite portrait'
-        'texte portrait'
-        'actions portrait'
-        'preuve portrait';
+      grid-template-areas: none;
       column-gap: clamp(3rem, 5vw, 5rem);
       align-items: start;
+    }
+
+    .accueil__identite {
+      grid-column: 1 / -1;
+      grid-row: 1;
+    }
+
+    /* Layers: the letters pass in front of the portrait, the apricot stroke runs behind it. */
+    .nom__ligne {
+      position: relative;
+      z-index: 2;
+    }
+
+    .accueil__portrait {
+      z-index: 1;
+    }
+
+    .nom {
+      /* As wide as the content allows, but never taller than the first screen leaves room for. */
+      font-size: min(
+        calc(100cqi / (var(--largeur-nom) + 0.02)),
+        max(5.5rem, calc((100svh - var(--hauteur-entete) - 23rem) / 2.1))
+      );
     }
 
     /* Same proportions as the CV photo: offset about 10 % and corner radius about 15 % of the width. */
     .accueil__portrait {
       --decalage: 1.75rem;
-      width: 20rem;
+      grid-column: 2;
+      grid-row: 1 / span 4;
+      width: var(--portrait);
       aspect-ratio: auto;
-      margin-top: 0.5rem;
+      margin-top: 0.75rem;
+    }
+
+    .accueil__texte {
+      grid-column: 1;
+      grid-row: 2;
+    }
+
+    .accueil__actions {
+      grid-column: 1;
+      grid-row: 3;
+    }
+
+    .accueil__preuve {
+      grid-column: 1;
+      grid-row: 4;
     }
 
     .accueil__portrait::before {
@@ -552,18 +599,6 @@ const lignes = LIGNES.map(({ texte, largeurs }) => {
 
     .accueil__texte {
       margin-top: 2rem;
-    }
-  }
-
-  /* Short laptop screens (1366x768, 1920x1080 at 125-150 %): shrink the name so the buttons and the
-     MonArc proof line stay above the fold. Fixed from the first paint, so nothing shifts. */
-  @media (min-width: 64em) and (max-height: 52em) {
-    .accueil {
-      padding-top: 2rem;
-    }
-
-    .nom {
-      font-size: min(calc(100cqi / (var(--largeur-nom) + 0.02)), 11rem, max(5.5rem, calc((100vh - 25rem) / 2.1)));
     }
   }
 </style>

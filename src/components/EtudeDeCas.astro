@@ -22,28 +22,34 @@ const resultats = [
   { valeur: 170000, prefixe: '+', libelle: "j'aime sur le compte TikTok" },
 ];
 
-const ecrans = [
+// The app's three screens, fanned out: the feed in front, the ranking and the profile behind it.
+const eventail = [
   {
-    src: ecranFil,
-    alt: "Écran Fil de MonArc : la preuve photo d'une séance de musculation publiée par un participant.",
-    legende: 'Le fil des preuves photo',
-  },
-  {
+    cote: 'gauche',
+    position: 'à gauche',
     src: ecranClassement,
     alt: 'Écran Classement de MonArc : le classement de la semaine, avec le grade et les points de chaque participant.',
     legende: 'Le classement de la semaine',
   },
   {
+    cote: 'centre',
+    position: 'au centre',
+    src: ecranFil,
+    alt: "Écran Fil de MonArc : la preuve photo d'une séance de musculation publiée par un participant.",
+    legende: 'Le fil des preuves photo',
+  },
+  {
+    cote: 'droite',
+    position: 'à droite',
     src: ecranProfil,
     alt: 'Écran Profil de MonArc : grade Apprenti, 940 points et progression vers le grade suivant.',
     legende: 'Le profil, les points et les grades',
   },
-  {
-    src: grilleInstagram,
-    alt: 'Grille Instagram du compte @monarc_app : les publications des jours 11 à 18 du Winter Arc.',
-    legende: 'Les preuves du jour sur Instagram',
-  },
 ];
+
+// Rendered width of the fanned phones (see --largeur-tel below), for the browser to pick the right file.
+const TAILLES_EVENTAIL =
+  '(min-width: 90em) 22rem, (min-width: 80em) 21rem, (min-width: 64em) 19rem, (min-width: 48em) 15rem, 13.5rem';
 
 const etapes = [
   {
@@ -109,12 +115,33 @@ const etapes = [
       </p>
     </div>
 
-    <div class="etude__ecrans" role="region" aria-label="Captures de MonArc" tabindex="0">
-      {ecrans.map((ecran) => <Telephone src={ecran.src} alt={ecran.alt} legende={ecran.legende} />)}
-    </div>
-    <p class="etude__floutage texte-secondaire">
-      Les photos de profil et les prénoms des autres participants sont floutés.
-    </p>
+    <!-- The site's second animated moment (after the hero): the phones spread out once, when they come into view. -->
+    <figure class="eventail" data-eventail>
+      <div class="eventail__scene">
+        {
+          eventail.map((ecran) => (
+            <div class={`eventail__tel eventail__tel--${ecran.cote}`}>
+              <Telephone src={ecran.src} alt={ecran.alt} sizes={TAILLES_EVENTAIL} />
+            </div>
+          ))
+        }
+      </div>
+      <figcaption class="eventail__legende">
+        <ul class="eventail__ecrans" role="list">
+          {
+            eventail.map((ecran) => (
+              <li class={`eventail__ecran eventail__ecran--${ecran.cote}`}>
+                <span set:html={typo(ecran.legende)} />
+                <span class="eventail__position"> ({ecran.position})</span>
+              </li>
+            ))
+          }
+        </ul>
+        <p class="etude__floutage texte-secondaire">
+          Les photos de profil et les prénoms des autres participants sont floutés.
+        </p>
+      </figcaption>
+    </figure>
 
     <div class="etude__recit">
       <div class="etude__contexte">
@@ -161,6 +188,12 @@ const etapes = [
       <h3 class="etude__soustitre">Sur les réseaux sociaux</h3>
       <div class="reseaux__telephones">
         <Telephone
+          src={grilleInstagram}
+          alt="Grille Instagram du compte @monarc_app : les publications des jours 11 à 18 du Winter Arc."
+          legende="Les preuves du jour sur Instagram"
+          sizes="(min-width: 64em) 17rem, 42vw"
+        />
+        <Telephone
           src={statsTiktok}
           alt="Statistiques TikTok du compte @monarc_app, du 19 août au 17 octobre 2026 : 1,9 million de vues de publications."
           legende="Les statistiques TikTok sur 60 jours"
@@ -173,25 +206,21 @@ const etapes = [
 </section>
 
 <script>
-  // Lazy images hidden to the right of the swipeable row only load once swiped into view, which
-  // shows an empty frame for a moment. Load the whole row as soon as it nears the screen.
-  const rangee = document.querySelector<HTMLElement>('.etude__ecrans');
-  if (rangee) {
-    // The row only scrolls on narrow screens: be a keyboard stop only there.
-    const large = matchMedia('(min-width: 64em)');
-    const majTabulation = () => (large.matches ? rangee.removeAttribute('tabindex') : (rangee.tabIndex = 0));
-    majTabulation();
-    large.addEventListener('change', majTabulation);
-
+  // The fan opens once, when at least a third of it is on screen. Without JavaScript or with reduced motion,
+  // the phones are simply shown spread out. Transforms only: nothing around the phones ever moves.
+  const eventail = document.querySelector<HTMLElement>('[data-eventail]');
+  if (eventail && 'IntersectionObserver' in window && matchMedia('(prefers-reduced-motion: no-preference)').matches) {
+    eventail.classList.add('eventail--ferme');
     const observateur = new IntersectionObserver(
       (entrees) => {
         if (!entrees.some((entree) => entree.isIntersecting)) return;
-        rangee.querySelectorAll<HTMLImageElement>('img[loading="lazy"]').forEach((img) => (img.loading = 'eager'));
         observateur.disconnect();
+        eventail.classList.add('eventail--anime');
+        requestAnimationFrame(() => eventail.classList.remove('eventail--ferme'));
       },
-      { rootMargin: '300px 0px' },
+      { threshold: 0.35 },
     );
-    observateur.observe(rangee);
+    observateur.observe(eventail);
   }
 </script>
 
@@ -279,33 +308,117 @@ const etapes = [
     font-size: var(--texte-s);
   }
 
-  /* Screens: swipeable row on phones, four columns on desktop */
-  .etude__ecrans {
+  /* Fan of phones */
+  .eventail {
+    --largeur-tel: clamp(13.5rem, 8rem + 14vw, 22rem);
+    --ecart: 46%;
+    --angle: 7deg;
+    --recul: 0.86;
+    margin: clamp(4rem, 3rem + 4vw, 7rem) 0 0;
+  }
+
+  .eventail__scene {
+    position: relative;
     display: grid;
-    grid-auto-flow: column;
-    grid-auto-columns: min(62vw, 15rem);
-    gap: 1.25rem;
-    margin-top: clamp(4rem, 3rem + 4vw, 7rem);
+    justify-content: center;
+    align-items: end;
     margin-inline: calc(-1 * var(--gouttiere));
-    padding: 0.25rem var(--gouttiere) 1rem;
-    overflow-x: auto;
-    overscroll-behavior-x: contain;
-    scroll-snap-type: x mandatory;
-    scroll-padding-inline: var(--gouttiere);
-    scrollbar-color: var(--brume-sur-nuit) transparent; /* 9.3:1 on the midnight blue */
+    padding-block: clamp(2.5rem, 1.5rem + 3vw, 4.5rem) clamp(1.5rem, 1rem + 2vw, 3rem);
+    overflow-x: clip; /* the outer phones may bleed past the screen edge on phones */
   }
 
-  /* Ring drawn inside the row, so all four sides stay visible despite the overflow */
-  .etude__ecrans:focus-visible {
-    outline-offset: -3px;
+  /* Light halo, so the dark phones stand out from the midnight blue */
+  .eventail__scene::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: min(150vw, 70rem);
+    aspect-ratio: 1.5;
+    background: radial-gradient(
+      closest-side,
+      rgb(238 241 248 / 0.3),
+      rgb(238 241 248 / 0.13) 45%,
+      rgb(238 241 248 / 0)
+    );
+    transform: translate(-50%, -50%);
+    pointer-events: none;
   }
 
-  .etude__ecrans > :global(*) {
-    scroll-snap-align: start;
+  .eventail__tel {
+    position: relative;
+    grid-area: 1 / 1;
+    width: var(--largeur-tel);
+    transform-origin: 50% 100%;
   }
+
+  .eventail__tel :global(.telephone__cadre) {
+    box-shadow:
+      inset 0 0 0 1px rgb(255 255 255 / 0.16),
+      0 1.75rem 3.5rem -1rem rgb(4 6 22 / 0.65);
+  }
+
+  .eventail__tel--centre {
+    z-index: 2;
+    transform: translateY(-5%);
+  }
+
+  .eventail__tel--gauche {
+    z-index: 1;
+    transform: translateX(calc(-1 * var(--ecart))) rotate(calc(-1 * var(--angle))) scale(var(--recul));
+  }
+
+  .eventail__tel--droite {
+    z-index: 1;
+    transform: translateX(var(--ecart)) rotate(var(--angle)) scale(var(--recul));
+  }
+
+  /* Before it is seen: the three phones stacked, the outer two just peeking out */
+  .eventail--ferme .eventail__tel--centre {
+    transform: none;
+  }
+
+  .eventail--ferme .eventail__tel--gauche {
+    transform: translateX(-9%) rotate(-1.5deg) scale(var(--recul));
+  }
+
+  .eventail--ferme .eventail__tel--droite {
+    transform: translateX(9%) rotate(1.5deg) scale(var(--recul));
+  }
+
+  .eventail--ferme .eventail__scene::before {
+    opacity: 0.45;
+  }
+
+  /* Slow start, soft landing: the spread reads as one gentle gesture */
+  .eventail--anime .eventail__tel {
+    transition: transform 1.5s cubic-bezier(0.45, 0, 0.2, 1);
+  }
+
+  .eventail--anime .eventail__tel--centre {
+    transition-duration: 1.2s;
+  }
+
+  .eventail--anime .eventail__scene::before {
+    transition: opacity 1.5s ease;
+  }
+
+  /* Captions: a list with positions on phones, one caption under each phone from 48em */
+  .eventail__legende {
+    margin-top: 0.5rem;
+  }
+
+  .eventail__ecrans {
+    display: grid;
+    gap: 0.25rem;
+    color: var(--brume-sur-nuit);
+    font-size: var(--texte-s);
+    line-height: 1.4;
+  }
+
 
   .etude__floutage {
-    margin-top: 0.5rem;
+    margin-top: 0.75rem;
     font-size: var(--texte-s);
   }
 
@@ -394,11 +507,38 @@ const etapes = [
   }
 
   @media (min-width: 48em) {
+    .eventail {
+      --ecart: 64%;
+      --angle: 8deg;
+    }
+
     .chiffres {
       grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 3rem 2rem;
     }
 
+    /* One caption under each phone: left, centre, right */
+    .eventail__ecrans {
+      grid-template-columns: minmax(0, 1fr) var(--largeur-tel) minmax(0, 1fr);
+      column-gap: 2rem;
+    }
+
+    .eventail__ecran--gauche {
+      text-align: end;
+    }
+
+    .eventail__ecran--centre {
+      color: var(--blanc);
+      text-align: center;
+    }
+
+    .eventail__position {
+      display: none;
+    }
+
+    .etude__floutage {
+      text-align: center;
+    }
   }
 
   @media (min-width: 64em) {
@@ -422,15 +562,6 @@ const etapes = [
     .etude__note {
       grid-column: 2;
       text-align: end;
-    }
-
-    .etude__ecrans {
-      grid-auto-flow: row;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 2rem;
-      margin-inline: 0;
-      padding: 0;
-      overflow: visible;
     }
 
     .etude__recit {
@@ -457,15 +588,25 @@ const etapes = [
     }
   }
 
-  /* Paper: the four screens side by side, never a scrolling row */
+  /* Paper: the phones side by side, never fanned */
   @media print {
-    .etude__ecrans {
-      grid-auto-flow: row;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
+    .eventail__scene {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1rem;
       margin-inline: 0;
-      padding-inline: 0;
+      padding: 0;
       overflow: visible;
-      scroll-snap-type: none;
     }
+
+    .eventail__scene::before {
+      display: none;
+    }
+
+    .eventail__tel {
+      grid-area: auto !important;
+      width: auto;
+      transform: none !important;
+    }
+
   }
 </style>

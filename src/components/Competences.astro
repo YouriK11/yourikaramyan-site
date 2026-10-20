@@ -65,10 +65,13 @@ const majuscule = (texte: string) => texte.charAt(0).toUpperCase() + texte.slice
     border-top: 2px solid var(--nuit);
   }
 
+  /* Group titles in the display face, like the case study's subtitles */
   .groupe__titre {
-    font-size: 1.125rem;
-    font-weight: 650;
-    line-height: 1.3;
+    font-family: var(--police-titre);
+    font-size: clamp(1.25rem, 0.85rem + 0.9vw, 1.875rem);
+    font-weight: 720;
+    font-stretch: 92%;
+    line-height: 1.15;
   }
 
   .groupe__elements {
@@ -142,6 +145,19 @@ const majuscule = (texte: string) => texte.charAt(0).toUpperCase() + texte.slice
   }
 
   @media (min-width: 64em) {
+    /* Larger skills and languages on large screens (unchanged on phones) */
+    .groupe__elements,
+    .langues,
+    .interets {
+      font-size: clamp(1.0625rem, 0.8rem + 0.4vw, 1.3125rem);
+    }
+
+    .langues dt {
+      font-family: var(--police-titre);
+      font-weight: 700;
+      font-stretch: 92%;
+    }
+
     .competences__grille {
       grid-template-columns: minmax(0, 7fr) minmax(0, 4fr);
       column-gap: clamp(3rem, 6vw, 6rem);

@@ -180,6 +180,19 @@ const lienEmail = objet ? `mailto:${email}?subject=${encodeURIComponent(objet)}`
   }
 
   @media (min-width: 64em) {
+    /* The address as large as its column allows (it is about 11.1em wide): up to about 60 px */
+    .contact__moyens {
+      container-type: inline-size;
+    }
+
+    .contact__adresse {
+      font-size: min(3.75rem, 8.4cqi);
+    }
+
+    .contact__liste dd {
+      font-size: clamp(1.125rem, 0.9rem + 0.35vw, 1.375rem);
+    }
+
     .contact__grille {
       grid-template-columns: minmax(0, 4fr) minmax(0, 7fr);
       column-gap: clamp(3rem, 6vw, 6rem);

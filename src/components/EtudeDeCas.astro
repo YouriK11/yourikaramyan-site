@@ -191,14 +191,14 @@ const etapes = [
           src={grilleInstagram}
           alt="Grille Instagram du compte @monarc_app : les publications des jours 11 à 18 du Winter Arc."
           legende="Les preuves du jour sur Instagram"
-          sizes="(min-width: 36em) 17rem, min(62vw, 15rem)"
+          sizes="(min-width: 64em) 21rem, (min-width: 36em) 17rem, min(62vw, 15rem)"
         />
         <Telephone
           src={statsTiktok}
           alt="Statistiques TikTok du compte @monarc_app, du 19 août au 17 octobre 2026 : 1,9 million de vues de publications."
           legende="Les statistiques TikTok sur 60 jours"
           camera={false}
-          sizes="(min-width: 36em) 17rem, min(62vw, 15rem)"
+          sizes="(min-width: 64em) 21rem, (min-width: 36em) 17rem, min(62vw, 15rem)"
         />
       </div>
     </div>
@@ -590,7 +590,9 @@ const etapes = [
       align-items: start;
     }
 
+    /* Desktop: the two captures fill their column instead of leaving it half empty */
     .reseaux__telephones {
+      grid-template-columns: repeat(2, minmax(0, 21rem));
       margin-top: 0;
     }
   }

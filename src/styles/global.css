@@ -35,20 +35,6 @@
   --rayon-s: 10px;
 }
 
-/* Variable font axes animated by the home hero. Registered so GSAP can tween them as numbers;
-   the initial values are the final state, so any revert lands on the full-weight name. */
-@property --wght {
-  syntax: '<number>';
-  inherits: false;
-  initial-value: 800;
-}
-
-@property --wdth {
-  syntax: '<number>';
-  inherits: false;
-  initial-value: 100;
-}
-
 /* Reset */
 *,
 *::before,
@@ -444,10 +430,10 @@ button {
     position: static !important;
   }
 
-  /* The hero name prints at its final state, whatever the scroll or the intro was doing */
+  /* The hero name prints at its final state, whatever the intro or the pointer was doing */
   .lettre {
-    --wght: 800 !important;
-    --wdth: 100 !important;
+    opacity: 1 !important;
+    transform: none !important;
   }
 
   .nom__trait,

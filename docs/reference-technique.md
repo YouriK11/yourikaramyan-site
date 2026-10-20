@@ -71,6 +71,8 @@ Prototype de l'effet d'accueil (lecture seule, ses fichiers gsap.js et bricolage
 
 ## Effet signature (étape 2) : aucun décalage de mise en page
 
+> **Mis à jour le 20/10/2026 (soir), à la demande de Youri** : les variations de graisse et de largeur créaient des trous entre les lettres (chaque lettre est dans une boîte à sa largeur finale : une lettre plus fine laisse un vide). L'entrée et l'effet de souris n'utilisent plus que des transformations : les lettres montent en vague et apparaissent, déjà à 800/100 ; près de la souris, elles se soulèvent de 7 % de la taille au plus. L'effet au défilement sur téléphone est supprimé. Le reste de cette section décrit l'ancienne version.
+
 Condition de Youri : le nom ne pousse jamais le contenu en dessous. Le Cumulative Layout Shift (CLS) compte aussi le déplacement des lettres elles-mêmes, et les mouvements de souris ou le défilement ne sont pas des « interactions récentes » qui l'excusent.
 
 - **Découpage à la construction** (pas de SplitText) : chaque lettre est un `inline-block` de largeur fixe en `em`, égale à son avance crénée dans l'état final (graisse 800, largeur 100, taille optique 96). Le glyphe est aligné au début de sa case (`text-align: start`). Largeurs mesurées sur le fichier Google v9 : Youri `0.506 0.567 0.557 0.400 0.234`, Karamyan `0.611 0.543 0.383 0.543 0.860 0.539 0.543 0.562`. **À recalculer si le fichier de police change.**

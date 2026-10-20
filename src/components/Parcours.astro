@@ -1,6 +1,7 @@
 ---
-// Timeline of every CV line (education, experience, academic projects, student jobs), most recent first,
-// grouped by starting year. Content comes from src/data/profil.ts only.
+// Timeline of every CV line, most recent first, grouped by starting year. Content comes from src/data/profil.ts only.
+// By default it shows the essentials for a marketing and e-commerce internship, plus the student jobs on one line;
+// "Voir tout le parcours" unfolds the rest. Without JavaScript, everything is shown.
 import { PROFIL } from '../data/profil';
 import { typo } from '../data/typographie';
 
@@ -16,6 +17,7 @@ interface Entree {
   textes: string[];
   resultats: string[];
   lien?: { href: string; texte: string };
+  essentiel: boolean;
 }
 
 const LIBELLES: Record<Categorie, string> = {
@@ -25,7 +27,13 @@ const LIBELLES: Record<Categorie, string> = {
   job: 'Job étudiant',
 };
 
-const majuscule = (texte: string) => texte.charAt(0).toUpperCase() + texte.slice(1);
+// Shown before "Voir tout le parcours": MonArc, the e-commerce shop, both bachelor's degrees and the academic projects.
+const ESSENTIELS = new Set([
+  "Projet d'application mobile",
+  'Boutique e-commerce',
+  'Bachelier en E-Business',
+  'Bachelier en Sciences de gestion',
+]);
 
 const entrees: Entree[] = [
   ...PROFIL.formation.map((f) => ({
@@ -37,6 +45,7 @@ const entrees: Entree[] = [
     fin: f.fin,
     textes: [],
     resultats: [],
+    essentiel: ESSENTIELS.has(f.titre),
   })),
   ...PROFIL.experiences.map((e) => ({
     categorie: 'experience' as const,
@@ -48,6 +57,7 @@ const entrees: Entree[] = [
     textes: [...e.points],
     resultats: 'resultats' in e ? [...e.resultats] : [],
     lien: e.structure === 'MonArc' ? { href: '#monarc', texte: "Lire l'étude de cas" } : undefined,
+    essentiel: ESSENTIELS.has(e.titre),
   })),
   ...PROFIL.projetsAcademiques.map((p) => ({
     categorie: 'academique' as const,
@@ -58,26 +68,21 @@ const entrees: Entree[] = [
     fin: p.fin,
     textes: [p.texte],
     resultats: [],
-  })),
-  ...PROFIL.jobs.map((j) => ({
-    categorie: 'job' as const,
-    titre: j.employeur,
-    lieu: '',
-    periode: j.periode,
-    debut: j.debut,
-    fin: j.fin,
-    textes: [majuscule(j.texte)],
-    resultats: [],
+    essentiel: true,
   })),
 ];
+
+// Student jobs: one line ("Quick Herstal (depuis 2023), Atlas Agency (2023) et ..."), with the CV's details when unfolded.
+const jobs = PROFIL.jobs.map((j) => `${j.employeur} (${j.periode})`);
+const ligneJobs = `${jobs.slice(0, -1).join(', ')} et ${jobs.at(-1)}.`;
 
 // Most recent first: starting year, then whatever is still ongoing or ended later.
 entrees.sort((a, b) => b.debut - a.debut || (b.fin ?? 9999) - (a.fin ?? 9999));
 
-const groupes = [...new Set(entrees.map((e) => e.debut))].map((annee) => ({
-  annee,
-  entrees: entrees.filter((e) => e.debut === annee),
-}));
+const groupes = [...new Set(entrees.map((e) => e.debut))].map((annee) => {
+  const liste = entrees.filter((e) => e.debut === annee);
+  return { annee, entrees: liste, essentiel: liste.some((e) => e.essentiel) };
+});
 ---
 
 <section id="parcours" class="section parcours" aria-labelledby="titre-parcours">
@@ -96,14 +101,14 @@ const groupes = [...new Set(entrees.map((e) => e.debut))].map((annee) => ({
       </ul>
     </div>
 
-    <ol class="frise" role="list">
+    <ol id="frise" class="frise" role="list" data-frise>
       {
         groupes.map((groupe) => (
-          <li class="frise__annee">
+          <li class="frise__annee" data-secondaire={groupe.essentiel ? undefined : ''}>
             <h3 class="frise__repere">{groupe.annee}</h3>
             <ol class="frise__entrees" role="list">
               {groupe.entrees.map((e) => (
-                <li class="entree">
+                <li class="entree" data-secondaire={e.essentiel ? undefined : ''}>
                   <span class={`pastille pastille--${e.categorie} entree__pastille`} aria-hidden="true" />
                   <h4 class="entree__titre" set:html={typo(e.titre)} />
                   {e.lieu && <p class="entree__lieu" set:html={typo(e.lieu)} />}
@@ -136,9 +141,52 @@ const groupes = [...new Set(entrees.map((e) => e.debut))].map((annee) => ({
           </li>
         ))
       }
+      <li class="frise__annee frise__annee--jobs">
+        <h3 class="frise__repere frise__repere--jobs">Jobs étudiants</h3>
+        <div class="frise__entrees">
+          <div class="entree">
+            <span class="pastille pastille--job entree__pastille" aria-hidden="true" />
+            <p class="jobs__ligne" data-resume set:html={typo(ligneJobs)} />
+            <ul class="jobs__details" role="list" data-secondaire>
+              {
+                PROFIL.jobs.map((j) => (
+                  <li>
+                    <p>
+                      <strong>{j.employeur}</strong>, <span set:html={typo(j.texte)} />
+                    </p>
+                    <p class="entree__meta">
+                      <span class="entree__categorie">{LIBELLES.job}</span>
+                      <span class="entree__periode" set:html={typo(j.periode)} />
+                    </p>
+                  </li>
+                ))
+              }
+            </ul>
+          </div>
+        </div>
+      </li>
     </ol>
+
+    <button class="bouton bouton--contour frise__bouton" type="button" aria-expanded="false" aria-controls="frise" hidden>
+      Voir tout le parcours
+    </button>
   </div>
 </section>
+
+<script>
+  // Folded by default once JavaScript runs (html.js, set in Base.astro): the button unfolds the rest.
+  const frise = document.querySelector<HTMLElement>('[data-frise]');
+  const bouton = document.querySelector<HTMLButtonElement>('.frise__bouton');
+  if (frise && bouton) {
+    bouton.hidden = false;
+    bouton.addEventListener('click', () => {
+      const complete = frise.classList.toggle('frise--complete');
+      bouton.setAttribute('aria-expanded', String(complete));
+      bouton.textContent = complete ? 'Réduire le parcours' : 'Voir tout le parcours';
+      if (!complete) bouton.scrollIntoView({ block: 'nearest' });
+    });
+  }
+</script>
 
 <style>
   .parcours__entete {
@@ -231,7 +279,7 @@ const groupes = [...new Set(entrees.map((e) => e.debut))].map((annee) => ({
 
   .entree {
     position: relative;
-    max-width: 44rem;
+    max-width: 48rem;
   }
 
   .entree__pastille {
@@ -241,9 +289,39 @@ const groupes = [...new Set(entrees.map((e) => e.debut))].map((annee) => ({
   }
 
   .entree__titre {
-    font-size: 1.125rem;
+    font-size: clamp(1.125rem, 0.95rem + 0.35vw, 1.375rem);
     font-weight: 650;
     line-height: 1.35;
+  }
+
+  /* Folding: only once JavaScript can unfold it again */
+  :global(html.js) .frise:not(.frise--complete) [data-secondaire],
+  :global(html.js) .frise.frise--complete [data-resume],
+  :global(html:not(.js)) [data-resume] {
+    display: none;
+  }
+
+  /* Student jobs */
+  .frise__repere--jobs {
+    font-size: var(--titre-3);
+    line-height: 1.15;
+  }
+
+  .frise__annee--jobs .entree {
+    max-width: none; /* the three jobs fit on one line from 1440 px */
+  }
+
+  .jobs__ligne {
+    padding-top: 0.0625rem;
+  }
+
+  .jobs__details {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .frise__bouton {
+    margin-top: 2.5rem;
   }
 
   .entree__lieu {
@@ -299,23 +377,43 @@ const groupes = [...new Set(entrees.map((e) => e.debut))].map((annee) => ({
     font-weight: 600;
   }
 
-  /* Desktop: years in their own column, kept in view while their entries scroll by. */
+  /* Desktop: large years in their own column, kept in view while their entries scroll by. */
   @media (min-width: 48em) {
     .parcours__entete {
       grid-template-columns: minmax(0, 1fr) auto;
       align-items: end;
     }
 
+    /* Shared by the timeline and the button below it */
+    .parcours {
+      --annee: clamp(2.75rem, 0.8rem + 3.6vw, 5rem);
+    }
+
     .frise__annee {
       display: grid;
-      grid-template-columns: 9rem minmax(0, 1fr);
+      grid-template-columns: calc(var(--annee) * 2.35 + 1.5rem) minmax(0, 1fr);
     }
 
     .frise__repere {
       position: sticky;
       top: calc(var(--hauteur-entete) + 1.5rem);
       align-self: start;
-      padding-top: 0.125rem;
+      font-size: var(--annee);
+      font-weight: 800;
+      font-stretch: 85%;
+      letter-spacing: -0.02em;
+    }
+
+    .frise__repere--jobs {
+      padding-top: 0.25rem;
+      font-size: var(--titre-3);
+      font-weight: 760;
+      font-stretch: 92%;
+      letter-spacing: 0;
+    }
+
+    .frise__bouton {
+      margin-left: calc(var(--annee) * 2.35 + 1.5rem + 2.5rem);
     }
 
     .frise__annee + .frise__annee {

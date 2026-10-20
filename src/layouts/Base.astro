@@ -62,6 +62,10 @@ const indexable = !noindex && !SITE.enConstruction;
 
     <Font cssVariable="--font-display" preload />
     <Font cssVariable="--font-body" preload />
+    <script is:inline>
+      // Before the first paint: content folded by a script (the timeline) stays visible without JavaScript.
+      document.documentElement.classList.add('js');
+    </script>
     <slot name="head" />
   </head>
   <body id="haut">

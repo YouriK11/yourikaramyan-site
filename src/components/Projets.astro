@@ -3,7 +3,7 @@
 // Projects listed in src/data/projets.ts open on a panel (native <details>, closed by default: keyboard, screen
 // readers and no-JS all work). Open, it shows the context, what he did and the results; MonArc's panel holds the
 // case study. The other projects stay a simple line until Youri gives more than the CV says.
-// Only facts from the CV and docs/suivi.md.
+// Only facts from the CV, from Youri (21/10/2026) and from docs/suivi.md.
 import EtudeDeCas from './EtudeDeCas.astro';
 import { PROFIL } from '../data/profil';
 import { PROJETS_AVEC_PANNEAU } from '../data/projets';
@@ -41,6 +41,10 @@ const projets: Projet[] = [
     annee: boutique.periode,
     role: 'Projet personnel, créé et géré de A à Z.',
     ligne: boutique.resultats[0],
+    // What the shop sold and how it found its customers: given by Youri on 21/10/2026.
+    contexte: "En 2022, j'ai créé ma boutique en ligne d'équipements sportifs.",
+    fait: [...boutique.points, "Acquisition des clients par le marketing d'influence, sur Twitter et YouTube."],
+    resultats: [...boutique.resultats],
   },
   {
     id: freelance.projet,
@@ -48,6 +52,9 @@ const projets: Projet[] = [
     annee: freelance.periode,
     role: 'Indépendant, pour des clients particuliers et professionnels.',
     ligne: 'Sites web, supports marketing, montage photo et vidéo, traduction.',
+    // Type of clients and one mission: given by Youri on 21/10/2026.
+    contexte: "De 2020 à 2023, j'ai travaillé en freelance. Mes clients étaient surtout des indépendants.",
+    fait: [...freelance.points, "Exemple de mission : le sous-titrage d'un cours en ligne."],
   },
   {
     id: crm.projet,
@@ -60,8 +67,22 @@ const projets: Projet[] = [
     id: yep.projet,
     titre: yep.titre,
     annee: `${yep.lieu}, ${yep.periode}`,
-    role: 'Projet académique.',
-    ligne: yep.texte,
+    // From the Gob'Eat business plan sent by Youri on 21/10/2026 (sources/business-plan-gobeat.pdf): his role
+    // (p. 3 and 10), the product (p. 6), the survey (p. 54), the café interviews (p. 29-31) and the general
+    // meeting (p. 4). The figures await his validation (docs/suivi.md). No other team member is named.
+    role: "Directeur général de Gob'Eat, notre entreprise étudiante.",
+    ligne: "Plus de 120 gobelets en biscuit présentés lors de l'assemblée générale.",
+    contexte:
+      "À dix étudiants de la HEPL, nous avons créé l'entreprise Gob'Eat. Notre produit : un gobelet en biscuit nappé de chocolat belge. Il se mange une fois le café terminé et ne laisse aucun déchet.",
+    fait: [
+      "Direction de l'équipe et point de contact commercial de l'entreprise.",
+      'Business plan : étude de marché, modèle financier, stratégie marketing et go-to-market.',
+      'Enquête auprès de 85 personnes et entretiens avec deux cafés du centre de Liège.',
+    ],
+    resultats: [
+      "Plus de 120 gobelets en biscuit présentés lors de l'assemblée générale.",
+      'Trois personnes interrogées sur quatre prêtes à essayer le produit.',
+    ],
   },
 ];
 ---
@@ -70,7 +91,7 @@ const projets: Projet[] = [
   <div class="conteneur">
     <div class="projets__entete">
       <h2 id="titre-projets" class="titre-section">Projets</h2>
-      <p class="projets__aide texte-secondaire">Le projet MonArc s'ouvre sur l'étude de cas complète.</p>
+      <p class="projets__aide texte-secondaire">Ouvrez un projet pour le découvrir en détail.</p>
     </div>
 
     <div class="projets__liste">

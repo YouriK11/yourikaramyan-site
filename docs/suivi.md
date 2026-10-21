@@ -96,10 +96,16 @@ Faits vérifiés sur Col&McArthur (octobre 2026) :
 
 ## En attente de Youri
 
-- [ ] **Nouveau CV (bloquant pour l'étape 7)** : le 21/10/2026, Youri annonce un nouveau CV avec la nouvelle photo et sans Google Play, dans `sources/CV_Youri_Karamyan.pdf`. Le fichier n'est toujours pas sur l'ordinateur (nouvelle recherche le 21/10 au soir : seul le CV du 19/10, avec Google Play, existe). Dès qu'il est là : le relire en entier, mettre `src/data/profil.ts` à jour s'il a changé, retirer le commentaire « Google Play » de la ligne MonArc, copier le fichier dans `public/Youri-Karamyan-CV.pdf`, puis passer `SITE.enConstruction` à false. Ne pas passer à false avant.
+- [ ] **Nouveau CV (bloquant pour l'étape 7)** : le 21/10/2026, Youri annonce un nouveau CV avec la nouvelle photo et sans Google Play, dans `sources/CV_Youri_Karamyan.pdf`. Le fichier n'est toujours pas sur l'ordinateur (nouvelle recherche le 21/10 au soir : seul le CV du 19/10, avec Google Play, existe). Le 21/10 vers 19 h, Youri le croit dans `sources/` : le fichier qui s'y trouve est identique, octet pour octet, à celui du 19/10 (ancienne photo sur fond jaune, Google Play). Les étapes B à F peuvent avancer : le site reste caché à Google tant que `enConstruction` vaut true. Ne pas partager le lien avant le nouveau CV. Dès qu'il est là : le relire en entier, mettre `src/data/profil.ts` à jour s'il a changé, retirer le commentaire « Google Play » de la ligne MonArc, copier le fichier dans `public/Youri-Karamyan-CV.pdf`, puis passer `SITE.enConstruction` à false. Ne pas passer à false avant.
 - [x] **Nouvelle photo** : en place le 21/10/2026 au soir (trouvée dans Téléchargements, copiée dans `sources/` et `src/assets/photos/youri-portrait-detoure.png`). Accueil, cadran de la page entreprise et image de partage vérifiés en 390, 1024, 1440 et 1920 px.
 - [ ] **Google Play** : MonArc n'y est pas publique. Ne jamais mentionner Google Play sans lien.
-- [ ] **Informations sur les projets** : le 21/10 au soir, Youri n'a rien ajouté (champs « [...] » vides) pour la boutique, le freelance, le CRM Odoo et le Young Enterprise Project. Ces quatre projets sont donc des lignes simples, sans panneau. Dès qu'il donne le contexte, ce qu'il a fait et les résultats d'un projet : ajouter son identifiant dans `src/data/projets.ts` et son contenu dans `src/components/Projets.astro`. Questions à lui poser : liste dans `docs/rapport-refonte.md`.
+- [ ] **Informations sur les projets** : le 21/10 vers 19 h, Youri a donné les informations de la boutique, du freelance et du Young Enterprise Project (voir « Précisions de Youri (21/10/2026) »). Ces trois projets ont retrouvé leur panneau. Reste le **CRM Odoo**, ligne simple tant que Youri n'a rien donné (questions dans `docs/rapport-refonte.md`). Pour le freelance, un résultat (nombre de clients ou de missions, un retour client) renforcerait le panneau.
+- [ ] **Chiffres du Young Enterprise Project, en attente de validation** (business plan Gob'Eat, `sources/business-plan-gobeat.pdf`). Affichés dans le panneau en local, à valider par Youri avant la mise en ligne publique (étape D) :
+  - une équipe de dix étudiants (p. 3) ;
+  - plus de 120 gobelets présentés lors de l'assemblée générale (p. 4), aussi en ligne de résumé ;
+  - une enquête auprès de 85 personnes (p. 54) ;
+  - « trois personnes interrogées sur quatre prêtes à essayer le produit » (75,3 % de « oui », question 5, p. 54) ;
+  - deux cafés du centre de Liège interrogés (p. 29-31, leurs noms ne sont pas affichés).
 - [ ] Domaine yourikaramyan.com : Youri l'achète lui-même avant l'étape 7.
 
 ## Précisions de Youri (19/10/2026)
@@ -109,3 +115,9 @@ Faits vérifiés sur Col&McArthur (octobre 2026) :
 - **Winter Arc** (consigne du 19/10/2026 au soir, qui remplace la précédente) : écrire seulement « Winter Arc 2026, lancé le 1er octobre ». Aucune date de fin, aucune saison suivante.
 - **TikTok** : une vidéo par jour, construite à partir des preuves photo des utilisateurs. Ne mettre en avant aucune vidéo en particulier.
 - Youri accepte les deux choix de l'étape 2 : phrase et ligne de preuve visibles dès le départ, léger recalage possible du texte si la police du texte arrive tard.
+
+## Précisions de Youri (21/10/2026)
+
+- **Boutique e-commerce (2022)** : elle vendait des équipements sportifs. Les clients venaient d'une stratégie d'influenceurs sur Twitter et YouTube. Le site écrit « marketing d'influence, sur Twitter et YouTube ». Toujours sans le nom de la boutique ni Shopify.
+- **Freelance digital (2020-2023)** : clients indépendants. Le CV dit « particuliers et professionnels » : le site écrit « Mes clients étaient surtout des indépendants ». Mission donnée en exemple : le sous-titrage d'un cours en ligne.
+- **Young Enterprise Project** : entreprise étudiante Gob'Eat (gobelet en biscuit nappé de chocolat belge). Youri en était le directeur général et le point de contact commercial (business plan, p. 3 et 10). Le business plan dit « 2025-2026 », le CV dit « 2025 » : le site garde 2025, comme le CV. Le business plan nomme les neuf autres membres de l'équipe et leurs e-mails : ne jamais les afficher.

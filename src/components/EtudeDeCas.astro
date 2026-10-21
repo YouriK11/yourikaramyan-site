@@ -18,7 +18,8 @@ import statsTiktok from '../assets/monarc/tiktok-stats.jpg';
 const resultats = [
   { valeur: 500, prefixe: '+', libelle: 'inscrits le jour du lancement' },
   { valeur: 1700, prefixe: '+', libelle: "inscrits sur la liste d'attente, avant le lancement" },
-  { texte: '7j/7', libelle: 'une vidéo TikTok publiée chaque jour' },
+  // Usage of the app: "20e sur 1 056 cette semaine" on Youri's "Aujourd'hui" screen (Youri, 21/10/2026).
+  { valeur: 1000, prefixe: '+', libelle: 'participants dans le classement de la semaine, au 21 octobre 2026' },
   { valeur: 1.9, decimales: 1, suffixe: ' M', libelle: 'vues sur TikTok en 60 jours' },
   { valeur: 6500, prefixe: '+', libelle: 'abonnés sur TikTok' },
   { valeur: 170000, prefixe: '+', libelle: "j'aime sur le compte TikTok" },
@@ -63,7 +64,7 @@ const etapes = [
     titre: "Constituer la liste d'attente",
     texte: [
       "Avant le lancement, j'ai constitué une liste d'attente de plus de 1 700 inscrits.",
-      'Je gère cette base clients par e-mail.',
+      "Je l'anime par e-mail.",
     ],
   },
   {

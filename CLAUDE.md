@@ -12,7 +12,7 @@ Avant de coder avec Astro, GSAP, Vercel ou les images de partage, lire `docs/ref
 - Débutant en technique : lui expliquer chaque commande à taper, étape par étape, sans rien supposer.
 
 ## Source de vérité
-- `sources/CV_Youri_Karamyan.pdf` (version du 19/10/2026, avec yourikaramyan.com). Le relire avant toute modification de contenu.
+- `sources/CV_Youri_Karamyan.pdf` (version finale du 21/10/2026 : ancienne photo, App Store, Google Play et version web, yourikaramyan.com). Le relire avant toute modification de contenu. Sur le site, la nouvelle photo détourée reste partout (choix de Youri).
 - La copie publiée est `public/Youri-Karamyan-CV.pdf`. Si le CV change, remplacer les deux fichiers.
 - N'inventer aucune expérience, aucune date, aucun chiffre. Si une information manque : la demander à Youri, ou poser un emplacement visible `[À COMPLÉTER : ...]`.
 - N'afficher que les chiffres listés dans `docs/suivi.md` (section « Chiffres validés »), arrondis comme indiqué.

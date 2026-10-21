@@ -3,7 +3,14 @@
 Le site te présente d'abord, toi. MonArc devient un projet parmi les autres.
 Tout est fusionné dans la branche principale `main`. Rien n'est en ligne et rien n'a été envoyé sur GitHub. Le dossier `sources/` n'a pas été modifié.
 
-## Avant tout : ta nouvelle photo et ton nouveau CV sont introuvables
+## Mise à jour du 21 octobre au soir
+
+- **Photo** : trouvée dans ton dossier Téléchargements, pas dans `sources/`. Je l'ai copiée dans `sources/` et à l'endroit où le site la lit. Elle est en place partout : accueil, page Col&McArthur, image de partage. Le grand portrait garde un cadre en format portrait (4:5), centré sur ton visage avec un peu d'espace au-dessus de ta tête. Le fichier lui-même n'est pas retouché. Captures dans `captures/photo/`.
+- **CV** : toujours introuvable. Le seul CV présent est celui du 19 octobre, qui mentionne Google Play. Le site reste donc caché à Google, et le CV téléchargeable reste l'ancien.
+- **Cadran** : le cadran de la variante C (anneau fin, douze index abricot) entoure maintenant ton portrait sur la page /col-macarthur. Il se trace à l'arrivée sur la page, sauf si le visiteur demande moins d'animations.
+- **Projets** : ton message contenait encore « [...] » pour les quatre projets. Comme tu l'as demandé, ces quatre projets sont devenus des lignes simples, sans panneau. Seul MonArc s'ouvre. Leurs détails du CV (tâches, taux de conversion, traductions) restent visibles dans le Parcours. Dès que tu m'envoies les informations d'un projet, je lui redonne son panneau.
+
+## Avant tout : ta nouvelle photo et ton nouveau CV sont introuvables (matin du 21 octobre)
 
 Ni `sources/photo_youri_portrait_transparent.png` ni le nouveau `sources/CV_Youri_Karamyan.pdf` ne sont sur ton ordinateur. Je les ai cherchés dans tout ton dossier utilisateur : le CV le plus récent date du 19 octobre et mentionne encore Google Play.
 

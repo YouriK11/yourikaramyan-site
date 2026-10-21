@@ -36,13 +36,14 @@ Le site présente d'abord la personne (décision de Youri du 21/10/2026). MonArc
 
 1. Accueil : il ne parle que de Youri. Nom en très grand, une phrase de présentation, boutons « Télécharger mon CV » et « Me contacter », portrait. Sur ordinateur, l'accueil occupe toute la hauteur de l'écran. Effet signature : le premier grand moment animé du site. Les lettres du nom restent toujours serrées (aucune variation de graisse).
 2. À propos : 4 ou 5 phrases courtes à la première personne (qui il est, ses études, ce qui le motive, ce qu'il cherche), uniquement des faits du CV.
-3. Projets : un panneau dépliant `<details>` par projet, tous fermés par défaut (MonArc, boutique e-commerce, freelance digital, CRM Odoo, Young Enterprise Project). Fermé : titre, année, rôle, une ligne de résultat. Ouvert : contexte, ce que j'ai fait, résultats. Le panneau MonArc contient l'étude de cas (chiffres, téléphones en éventail, réseaux sociaux) ; l'éventail s'ouvre à l'ouverture du panneau (deuxième et dernier moment animé du site). Boutons App Store et getmonarcapp.com.
-4. Parcours : frise chronologique (formation, expériences, projets académiques, jobs étudiants). Les lignes qui ont un panneau n'ont pas de détails, seulement un lien « Voir le projet ».
+3. Projets : une ligne par projet (MonArc, boutique e-commerce, freelance digital, CRM Odoo, Young Enterprise Project) : titre, année, rôle, une ligne de résultat. Un projet n'a un panneau dépliant `<details>` (fermé par défaut) que si Youri a donné son contexte, ce qu'il a fait et ses résultats : « un panneau qui s'ouvre sur presque rien fait plus de mal que de bien » (Youri, 21/10/2026). Liste dans `src/data/projets.ts` ; aujourd'hui, seul MonArc. Le panneau MonArc contient l'étude de cas (chiffres, téléphones en éventail, réseaux sociaux) ; l'éventail s'ouvre à l'ouverture du panneau (deuxième et dernier moment animé du site). Boutons App Store et getmonarcapp.com.
+4. Parcours : frise chronologique (formation, expériences, projets académiques, jobs étudiants). Les lignes dont le projet a un panneau n'ont pas de détails, seulement un lien « Voir le projet ». Les autres gardent les détails du CV.
 5. Compétences et langues, reprises du CV.
 6. Contact : e-mail avec bouton pour le copier, téléphone, LinkedIn.
 7. Pages entreprises `/[nom-entreprise]` : absentes du menu, `noindex`, exclues du sitemap. Contenu : accroche adressée à l'équipe, 3 idées concrètes, résumé du profil, CV, bouton de contact. Une nouvelle page se crée en dupliquant un seul fichier.
    - Les 3 idées sont toujours proposées à Youri dans la conversation et validées par lui avant d'être mises sur la page.
    - Première page : `/col-macarthur`. Écrire « Col&McArthur » sur la page (orthographe de leur site).
+   - Le portrait de la lettre est dans un cadran de montre (anneau fin, douze index abricot, tracé à l'arrivée), repris de la variante C à la demande de Youri.
 
 ## Design
 - Couleurs : bleu nuit #18214F, abricot #EE9A35, fond blanc #FFFFFF, teinte claire #EEF1F8.
@@ -50,7 +51,7 @@ Le site présente d'abord la personne (décision de Youri du 21/10/2026). MonArc
 - Polices : Bricolage Grotesque pour les titres, Instrument Sans pour le texte.
 - Utiliser la skill frontend-design. Le site a une vraie personnalité et ne ressemble à aucun template.
 - GSAP autorisé. Deux moments animés seulement : le nom de l'accueil, puis l'éventail de téléphones du panneau MonArc. Le reste du site reste calme et précis.
-- Portrait : photo détourée (sans fond) posée sur le bleu nuit, avec un léger halo clair derrière Youri. Fichier `src/assets/photos/youri-portrait-detoure.png`, copie de `sources/photo_youri_portrait_transparent.png`, jamais retouchée (voir `src/data/portrait.ts`).
+- Portrait : photo détourée (sans fond) posée sur le bleu nuit, avec un léger halo clair derrière Youri. Fichier `src/assets/photos/youri-portrait-detoure.png`, copie de `sources/photo_youri_portrait_transparent.png` (1847 × 1558, en place depuis le 21/10/2026), jamais retouchée : seul le cadrage se fait à l'affichage (format 4:5, centré sur le visage, voir `src/data/portrait.ts`).
 - Effet signature : le nom ne pousse jamais le contenu en dessous pendant l'animation. Sa place finale est réservée dès le chargement (aucun décalage de mise en page).
 - Respecter `prefers-reduced-motion`.
 

@@ -1,10 +1,12 @@
 ---
 // Timeline of every CV line, most recent first, grouped by starting year. Content comes from src/data/profil.ts only.
-// Lines that have a panel in the "Projets" section show no details here, only a "Voir le projet" link to it.
+// Lines whose project has a panel in the "Projets" section (src/data/projets.ts) show no details here, only a
+// "Voir le projet" link to it. The others keep their CV details.
 // By default it shows the essentials for a marketing and e-commerce internship, plus the student jobs on one line;
 // "Voir tout le parcours" unfolds the rest. Without JavaScript, everything is shown.
 import { PROFIL } from '../data/profil';
 import { typo } from '../data/typographie';
+import { PROJETS_AVEC_PANNEAU } from '../data/projets';
 
 type Categorie = 'formation' | 'experience' | 'academique' | 'job';
 
@@ -55,9 +57,9 @@ const entrees: Entree[] = [
     periode: e.periode,
     debut: e.debut,
     fin: e.fin,
-    textes: [],
-    resultats: [],
-    lien: { href: `#${e.projet}`, texte: 'Voir le projet' },
+    ...(PROJETS_AVEC_PANNEAU.has(e.projet)
+      ? { textes: [], resultats: [], lien: { href: `#${e.projet}`, texte: 'Voir le projet' } }
+      : { textes: [...e.points], resultats: 'resultats' in e ? [...e.resultats] : [] }),
     essentiel: ESSENTIELS.has(e.titre),
   })),
   ...PROFIL.projetsAcademiques.map((p) => ({
@@ -67,9 +69,9 @@ const entrees: Entree[] = [
     periode: p.periode,
     debut: p.debut,
     fin: p.fin,
-    textes: [],
-    resultats: [],
-    lien: { href: `#${p.projet}`, texte: 'Voir le projet' },
+    ...(PROJETS_AVEC_PANNEAU.has(p.projet)
+      ? { textes: [], resultats: [], lien: { href: `#${p.projet}`, texte: 'Voir le projet' } }
+      : { textes: [p.texte], resultats: [] }),
     essentiel: true,
   })),
 ];

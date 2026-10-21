@@ -31,7 +31,7 @@ const lignes = LIGNES.map(({ texte, largeurs }) => {
 ---
 
 <section class="accueil" data-accueil aria-labelledby="titre-accueil">
-  <div class="conteneur accueil__grille" style={`--ratio-portrait: ${(PORTRAIT.height / PORTRAIT.width).toFixed(4)}`}>
+  <div class="conteneur accueil__grille">
     <div class="accueil__identite">
       <script is:inline>
         // Runs before the name is painted: the letters start low and invisible (always at full weight, so they
@@ -392,17 +392,21 @@ const lignes = LIGNES.map(({ texte, largeurs }) => {
   }
 
   /* Cut-out photo (no background): on the midnight blue, with a light halo behind the shoulders so the
-     dark shirt stands out. Small square on phones: framed on the face. */
+     dark shirt stands out. Framed on the face (it sits right of centre in the file), standing on the bottom
+     edge, with a little room above the head (padding: object-fit works inside the content box). */
   .portrait--detoure {
+    box-sizing: border-box;
+    padding-top: 8%;
     background:
       radial-gradient(
-        ellipse 62% 56% at 50% 52%,
-        rgb(238 241 248 / 0.36),
-        rgb(238 241 248 / 0.14) 52%,
+        ellipse 62% 56% at 55% 48%,
+        rgb(238 241 248 / 0.38),
+        rgb(238 241 248 / 0.15) 52%,
         rgb(238 241 248 / 0) 78%
       ),
       var(--nuit);
-    object-position: 50% 8%;
+    object-fit: cover;
+    object-position: 62% 100%;
   }
 
   /* Text */
@@ -482,10 +486,10 @@ const lignes = LIGNES.map(({ texte, largeurs }) => {
       /* A soft navy shadow keeps the white letters readable over the light parts of the photo too */
       text-shadow: 0 0.02em 0.1em rgb(24 33 79 / 0.6);
       /* Top: the photo starts 0.25rem above the name. Height: photo width (portrait minus the apricot offset)
-         times the photo's own ratio. */
+         times 1.25 (the 4:5 frame). */
       clip-path: inset(
         -0.25rem var(--decalage-portrait)
-          calc(100% + 0.25rem - (var(--portrait) - var(--decalage-portrait)) * var(--ratio-portrait))
+          calc(100% + 0.25rem - (var(--portrait) - var(--decalage-portrait)) * 1.25)
           calc(100% - var(--portrait)) round 2.75rem
       );
       pointer-events: none;
@@ -538,10 +542,6 @@ const lignes = LIGNES.map(({ texte, largeurs }) => {
       height: auto;
     }
 
-    /* The cut-out photo keeps its own proportions: nothing of the shoulders is cropped */
-    .portrait--grand.portrait--detoure {
-      aspect-ratio: auto;
-    }
 
     .accueil__texte {
       margin-top: 2rem;

@@ -49,11 +49,18 @@ async function photoPartage(): Promise<Buffer> {
       <rect width="330" height="412" fill="url(#halo)"/>
     </svg>`,
   );
+  // Same framing as on the pages: portrait format, centred on the face (right of centre in the file),
+  // standing on the bottom edge, with 34 px of room above the head.
+  const { width = 1, height = 1 } = await sharp(FICHIER_PORTRAIT_OG).metadata();
+  const hauteurCible = 412 - 34;
+  const largeurCrop = Math.min(width, Math.round((height * 330) / hauteurCible));
+  const gauche = Math.max(0, Math.min(width - largeurCrop, Math.round(width * 0.62 - largeurCrop / 2)));
   const personne = await sharp(FICHIER_PORTRAIT_OG)
-    .resize(330, 412, { fit: 'contain', position: 'bottom', background: { r: 0, g: 0, b: 0, alpha: 0 } })
+    .extract({ left: gauche, top: 0, width: largeurCrop, height })
+    .resize(330, hauteurCible)
     .png()
     .toBuffer();
-  return sharp(fond).composite([{ input: personne }]).jpeg({ quality: 86 }).toBuffer();
+  return sharp(fond).composite([{ input: personne, top: 34, left: 0 }]).jpeg({ quality: 86 }).toBuffer();
 }
 
 type Noeud = { type: string; props: Record<string, unknown> };

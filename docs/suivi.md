@@ -96,10 +96,10 @@ Faits vérifiés sur Col&McArthur (octobre 2026) :
 
 ## En attente de Youri
 
-- [ ] **Nouveau CV (bloquant pour l'étape 7)** : le 21/10/2026, Youri annonce un nouveau CV avec la nouvelle photo et sans Google Play, dans `sources/CV_Youri_Karamyan.pdf`. Le fichier n'est pas encore sur l'ordinateur (recherche complète le 21/10). Dès qu'il est là : le relire en entier, mettre `src/data/profil.ts` à jour s'il a changé, retirer le commentaire « Google Play » de la ligne MonArc, copier le fichier dans `public/Youri-Karamyan-CV.pdf`, puis passer `SITE.enConstruction` à false. Ne pas passer à false avant.
-- [ ] **Nouvelle photo** : `sources/photo_youri_portrait_transparent.png`, annoncée le 21/10/2026, pas encore sur l'ordinateur. La copier dans `src/assets/photos/youri-portrait-detoure.png` : le site l'utilise tout seul (fond bleu nuit, halo, nom en blanc sur la photo, image de partage). Vérifier ensuite l'accueil en 1024, 1440 et 1920 px (lisibilité du nom sur la photo).
+- [ ] **Nouveau CV (bloquant pour l'étape 7)** : le 21/10/2026, Youri annonce un nouveau CV avec la nouvelle photo et sans Google Play, dans `sources/CV_Youri_Karamyan.pdf`. Le fichier n'est toujours pas sur l'ordinateur (nouvelle recherche le 21/10 au soir : seul le CV du 19/10, avec Google Play, existe). Dès qu'il est là : le relire en entier, mettre `src/data/profil.ts` à jour s'il a changé, retirer le commentaire « Google Play » de la ligne MonArc, copier le fichier dans `public/Youri-Karamyan-CV.pdf`, puis passer `SITE.enConstruction` à false. Ne pas passer à false avant.
+- [x] **Nouvelle photo** : en place le 21/10/2026 au soir (trouvée dans Téléchargements, copiée dans `sources/` et `src/assets/photos/youri-portrait-detoure.png`). Accueil, cadran de la page entreprise et image de partage vérifiés en 390, 1024, 1440 et 1920 px.
 - [ ] **Google Play** : MonArc n'y est pas publique. Ne jamais mentionner Google Play sans lien.
-- [ ] **Informations manquantes sur les projets** : liste dans `docs/rapport-refonte.md`.
+- [ ] **Informations sur les projets** : le 21/10 au soir, Youri n'a rien ajouté (champs « [...] » vides) pour la boutique, le freelance, le CRM Odoo et le Young Enterprise Project. Ces quatre projets sont donc des lignes simples, sans panneau. Dès qu'il donne le contexte, ce qu'il a fait et les résultats d'un projet : ajouter son identifiant dans `src/data/projets.ts` et son contenu dans `src/components/Projets.astro`. Questions à lui poser : liste dans `docs/rapport-refonte.md`.
 - [ ] Domaine yourikaramyan.com : Youri l'achète lui-même avant l'étape 7.
 
 ## Précisions de Youri (19/10/2026)

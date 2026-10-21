@@ -1,11 +1,12 @@
 ---
-// "Projets": one panel per project, all closed by default. Native <details> panels: they open with the keyboard
-// (Tab, then Enter or Space), screen readers announce them as collapsed or expanded, and they work without
-// JavaScript. Closed, a panel shows the title, the year, Youri's role and one line of result. Open, it shows the
-// context, what he did and the results. Only facts from the CV and docs/suivi.md: the panels with little
-// information on the CV stay short (the missing information is listed in docs/rapport-refonte.md).
+// "Projets": one row per project, with the title, the year, Youri's role and one line of result.
+// Projects listed in src/data/projets.ts open on a panel (native <details>, closed by default: keyboard, screen
+// readers and no-JS all work). Open, it shows the context, what he did and the results; MonArc's panel holds the
+// case study. The other projects stay a simple line until Youri gives more than the CV says.
+// Only facts from the CV and docs/suivi.md.
 import EtudeDeCas from './EtudeDeCas.astro';
 import { PROFIL } from '../data/profil';
+import { PROJETS_AVEC_PANNEAU } from '../data/projets';
 import { typo } from '../data/typographie';
 
 const [monarc, freelance, boutique] = PROFIL.experiences;
@@ -40,8 +41,6 @@ const projets: Projet[] = [
     annee: boutique.periode,
     role: 'Projet personnel, créé et géré de A à Z.',
     ligne: boutique.resultats[0],
-    fait: [...boutique.points],
-    resultats: [...boutique.resultats],
   },
   {
     id: freelance.projet,
@@ -49,8 +48,6 @@ const projets: Projet[] = [
     annee: freelance.periode,
     role: 'Indépendant, pour des clients particuliers et professionnels.',
     ligne: 'Sites web, supports marketing, montage photo et vidéo, traduction.',
-    contexte: "De 2020 à 2023, j'ai travaillé en indépendant pour des clients particuliers et professionnels.",
-    fait: [...freelance.points],
   },
   {
     id: crm.projet,
@@ -58,15 +55,13 @@ const projets: Projet[] = [
     annee: `${crm.lieu}, ${crm.periode}`,
     role: 'Projet académique.',
     ligne: crm.texte,
-    fait: [crm.texte],
   },
   {
     id: yep.projet,
     titre: yep.titre,
     annee: `${yep.lieu}, ${yep.periode}`,
     role: 'Projet académique.',
-    ligne: "Création d'une entreprise étudiante.",
-    fait: [yep.texte],
+    ligne: yep.texte,
   },
 ];
 ---
@@ -75,12 +70,13 @@ const projets: Projet[] = [
   <div class="conteneur">
     <div class="projets__entete">
       <h2 id="titre-projets" class="titre-section">Projets</h2>
-      <p class="projets__aide texte-secondaire">Ouvrez un projet pour le découvrir en détail.</p>
+      <p class="projets__aide texte-secondaire">Le projet MonArc s'ouvre sur l'étude de cas complète.</p>
     </div>
 
     <div class="projets__liste">
       {
-        projets.map((p) => (
+        projets.map((p) =>
+          PROJETS_AVEC_PANNEAU.has(p.id) ? (
           <details id={p.id} class="projet" data-projet>
             <summary class="projet__resume">
               <span class="projet__annee" set:html={typo(p.annee)} />
@@ -125,7 +121,17 @@ const projets: Projet[] = [
               )}
             </div>
           </details>
-        ))
+          ) : (
+            <div id={p.id} class="projet">
+              <div class="projet__resume projet__resume--fixe">
+                <span class="projet__annee" set:html={typo(p.annee)} />
+                <h3 class="projet__titre" set:html={typo(p.titre)} />
+                <span class="projet__role" set:html={typo(p.role)} />
+                <span class="projet__ligne" set:html={typo(p.ligne)} />
+              </div>
+            </div>
+          ),
+        )
       }
     </div>
   </div>
@@ -199,6 +205,11 @@ const projets: Projet[] = [
     padding-block: 1.5rem;
     cursor: pointer;
     list-style: none;
+  }
+
+  /* Simple line (no panel): nothing to open */
+  .projet__resume--fixe {
+    cursor: auto;
   }
 
   .projet__resume::-webkit-details-marker {
@@ -300,11 +311,11 @@ const projets: Projet[] = [
   }
 
   @media (hover: hover) {
-    .projet__resume:hover .projet__bascule {
+    summary.projet__resume:hover .projet__bascule {
       border-color: var(--abricot);
     }
 
-    .projet__resume:hover .projet__titre {
+    summary.projet__resume:hover .projet__titre {
       text-decoration: underline;
       text-decoration-color: var(--abricot);
       text-decoration-thickness: 3px;

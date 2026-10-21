@@ -26,9 +26,11 @@ Consignes de Youri pour cette nuit :
 | 4 | Parcours, compétences, contact | Terminée le 19/10/2026 (nuit), commit 90c7403 |
 | 5 | Page /col-macarthur et système de duplication | Terminée le 20/10/2026, commit 630918b |
 | 6 | Finitions : images de partage, accessibilité, Lighthouse mobile, compteur de visites | Terminée le 20/10/2026, commit c51d1f6 (compteur prêt, inactif sans compte GoatCounter) |
-| 7 | Mise en ligne sur yourikaramyan.com (GitHub + Vercel, achat du domaine sur Vercel) | À faire |
+| 7 | Mise en ligne sur yourikaramyan.com (GitHub + Vercel, achat du domaine sur Vercel) | Préparée le 21/10/2026 : guide pas à pas `docs/guide-mise-en-ligne.md`. Reste à faire par Youri (comptes et achat) |
 
-Passe visuelle « whaou » (20/10/2026) : sur la branche git `passe-whaou`, en attente de la validation de Youri. Détail dans `docs/rapport-passe-whaou.md`.
+Passe visuelle « whaou » (20/10/2026) : branche `passe-whaou`, fusionnée dans `main` le 21/10/2026 avec la refonte. Détail dans `docs/rapport-passe-whaou.md`.
+
+Refonte « la personne d'abord » (21/10/2026, demandée par Youri) : À propos, Projets en panneaux, nouveau menu, parcours allégé. Branche `refonte-projets`, fusionnée dans `main`. Détail dans `docs/rapport-refonte.md`. Les trois variantes de l'accueil (`docs/variantes.md`) sont abandonnées : la refonte les remplace (récupérables sur la branche `passe-whaou`, commit `c99d186`).
 
 Soirée du 20/10/2026 (même branche) : lettres du nom toujours serrées, trois variantes de l'accueil sur `/essai-a`, `/essai-b`, `/essai-c` (**en attente du choix de Youri**, comparatif dans `docs/variantes.md`), puis améliorations sur grand écran. Détail dans `docs/rapport-soiree.md`.
 
@@ -94,8 +96,10 @@ Faits vérifiés sur Col&McArthur (octobre 2026) :
 
 ## En attente de Youri
 
-- [ ] **Google Play** : MonArc est en test fermé, validation attendue le 19-20/10/2026 (Youri). Dès que l'app est publique, demander le lien Google Play, ajouter le bouton (`PROFIL.monarc.googlePlay`) et remettre « Google Play » dans la ligne MonArc de `profil.ts`. Le CV deviendra exact tel quel.
-- [ ] **Bloquant pour l'étape 7** : tant que l'app n'est pas publique sur Google Play, le CV téléchargeable est inexact. Ne pas passer `SITE.enConstruction` à false avant que l'un des deux soit vrai : app publique sur Google Play, ou CV corrigé fourni par Youri (remplacer alors `sources/CV_Youri_Karamyan.pdf` et `public/Youri-Karamyan-CV.pdf` ensemble).
+- [ ] **Nouveau CV (bloquant pour l'étape 7)** : le 21/10/2026, Youri annonce un nouveau CV avec la nouvelle photo et sans Google Play, dans `sources/CV_Youri_Karamyan.pdf`. Le fichier n'est pas encore sur l'ordinateur (recherche complète le 21/10). Dès qu'il est là : le relire en entier, mettre `src/data/profil.ts` à jour s'il a changé, retirer le commentaire « Google Play » de la ligne MonArc, copier le fichier dans `public/Youri-Karamyan-CV.pdf`, puis passer `SITE.enConstruction` à false. Ne pas passer à false avant.
+- [ ] **Nouvelle photo** : `sources/photo_youri_portrait_transparent.png`, annoncée le 21/10/2026, pas encore sur l'ordinateur. La copier dans `src/assets/photos/youri-portrait-detoure.png` : le site l'utilise tout seul (fond bleu nuit, halo, nom en blanc sur la photo, image de partage). Vérifier ensuite l'accueil en 1024, 1440 et 1920 px (lisibilité du nom sur la photo).
+- [ ] **Google Play** : MonArc n'y est pas publique. Ne jamais mentionner Google Play sans lien.
+- [ ] **Informations manquantes sur les projets** : liste dans `docs/rapport-refonte.md`.
 - [ ] Domaine yourikaramyan.com : Youri l'achète lui-même avant l'étape 7.
 
 ## Précisions de Youri (19/10/2026)

@@ -10,6 +10,8 @@ const echapper = (texte: string) =>
 export function typo(texte: string): string {
   return (
     echapper(texte)
+      // "de A à Z" stays on one line
+      .replace(/\bA à Z\b/g, `A${NBSP}à${NBSP}Z`)
       // Non-breaking space before : ; ! ? » and after «
       .replace(/ ([:;!?»])/g, `${NBSP}$1`)
       .replace(/« /g, `«${NBSP}`)

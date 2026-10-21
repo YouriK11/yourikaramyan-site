@@ -31,7 +31,7 @@ const lignes = LIGNES.map(({ texte, largeurs }) => {
 ---
 
 <section class="accueil" data-accueil aria-labelledby="titre-accueil">
-  <div class="conteneur accueil__grille">
+  <div class="conteneur accueil__grille" style={`--ratio-portrait: ${(PORTRAIT.height / PORTRAIT.width).toFixed(4)}`}>
     <div class="accueil__identite">
       <script is:inline>
         // Runs before the name is painted: the letters start low and invisible (always at full weight, so they
@@ -481,7 +481,13 @@ const lignes = LIGNES.map(({ texte, largeurs }) => {
       color: var(--blanc);
       /* A soft navy shadow keeps the white letters readable over the light parts of the photo too */
       text-shadow: 0 0.02em 0.1em rgb(24 33 79 / 0.6);
-      clip-path: inset(-1rem var(--decalage-portrait) -1rem calc(100% - var(--portrait)));
+      /* Top: the photo starts 0.25rem above the name. Height: photo width (portrait minus the apricot offset)
+         times the photo's own ratio. */
+      clip-path: inset(
+        -0.25rem var(--decalage-portrait)
+          calc(100% + 0.25rem - (var(--portrait) - var(--decalage-portrait)) * var(--ratio-portrait))
+          calc(100% - var(--portrait)) round 2.75rem
+      );
       pointer-events: none;
     }
 

@@ -393,7 +393,8 @@ button {
   .contact__copie,
   .etude__liens,
   .accueil__actions,
-  .bouton {
+  .bouton,
+  .projet__bascule {
     display: none !important;
   }
 
@@ -412,6 +413,8 @@ button {
   .chiffre__valeur,
   .etape__numero,
   .idee__numero,
+  .projet__annee,
+  .projet__puces--resultats li,
   .idee__experience > span:first-child {
     color: #000 !important;
   }
@@ -422,7 +425,9 @@ button {
   .nom__trait,
   .groupe__elements li::before,
   .entree__textes li::before,
-  .entree__resultats li::before {
+  .entree__resultats li::before,
+  .projet__ligne::before,
+  .projet__puces li::before {
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
   }

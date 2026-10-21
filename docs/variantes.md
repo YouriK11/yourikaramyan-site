@@ -1,3 +1,5 @@
+> **Abandonnées le 21/10/2026** : la refonte « la personne d'abord » demandée par Youri remplace ces variantes. Les pages d'essai ont été retirées du site ; elles restent récupérables sur la branche git `passe-whaou` (commit `c99d186`).
+
 # Trois variantes de l'accueil (20 octobre 2026)
 
 Les trois variantes sont sur la branche `passe-whaou`, chacune sur une page temporaire. Ces pages ne sont jamais indexées par Google, n'apparaissent ni dans le menu ni dans le plan du site.

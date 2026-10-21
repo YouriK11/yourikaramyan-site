@@ -173,6 +173,16 @@ Condition de Youri : le nom ne pousse jamais le contenu en dessous. Le Cumulativ
 - **Section en cours dans le menu** : `IntersectionObserver` avec `rootMargin: '-35% 0px -60% 0px'` (une bande fine au tiers de l'écran), `aria-current="location"` sur les liens, accueil seulement.
 - **Données structurées** : `schema.org/Person` en JSON-LD dans `index.astro`, construit à partir de `src/data/profil.ts` uniquement.
 
+## Refonte « la personne d'abord » (21/10/2026)
+
+- **Panneaux de projets** : `<details>` / `<summary>` natifs (`src/components/Projets.astro`). Chrome expose le résumé comme « DisclosureTriangle » avec l'état `expanded`, et garde le `<h3>` placé dans le résumé comme titre (vérifié dans l'arbre d'accessibilité). Le contenu d'un panneau fermé n'a aucune boîte : un `IntersectionObserver` sur un élément du panneau ne se déclenche qu'à l'ouverture. C'est ce qui lance l'éventail et les compteurs « à l'ouverture ».
+- **Liens vers un panneau** : `#monarc`, `#boutique-e-commerce`, `#freelance-digital`, `#crm-odoo`, `#young-enterprise-project` (champ `projet` de `profil.ts`). Un script ouvre le panneau visé au chargement, au changement d'ancre et au second clic sur le même lien. Avant l'impression, tous les panneaux s'ouvrent, puis se referment.
+- **Titres de niveau 5** : la remise à zéro de `global.css` couvre maintenant `h5` et `h6` (sinon marges par défaut dans les étapes de l'étude de cas).
+- **Menu complet à partir de 64em** : avec cinq liens et le bouton CV, il ne tient plus à 768 px. Les tablettes gardent le bouton « Menu ».
+- **Photo détourée** : `src/data/portrait.ts` cherche `src/assets/photos/youri-portrait-detoure.png` avec `import.meta.glob`. Présente : elle est utilisée partout (fond bleu nuit et halo en CSS sur l'image elle-même, proportions naturelles), et l'image de partage la compose avec sharp sur un cadre bleu nuit. Absente : l'ancienne photo reste. Après avoir copié le fichier, relancer `npm run dev` ou `npm run build`.
+- **Nom en blanc sur la photo** : sur ordinateur, une copie blanche du nom (`.nom__visuel--sur-photo`, `aria-hidden`) est découpée par `clip-path: inset(… var(--decalage-portrait) … calc(100% - var(--portrait)))` exactement sur la photo. Ses lettres portent aussi la classe `.lettre` : l'entrée et le soulèvement à la souris les animent avec les originales. Rendue seulement si la photo détourée est présente, masquée à l'impression.
+- **Mesure Lighthouse** : le même grand blocage occasionnel (environ 550 ms dans le script de l'accueil) apparaît aussi bien sur l'ancienne version que sur la nouvelle : bruit de la machine. Comparer en A/B alterné ; médiane d'environ 96 sur l'accueil le 21/10.
+
 ## Compteur de visites (étape 6)
 
 - **GoatCounter** : gratuit pour un site personnel, sans cookies, hébergé en Finlande et en Allemagne, vues par page et par jour, sources des visites.

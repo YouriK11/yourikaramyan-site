@@ -16,7 +16,8 @@ interface Projet {
   titre: string;
   annee: string;
   role: string;
-  /** One line shown when the panel is closed: a result when the CV gives one, otherwise what was done. */
+  /** One line shown when the panel is closed (hidden once open): a result when the CV gives one, otherwise what
+   *  was done. */
   ligne: string;
   contexte?: string;
   fait?: string[];
@@ -37,9 +38,8 @@ const projets: Projet[] = [
     id: boutique.projet,
     titre: boutique.titre,
     annee: boutique.periode,
-    role: 'Projet personnel, créé et géré de A à Z.',
+    role: 'Projet personnel, créé et géré de A à Z.',
     ligne: boutique.resultats[0],
-    contexte: 'Une boutique en ligne, mon projet personnel en 2022.',
     fait: [...boutique.points],
     resultats: [...boutique.resultats],
   },
@@ -56,19 +56,17 @@ const projets: Projet[] = [
     id: crm.projet,
     titre: crm.titre,
     annee: `${crm.lieu}, ${crm.periode}`,
-    role: 'Projet académique à la HEPL.',
+    role: 'Projet académique.',
     ligne: crm.texte,
-    contexte: 'Un projet académique de la HEPL, en 2026.',
     fait: [crm.texte],
   },
   {
     id: yep.projet,
     titre: yep.titre,
     annee: `${yep.lieu}, ${yep.periode}`,
-    role: 'Projet académique à la HEPL.',
+    role: 'Projet académique.',
     ligne: "Création d'une entreprise étudiante.",
-    contexte: "Un projet académique de la HEPL, en 2025 : la création d'une entreprise étudiante.",
-    fait: ['Étude de marché, modèle financier, stratégie marketing et go-to-market.'],
+    fait: [yep.texte],
   },
 ];
 ---
@@ -86,10 +84,8 @@ const projets: Projet[] = [
           <details id={p.id} class="projet" data-projet>
             <summary class="projet__resume">
               <span class="projet__annee" set:html={typo(p.annee)} />
-              <span class="projet__entete">
-                <h3 class="projet__titre" set:html={typo(p.titre)} />
-                <span class="projet__role" set:html={typo(p.role)} />
-              </span>
+              <h3 class="projet__titre" set:html={typo(p.titre)} />
+              <span class="projet__role" set:html={typo(p.role)} />
               <span class="projet__ligne" set:html={typo(p.ligne)} />
               <span class="projet__bascule" aria-hidden="true" />
             </summary>
@@ -138,7 +134,12 @@ const projets: Projet[] = [
 <script>
   // A link to a project (#monarc, "Voir le projet" in the timeline, the company pages) opens its panel.
   const ouvrir = () => {
-    const id = decodeURIComponent(location.hash.slice(1));
+    let id = location.hash.slice(1);
+    try {
+      id = decodeURIComponent(id);
+    } catch {
+      return; // malformed address: nothing to open
+    }
     if (!id) return;
     const cible = document.getElementById(id);
     const panneau = cible?.closest<HTMLDetailsElement>('details[data-projet]');
@@ -147,7 +148,6 @@ const projets: Projet[] = [
     panneau.scrollIntoView();
   };
   addEventListener('hashchange', ouvrir);
-  ouvrir();
   // Same link clicked twice (the hash does not change): open the panel anyway.
   document.addEventListener('click', (evenement) => {
     const lien = evenement.target instanceof Element ? evenement.target.closest<HTMLAnchorElement>('a[href*="#"]') : null;
@@ -162,6 +162,9 @@ const projets: Projet[] = [
     panneaux.forEach((p) => (p.open = true));
   });
   addEventListener('afterprint', () => panneaux.forEach((p, i) => (p.open = ouverts[i] ?? false)));
+
+  // Last, once every listener is in place: open the panel named in the address (/#monarc).
+  ouvrir();
 </script>
 
 <style>
@@ -189,7 +192,8 @@ const projets: Projet[] = [
     grid-template-columns: minmax(0, 1fr) 2.75rem;
     grid-template-areas:
       'annee bascule'
-      'entete bascule'
+      'titre bascule'
+      'role bascule'
       'ligne ligne';
     column-gap: 1rem;
     padding-block: 1.5rem;
@@ -214,23 +218,22 @@ const projets: Projet[] = [
     font-weight: 720;
   }
 
-  .projet__entete {
-    grid-area: entete;
-    display: grid;
-    gap: 0.375rem;
-    margin-top: 0.375rem;
-  }
-
   .projet__titre {
+    grid-area: titre;
+    margin-top: 0.375rem;
     font-family: var(--police-titre);
     font-size: clamp(1.75rem, 1.2rem + 2vw, 3rem);
     font-weight: 760;
     font-stretch: 90%;
     line-height: 1.05;
+    text-wrap: balance;
   }
 
   .projet__role {
+    grid-area: role;
+    margin-top: 0.375rem;
     color: var(--brume-sur-nuit);
+    text-wrap: pretty;
   }
 
   .projet__ligne {
@@ -239,6 +242,12 @@ const projets: Projet[] = [
     margin-top: 0.875rem;
     padding-left: 1.125rem;
     font-weight: 600;
+    text-wrap: pretty;
+  }
+
+  /* Open panel: the content below says it all, the summary line disappears */
+  .projet[open] .projet__ligne {
+    display: none;
   }
 
   /* Small apricot square, as the CV's bullets */
@@ -309,6 +318,15 @@ const projets: Projet[] = [
     }
   }
 
+  /* High-contrast mode: the + and − bars keep the text colour */
+  @media (forced-colors: active) {
+    .projet__bascule::before,
+    .projet__bascule::after {
+      forced-color-adjust: none;
+      background: CanvasText;
+    }
+  }
+
   /* Open panel */
   .projet__contenu {
     padding-top: 0.5rem;
@@ -353,13 +371,15 @@ const projets: Projet[] = [
   /* From tablets: year on the left, title and role in the middle, result on the right */
   @media (min-width: 48em) {
     .projet {
-      --annee: 9rem;
+      --annee: 7rem;
       --colonnes: clamp(1.5rem, 3vw, 3rem);
     }
 
     .projet__resume {
       grid-template-columns: var(--annee) minmax(0, 1.15fr) minmax(0, 1fr) 2.75rem;
-      grid-template-areas: 'annee entete ligne bascule';
+      grid-template-areas:
+        'annee titre ligne bascule'
+        'annee role ligne bascule';
       column-gap: var(--colonnes);
       align-items: center;
       padding-block: 2rem;
@@ -370,18 +390,34 @@ const projets: Projet[] = [
       padding-top: 0.5rem;
     }
 
-    .projet__entete,
+    .projet__titre {
+      align-self: end;
+      margin-top: 0;
+    }
+
+    .projet__role {
+      align-self: start;
+    }
+
     .projet__ligne {
       margin-top: 0;
+    }
+
+    /* The row keeps its height when the line is hidden */
+    .projet[open] .projet__ligne {
+      display: block;
+      visibility: hidden;
     }
 
     .projet__contenu {
       padding-left: calc(var(--annee) + var(--colonnes));
     }
 
+    /* Same columns as the summary: "Ce que j'ai fait" starts under the result */
     .projet__details {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      column-gap: 3rem;
+      grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+      column-gap: var(--colonnes);
+      padding-right: calc(2.75rem + var(--colonnes));
       max-width: none;
     }
   }

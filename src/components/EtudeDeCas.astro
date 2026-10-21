@@ -264,12 +264,13 @@ const etapes = [
   /* No content-visibility here on purpose: Chrome leaves skipped blocks out of the accessibility tree
      until they are scrolled into view, so screen reader users could not reach these headings. */
 
+  /* Same size as the subheadings of the other project panels */
   .etude__soustitre {
     font-family: var(--police-titre);
-    font-size: clamp(1.625rem, 1.2rem + 1.6vw, 2.75rem);
-    font-weight: 740;
+    font-size: clamp(1.25rem, 1rem + 0.8vw, 1.75rem);
+    font-weight: 720;
     font-stretch: 92%;
-    line-height: 1.1;
+    line-height: 1.15;
   }
 
   /* Key results: the proof, very large */

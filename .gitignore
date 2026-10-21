@@ -25,3 +25,5 @@ sources/
 
 # Verification screenshots
 captures/
+# Console logs written by the editor's Playwright
+.playwright-mcp/

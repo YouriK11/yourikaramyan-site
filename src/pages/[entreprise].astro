@@ -11,7 +11,7 @@ import PiedDePage from '../components/PiedDePage.astro';
 import IconeTelechargement from '../components/IconeTelechargement.astro';
 import { PROFIL } from '../data/profil';
 import { typo } from '../data/typographie';
-import portrait from '../assets/photos/youri-portrait.jpg';
+import { PORTRAIT, PORTRAIT_DETOURE } from '../data/portrait';
 
 export const getStaticPaths = (async () => {
   const entreprises = await getCollection('entreprises');
@@ -74,8 +74,8 @@ const cv = [
         </div>
         <div class="lettre__portrait">
           <Picture
-            class="lettre__photo"
-            src={portrait}
+            class:list={['lettre__photo', { 'lettre__photo--detoure': PORTRAIT_DETOURE }]}
+            src={PORTRAIT}
             formats={['avif', 'webp']}
             widths={[240, 320, 480, 640, 800]}
             sizes="(min-width: 64em) 24rem, 7.5rem"
@@ -251,6 +251,20 @@ const cv = [
     object-fit: cover;
     border-radius: 1.25rem;
     background: var(--brume);
+  }
+
+  /* Cut-out photo (no background): on the midnight blue, with a light halo behind the shoulders, in its own
+     proportions (nothing cropped) */
+  .lettre__photo--detoure {
+    aspect-ratio: auto;
+    background:
+      radial-gradient(
+        ellipse 62% 56% at 50% 52%,
+        rgb(238 241 248 / 0.36),
+        rgb(238 241 248 / 0.14) 52%,
+        rgb(238 241 248 / 0) 78%
+      ),
+      var(--nuit);
   }
 
   /* Ideas */

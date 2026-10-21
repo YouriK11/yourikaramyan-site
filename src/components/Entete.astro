@@ -5,7 +5,8 @@ import { PROFIL } from '../data/profil';
 import IconeTelechargement from './IconeTelechargement.astro';
 
 const liens = [
-  { href: '/#monarc', texte: 'MonArc' },
+  { href: '/#a-propos', texte: 'À propos' },
+  { href: '/#projets', texte: 'Projets' },
   { href: '/#parcours', texte: 'Parcours' },
   { href: '/#competences', texte: 'Compétences' },
   { href: '/#contact', texte: 'Contact' },
@@ -134,7 +135,8 @@ const liens = [
     });
 
     // The desktop layout hides the panel: close it for real.
-    const bureau = window.matchMedia('(min-width: 48em)');
+    // Same breakpoint as the CSS below: five links and the CV button need about 1024 px.
+    const bureau = window.matchMedia('(min-width: 64em)');
     bureau.addEventListener('change', () => {
       if (bureau.matches && menu.matches(':popover-open')) menu.hidePopover();
     });
@@ -193,6 +195,7 @@ const liens = [
   /* Hover: an apricot stroke draws itself under the link (drawn as a background, so nothing moves) */
   .entete__nav ul a {
     display: inline-block;
+    white-space: nowrap;
     padding: 0.375rem 0.5rem;
     margin-inline: -0.5rem;
     font-weight: 500;
@@ -246,7 +249,8 @@ const liens = [
     }
   }
 
-  @media (min-width: 48em) {
+  /* Full menu from 64em: five links and the CV button need the room (tablets keep the "Menu" button) */
+  @media (min-width: 64em) {
     .entete__nav {
       display: flex;
       align-items: center;
@@ -331,7 +335,7 @@ const liens = [
     }
   }
 
-  @media (min-width: 48em) {
+  @media (min-width: 64em) {
     .menu-mobile:popover-open {
       display: none;
     }

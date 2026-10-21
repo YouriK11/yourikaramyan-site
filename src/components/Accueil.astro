@@ -5,8 +5,7 @@
 // The letters only ever move by transforms (entrance, pointer lift), always at full weight: they stay tight,
 // and no content around them ever moves.
 import { Picture } from 'astro:assets';
-import portrait from '../assets/photos/youri-portrait.jpg';
-import visage from '../assets/photos/youri-visage.jpg';
+import { PORTRAIT, VIGNETTE, PORTRAIT_DETOURE } from '../data/portrait';
 import IconeTelechargement from './IconeTelechargement.astro';
 import { PROFIL } from '../data/profil';
 
@@ -58,13 +57,26 @@ const lignes = LIGNES.map(({ texte, largeurs }) => {
           }
           <span class="nom__trait" data-trait></span>
         </span>
+        {
+          PORTRAIT_DETOURE && (
+            /* Desktop: a white copy of the name, shown only where the letters cross the midnight blue photo,
+               so they stay readable. Same letters, same animation (the script moves every .lettre). */
+            <span class="nom__visuel nom__visuel--sur-photo" aria-hidden="true">
+              {lignes.map((ligne) => (
+                <span class="nom__ligne">
+                  {ligne.map((l) => <span class="lettre" style={`--l: ${l.largeur}em`} data-x={l.x}>{l.lettre}</span>)}
+                </span>
+              ))}
+            </span>
+          )
+        }
       </h1>
     </div>
 
     <div class="accueil__portrait" data-apparition>
       <Picture
-        class="portrait portrait--vignette"
-        src={visage}
+        class:list={['portrait portrait--vignette', { 'portrait--detoure': PORTRAIT_DETOURE }]}
+        src={VIGNETTE}
         formats={['avif', 'webp']}
         widths={[96, 160, 240]}
         sizes="5rem"
@@ -72,8 +84,8 @@ const lignes = LIGNES.map(({ texte, largeurs }) => {
         loading="lazy"
       />
       <Picture
-        class="portrait portrait--grand"
-        src={portrait}
+        class:list={['portrait portrait--grand', { 'portrait--detoure': PORTRAIT_DETOURE }]}
+        src={PORTRAIT}
         formats={['avif', 'webp']}
         widths={[320, 480, 640, 800]}
         sizes="26rem"
@@ -98,12 +110,6 @@ const lignes = LIGNES.map(({ texte, largeurs }) => {
       </a>
       <a class="bouton bouton--contour" href="#contact">Me contacter</a>
     </div>
-
-    <!-- Visible from the first paint: it is the largest text on phones, so fading it would delay LCP. -->
-    <p class="accueil__preuve">
-      MonArc, l'application que j'ai conçue, a dépassé 500&nbsp;inscrits le jour de son lancement.
-      <a class="lien" href="#monarc">Lire l'étude de cas</a>
-    </p>
   </div>
 </section>
 
@@ -284,8 +290,7 @@ const lignes = LIGNES.map(({ texte, largeurs }) => {
     grid-template-areas:
       'identite identite'
       'portrait texte'
-      'actions actions'
-      'preuve preuve';
+      'actions actions';
     column-gap: 1.125rem;
     align-items: center;
   }
@@ -307,6 +312,10 @@ const lignes = LIGNES.map(({ texte, largeurs }) => {
 
   .nom__visuel {
     display: block;
+  }
+
+  .nom__visuel--sur-photo {
+    display: none;
   }
 
   .nom__ligne {
@@ -382,6 +391,20 @@ const lignes = LIGNES.map(({ texte, largeurs }) => {
     display: none;
   }
 
+  /* Cut-out photo (no background): on the midnight blue, with a light halo behind the shoulders so the
+     dark shirt stands out. Small square on phones: framed on the face. */
+  .portrait--detoure {
+    background:
+      radial-gradient(
+        ellipse 62% 56% at 50% 52%,
+        rgb(238 241 248 / 0.36),
+        rgb(238 241 248 / 0.14) 52%,
+        rgb(238 241 248 / 0) 78%
+      ),
+      var(--nuit);
+    object-position: 50% 8%;
+  }
+
   /* Text */
   .accueil__texte {
     grid-area: texte;
@@ -404,21 +427,6 @@ const lignes = LIGNES.map(({ texte, largeurs }) => {
     margin-top: 2rem;
   }
 
-  .accueil__preuve {
-    grid-area: preuve;
-    max-width: 38rem;
-    margin-top: 1.75rem;
-    padding-top: 1.25rem;
-    border-top: 1px solid var(--trait);
-    color: var(--ardoise);
-  }
-
-  .accueil__preuve .lien {
-    color: var(--nuit);
-    font-weight: 600;
-    white-space: nowrap;
-  }
-
   /* On phones the two buttons stack: give them the same full width. */
   @media (max-width: 35.99em) {
     .accueil__actions .bouton {
@@ -428,7 +436,7 @@ const lignes = LIGNES.map(({ texte, largeurs }) => {
 
   /* Desktop: the hero fills the first screen. The name runs across the whole width, as on a poster;
      the large portrait sits at the right, beside "Youri", and the end of "Karamyan" passes in front of it.
-     Both sizes follow the screen height too, so the buttons and the MonArc line stay in the first screen.
+     Both sizes follow the screen height too, so the buttons stay in the first screen.
      Everything is fixed from the first paint: nothing shifts. */
   @media (min-width: 64em) {
     .accueil {
@@ -440,8 +448,9 @@ const lignes = LIGNES.map(({ texte, largeurs }) => {
 
     .accueil__grille {
       --portrait: min(26rem, 30vw, calc((100svh - var(--hauteur-entete)) * 0.5));
+      --decalage-portrait: 1.75rem;
       grid-template-columns: minmax(0, 1fr) var(--portrait);
-      grid-template-rows: auto auto auto 1fr;
+      grid-template-rows: auto auto 1fr;
       grid-template-areas: none;
       column-gap: clamp(3rem, 5vw, 5rem);
       align-items: start;
@@ -462,20 +471,34 @@ const lignes = LIGNES.map(({ texte, largeurs }) => {
       z-index: 1;
     }
 
+    /* The white copy covers exactly the photo: from the start of the portrait column to the photo's right edge
+       (the apricot block beyond it keeps the navy letters) */
+    .nom__visuel--sur-photo {
+      display: block;
+      position: absolute;
+      inset: 0;
+      z-index: 3;
+      color: var(--blanc);
+      /* A soft navy shadow keeps the white letters readable over the light parts of the photo too */
+      text-shadow: 0 0.02em 0.1em rgb(24 33 79 / 0.6);
+      clip-path: inset(-1rem var(--decalage-portrait) -1rem calc(100% - var(--portrait)));
+      pointer-events: none;
+    }
+
     .nom {
       /* As wide as the content allows, but never taller than the first screen leaves room for. */
       font-size: min(
         calc(100cqi / (var(--largeur-nom) + 0.02)),
         14rem,
-        max(5.5rem, calc((100svh - var(--hauteur-entete) - 23rem) / 2.1))
+        max(5.5rem, calc((100svh - var(--hauteur-entete) - 17rem) / 2.1))
       );
     }
 
     /* Same proportions as the CV photo: offset about 10 % and corner radius about 15 % of the width. */
     .accueil__portrait {
-      --decalage: 1.75rem;
+      --decalage: var(--decalage-portrait);
       grid-column: 2;
-      grid-row: 1 / span 4;
+      grid-row: 1 / span 3;
       width: var(--portrait);
       aspect-ratio: auto;
       margin-top: -0.25rem;
@@ -489,11 +512,6 @@ const lignes = LIGNES.map(({ texte, largeurs }) => {
     .accueil__actions {
       grid-column: 1;
       grid-row: 3;
-    }
-
-    .accueil__preuve {
-      grid-column: 1;
-      grid-row: 4;
     }
 
     .accueil__portrait::before {
@@ -514,29 +532,29 @@ const lignes = LIGNES.map(({ texte, largeurs }) => {
       height: auto;
     }
 
+    /* The cut-out photo keeps its own proportions: nothing of the shoulders is cropped */
+    .portrait--grand.portrait--detoure {
+      aspect-ratio: auto;
+    }
+
     .accueil__texte {
       margin-top: 2rem;
     }
   }
 
   /* Short laptop windows (1366x768, 1536x730, 1920x1080 at 125 %): tighter spacing below the name,
-     so the name can stay large while the buttons and the MonArc line remain in the first screen. */
+     so the name can stay large while the buttons remain in the first screen. */
   @media (min-width: 80em) and (max-height: 50em) {
     .accueil__texte,
     .accueil__actions {
       margin-top: 1.25rem;
     }
 
-    .accueil__preuve {
-      margin-top: 1rem;
-      padding-top: 0.875rem;
-    }
-
     .nom {
       font-size: min(
         calc(100cqi / (var(--largeur-nom) + 0.02)),
         14rem,
-        max(5.5rem, calc((100svh - var(--hauteur-entete) - 20.5rem) / 2.1))
+        max(5.5rem, calc((100svh - var(--hauteur-entete) - 15.5rem) / 2.1))
       );
     }
   }

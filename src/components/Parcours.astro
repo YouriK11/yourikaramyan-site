@@ -1,5 +1,6 @@
 ---
 // Timeline of every CV line, most recent first, grouped by starting year. Content comes from src/data/profil.ts only.
+// Lines that have a panel in the "Projets" section show no details here, only a "Voir le projet" link to it.
 // By default it shows the essentials for a marketing and e-commerce internship, plus the student jobs on one line;
 // "Voir tout le parcours" unfolds the rest. Without JavaScript, everything is shown.
 import { PROFIL } from '../data/profil';
@@ -54,9 +55,9 @@ const entrees: Entree[] = [
     periode: e.periode,
     debut: e.debut,
     fin: e.fin,
-    textes: [...e.points],
-    resultats: 'resultats' in e ? [...e.resultats] : [],
-    lien: e.structure === 'MonArc' ? { href: '#monarc', texte: "Lire l'étude de cas" } : undefined,
+    textes: [],
+    resultats: [],
+    lien: { href: `#${e.projet}`, texte: 'Voir le projet' },
     essentiel: ESSENTIELS.has(e.titre),
   })),
   ...PROFIL.projetsAcademiques.map((p) => ({
@@ -66,8 +67,9 @@ const entrees: Entree[] = [
     periode: p.periode,
     debut: p.debut,
     fin: p.fin,
-    textes: [p.texte],
+    textes: [],
     resultats: [],
+    lien: { href: `#${p.projet}`, texte: 'Voir le projet' },
     essentiel: true,
   })),
 ];
@@ -133,6 +135,7 @@ const groupes = [...new Set(entrees.map((e) => e.debut))].map((annee) => {
                   {e.lien && (
                     <a class="lien entree__lien" href={e.lien.href}>
                       {e.lien.texte}
+                      <span class="sr-only"> : {e.titre}</span>
                     </a>
                   )}
                 </li>

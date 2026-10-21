@@ -29,6 +29,7 @@ export const PROFIL = {
     nomTelechargement: 'Youri-Karamyan-CV.pdf',
   },
 
+  // projet: address of the project's panel in the "Projets" section (#monarc...), shared with the timeline.
   // debut / fin: years used to order the timeline (fin: null = still ongoing). periode: text shown, as on the CV.
   formation: [
     { titre: 'Bachelier en E-Business', lieu: 'HEPL, Liège', periode: "2024 à aujourd'hui", debut: 2024, fin: null },
@@ -39,6 +40,7 @@ export const PROFIL = {
   experiences: [
     {
       titre: "Projet d'application mobile",
+      projet: 'monarc',
       structure: 'MonArc',
       detail: 'getmonarcapp.com',
       periode: '2026',
@@ -53,6 +55,7 @@ export const PROFIL = {
     },
     {
       titre: 'Freelance digital',
+      projet: 'freelance-digital',
       structure: 'Indépendant',
       detail: 'clients particuliers et professionnels',
       periode: '2020-2023',
@@ -65,6 +68,7 @@ export const PROFIL = {
     },
     {
       titre: 'Boutique e-commerce',
+      projet: 'boutique-e-commerce',
       structure: 'Projet personnel',
       detail: '',
       periode: '2022',
@@ -82,6 +86,7 @@ export const PROFIL = {
   projetsAcademiques: [
     {
       titre: "Implémentation d'un CRM Odoo",
+      projet: 'crm-odoo',
       lieu: 'HEPL',
       periode: '2026',
       debut: 2026,
@@ -90,6 +95,7 @@ export const PROFIL = {
     },
     {
       titre: 'Young Enterprise Project',
+      projet: 'young-enterprise-project',
       lieu: 'HEPL',
       periode: '2025',
       debut: 2025,

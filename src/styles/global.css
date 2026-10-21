@@ -81,6 +81,8 @@ h1,
 h2,
 h3,
 h4,
+h5,
+h6,
 p,
 ul,
 ol,
@@ -428,6 +430,11 @@ button {
   /* Timeline years sit at the top of their group, whatever the scroll position */
   .frise__repere {
     position: static !important;
+  }
+
+  /* The white copy of the name over the photo: useless on paper, where the frame's background is dropped */
+  .nom__visuel--sur-photo {
+    display: none !important;
   }
 
   /* The hero name prints at its final state, whatever the intro or the pointer was doing */

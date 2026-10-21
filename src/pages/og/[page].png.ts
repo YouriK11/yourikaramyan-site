@@ -5,6 +5,7 @@ import { getCollection } from 'astro:content';
 import { readFile } from 'node:fs/promises';
 import satori from 'satori';
 import sharp from 'sharp';
+import { PORTRAIT_DETOURE, FICHIER_PORTRAIT_OG } from '../../data/portrait';
 
 const NUIT = '#18214F';
 const ABRICOT = '#EE9A35';
@@ -27,9 +28,33 @@ export const getStaticPaths = (async () => {
 const [bricolage, instrument, photo] = await Promise.all([
   readFile('src/assets/fonts/bricolage-grotesque-latin-opsz96.woff2'),
   readFile('src/assets/fonts/instrument-sans-latin.woff2'),
-  sharp('src/assets/photos/youri-portrait.jpg').resize(330, 412).jpeg({ quality: 86 }).toBuffer(),
+  photoPartage(),
 ]);
 const photoUrl = `data:image/jpeg;base64,${photo.toString('base64')}`;
+
+// The portrait, 330 x 412. The cut-out photo (src/data/portrait.ts) stands on the bottom edge of a midnight blue
+// frame with a light halo behind the shoulders, as on the pages; the previous photo is simply resized.
+async function photoPartage(): Promise<Buffer> {
+  if (!PORTRAIT_DETOURE) return sharp(FICHIER_PORTRAIT_OG).resize(330, 412).jpeg({ quality: 86 }).toBuffer();
+  const fond = Buffer.from(
+    `<svg xmlns="http://www.w3.org/2000/svg" width="330" height="412">
+      <defs>
+        <radialGradient id="halo" cx="50%" cy="52%" r="62%">
+          <stop offset="0" stop-color="#EEF1F8" stop-opacity="0.36"/>
+          <stop offset="0.52" stop-color="#EEF1F8" stop-opacity="0.14"/>
+          <stop offset="1" stop-color="#EEF1F8" stop-opacity="0"/>
+        </radialGradient>
+      </defs>
+      <rect width="330" height="412" fill="${NUIT}"/>
+      <rect width="330" height="412" fill="url(#halo)"/>
+    </svg>`,
+  );
+  const personne = await sharp(FICHIER_PORTRAIT_OG)
+    .resize(330, 412, { fit: 'contain', position: 'bottom', background: { r: 0, g: 0, b: 0, alpha: 0 } })
+    .png()
+    .toBuffer();
+  return sharp(fond).composite([{ input: personne }]).jpeg({ quality: 86 }).toBuffer();
+}
 
 type Noeud = { type: string; props: Record<string, unknown> };
 const div = (style: Record<string, unknown>, children?: unknown): Noeud => ({ type: 'div', props: { style, children } });

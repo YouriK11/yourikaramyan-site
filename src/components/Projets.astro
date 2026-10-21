@@ -1,0 +1,395 @@
+---
+// "Projets": one panel per project, all closed by default. Native <details> panels: they open with the keyboard
+// (Tab, then Enter or Space), screen readers announce them as collapsed or expanded, and they work without
+// JavaScript. Closed, a panel shows the title, the year, Youri's role and one line of result. Open, it shows the
+// context, what he did and the results. Only facts from the CV and docs/suivi.md: the panels with little
+// information on the CV stay short (the missing information is listed in docs/rapport-refonte.md).
+import EtudeDeCas from './EtudeDeCas.astro';
+import { PROFIL } from '../data/profil';
+import { typo } from '../data/typographie';
+
+const [monarc, freelance, boutique] = PROFIL.experiences;
+const [crm, yep] = PROFIL.projetsAcademiques;
+
+interface Projet {
+  id: string;
+  titre: string;
+  annee: string;
+  role: string;
+  /** One line shown when the panel is closed: a result when the CV gives one, otherwise what was done. */
+  ligne: string;
+  contexte?: string;
+  fait?: string[];
+  resultats?: string[];
+  etudeDeCas?: boolean;
+}
+
+const projets: Projet[] = [
+  {
+    id: monarc.projet,
+    titre: 'MonArc',
+    annee: monarc.periode,
+    role: "J'ai conçu le produit et piloté son développement.",
+    ligne: 'Plus de 500 inscrits le jour du lancement.',
+    etudeDeCas: true,
+  },
+  {
+    id: boutique.projet,
+    titre: boutique.titre,
+    annee: boutique.periode,
+    role: 'Projet personnel, créé et géré de A à Z.',
+    ligne: boutique.resultats[0],
+    contexte: 'Une boutique en ligne, mon projet personnel en 2022.',
+    fait: [...boutique.points],
+    resultats: [...boutique.resultats],
+  },
+  {
+    id: freelance.projet,
+    titre: freelance.titre,
+    annee: freelance.periode,
+    role: 'Indépendant, pour des clients particuliers et professionnels.',
+    ligne: 'Sites web, supports marketing, montage photo et vidéo, traduction.',
+    contexte: "De 2020 à 2023, j'ai travaillé en indépendant pour des clients particuliers et professionnels.",
+    fait: [...freelance.points],
+  },
+  {
+    id: crm.projet,
+    titre: crm.titre,
+    annee: `${crm.lieu}, ${crm.periode}`,
+    role: 'Projet académique à la HEPL.',
+    ligne: crm.texte,
+    contexte: 'Un projet académique de la HEPL, en 2026.',
+    fait: [crm.texte],
+  },
+  {
+    id: yep.projet,
+    titre: yep.titre,
+    annee: `${yep.lieu}, ${yep.periode}`,
+    role: 'Projet académique à la HEPL.',
+    ligne: "Création d'une entreprise étudiante.",
+    contexte: "Un projet académique de la HEPL, en 2025 : la création d'une entreprise étudiante.",
+    fait: ['Étude de marché, modèle financier, stratégie marketing et go-to-market.'],
+  },
+];
+---
+
+<section id="projets" class="section sur-nuit projets" aria-labelledby="titre-projets">
+  <div class="conteneur">
+    <div class="projets__entete">
+      <h2 id="titre-projets" class="titre-section">Projets</h2>
+      <p class="projets__aide texte-secondaire">Ouvrez un projet pour le découvrir en détail.</p>
+    </div>
+
+    <div class="projets__liste">
+      {
+        projets.map((p) => (
+          <details id={p.id} class="projet" data-projet>
+            <summary class="projet__resume">
+              <span class="projet__annee" set:html={typo(p.annee)} />
+              <span class="projet__entete">
+                <h3 class="projet__titre" set:html={typo(p.titre)} />
+                <span class="projet__role" set:html={typo(p.role)} />
+              </span>
+              <span class="projet__ligne" set:html={typo(p.ligne)} />
+              <span class="projet__bascule" aria-hidden="true" />
+            </summary>
+
+            <div class="projet__contenu">
+              {p.etudeDeCas ? (
+                <EtudeDeCas />
+              ) : (
+                <div class="projet__details">
+                  {p.contexte && (
+                    <div>
+                      <h4 class="projet__soustitre">Le contexte</h4>
+                      <p set:html={typo(p.contexte)} />
+                    </div>
+                  )}
+                  {p.fait && (
+                    <div>
+                      <h4 class="projet__soustitre">Ce que j'ai fait</h4>
+                      <ul class="projet__puces" role="list">
+                        {p.fait.map((f) => (
+                          <li set:html={typo(f)} />
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                  {p.resultats && (
+                    <div>
+                      <h4 class="projet__soustitre">Les résultats</h4>
+                      <ul class="projet__puces projet__puces--resultats" role="list">
+                        {p.resultats.map((r) => (
+                          <li set:html={typo(r)} />
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+          </details>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<script>
+  // A link to a project (#monarc, "Voir le projet" in the timeline, the company pages) opens its panel.
+  const ouvrir = () => {
+    const id = decodeURIComponent(location.hash.slice(1));
+    if (!id) return;
+    const cible = document.getElementById(id);
+    const panneau = cible?.closest<HTMLDetailsElement>('details[data-projet]');
+    if (!panneau || panneau.open) return;
+    panneau.open = true;
+    panneau.scrollIntoView();
+  };
+  addEventListener('hashchange', ouvrir);
+  ouvrir();
+  // Same link clicked twice (the hash does not change): open the panel anyway.
+  document.addEventListener('click', (evenement) => {
+    const lien = evenement.target instanceof Element ? evenement.target.closest<HTMLAnchorElement>('a[href*="#"]') : null;
+    if (lien && lien.pathname === location.pathname && lien.hash === location.hash) ouvrir();
+  });
+
+  // Printing: every panel opens, then closes again.
+  const panneaux = Array.from(document.querySelectorAll<HTMLDetailsElement>('details[data-projet]'));
+  let ouverts: boolean[] = [];
+  addEventListener('beforeprint', () => {
+    ouverts = panneaux.map((p) => p.open);
+    panneaux.forEach((p) => (p.open = true));
+  });
+  addEventListener('afterprint', () => panneaux.forEach((p, i) => (p.open = ouverts[i] ?? false)));
+</script>
+
+<style>
+  .projets__entete {
+    display: grid;
+    gap: 1.25rem;
+  }
+
+  .projets__aide {
+    font-size: var(--texte-s);
+  }
+
+  .projets__liste {
+    margin-top: clamp(2.5rem, 2rem + 2vw, 4rem);
+    border-bottom: 1px solid rgb(255 255 255 / 0.16);
+  }
+
+  .projet {
+    border-top: 1px solid rgb(255 255 255 / 0.16);
+  }
+
+  /* Closed panel: year, title and role, one line of result, and the + / − button */
+  .projet__resume {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 2.75rem;
+    grid-template-areas:
+      'annee bascule'
+      'entete bascule'
+      'ligne ligne';
+    column-gap: 1rem;
+    padding-block: 1.5rem;
+    cursor: pointer;
+    list-style: none;
+  }
+
+  .projet__resume::-webkit-details-marker {
+    display: none;
+  }
+
+  .projet__resume:focus-visible {
+    outline-offset: 4px;
+    border-radius: var(--rayon-s);
+  }
+
+  .projet__annee {
+    grid-area: annee;
+    color: var(--abricot);
+    font-family: var(--police-titre);
+    font-size: var(--texte-m);
+    font-weight: 720;
+  }
+
+  .projet__entete {
+    grid-area: entete;
+    display: grid;
+    gap: 0.375rem;
+    margin-top: 0.375rem;
+  }
+
+  .projet__titre {
+    font-family: var(--police-titre);
+    font-size: clamp(1.75rem, 1.2rem + 2vw, 3rem);
+    font-weight: 760;
+    font-stretch: 90%;
+    line-height: 1.05;
+  }
+
+  .projet__role {
+    color: var(--brume-sur-nuit);
+  }
+
+  .projet__ligne {
+    grid-area: ligne;
+    position: relative;
+    margin-top: 0.875rem;
+    padding-left: 1.125rem;
+    font-weight: 600;
+  }
+
+  /* Small apricot square, as the CV's bullets */
+  .projet__ligne::before,
+  .projet__puces li::before {
+    content: '';
+    position: absolute;
+    top: 0.62em;
+    left: 0;
+    width: 0.375rem;
+    height: 0.375rem;
+    border-radius: 1px;
+    background: var(--abricot);
+  }
+
+  /* The + turns into a − when the panel is open */
+  .projet__bascule {
+    grid-area: bascule;
+    position: relative;
+    align-self: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    border: 2px solid rgb(255 255 255 / 0.4);
+    border-radius: 50%;
+  }
+
+  .projet__bascule::before,
+  .projet__bascule::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0.875rem;
+    height: 2px;
+    border-radius: 1px;
+    background: var(--blanc);
+    transform: translate(-50%, -50%);
+  }
+
+  .projet__bascule::after {
+    transform: translate(-50%, -50%) rotate(90deg);
+  }
+
+  .projet[open] .projet__bascule::after {
+    transform: translate(-50%, -50%);
+  }
+
+  .projet[open] .projet__bascule {
+    border-color: var(--abricot);
+  }
+
+  @media (hover: hover) {
+    .projet__resume:hover .projet__bascule {
+      border-color: var(--abricot);
+    }
+
+    .projet__resume:hover .projet__titre {
+      text-decoration: underline;
+      text-decoration-color: var(--abricot);
+      text-decoration-thickness: 3px;
+      text-underline-offset: 0.15em;
+    }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .projet__bascule::after {
+      transition: transform 0.25s ease;
+    }
+  }
+
+  /* Open panel */
+  .projet__contenu {
+    padding-top: 0.5rem;
+    padding-bottom: clamp(2.5rem, 2rem + 2vw, 4rem);
+  }
+
+  .projet__details {
+    display: grid;
+    gap: 2rem;
+    max-width: 48rem;
+  }
+
+  .projet__soustitre {
+    margin-bottom: 0.75rem;
+    font-family: var(--police-titre);
+    font-size: clamp(1.25rem, 1rem + 0.8vw, 1.75rem);
+    font-weight: 720;
+    font-stretch: 92%;
+    line-height: 1.15;
+  }
+
+  .projet__details p {
+    color: var(--brume-sur-nuit);
+  }
+
+  .projet__puces {
+    display: grid;
+    gap: 0.5rem;
+  }
+
+  .projet__puces li {
+    position: relative;
+    padding-left: 1.125rem;
+    color: var(--brume-sur-nuit);
+  }
+
+  .projet__puces--resultats li {
+    color: var(--blanc);
+    font-weight: 600;
+  }
+
+  /* From tablets: year on the left, title and role in the middle, result on the right */
+  @media (min-width: 48em) {
+    .projet {
+      --annee: 9rem;
+      --colonnes: clamp(1.5rem, 3vw, 3rem);
+    }
+
+    .projet__resume {
+      grid-template-columns: var(--annee) minmax(0, 1.15fr) minmax(0, 1fr) 2.75rem;
+      grid-template-areas: 'annee entete ligne bascule';
+      column-gap: var(--colonnes);
+      align-items: center;
+      padding-block: 2rem;
+    }
+
+    .projet__annee {
+      align-self: start;
+      padding-top: 0.5rem;
+    }
+
+    .projet__entete,
+    .projet__ligne {
+      margin-top: 0;
+    }
+
+    .projet__contenu {
+      padding-left: calc(var(--annee) + var(--colonnes));
+    }
+
+    .projet__details {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      column-gap: 3rem;
+      max-width: none;
+    }
+  }
+
+  /* The MonArc case study needs the whole width */
+  @media (min-width: 48em) {
+    .projet:has(.etude) .projet__contenu {
+      padding-left: 0;
+    }
+  }
+</style>

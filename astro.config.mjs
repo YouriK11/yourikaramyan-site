@@ -53,35 +53,5 @@ export default defineConfig({
         ],
       },
     },
-    // Trial pages /essai-b and /essai-c only (home variants under review, 20/10/2026).
-    {
-      provider: fontProviders.local(),
-      name: 'Archivo',
-      cssVariable: '--font-archivo',
-      fallbacks: ['system-ui'],
-      options: {
-        variants: [
-          {
-            // Google Fonts v25 latin file: wght 100-900, wdth 62-125.
-            src: ['./src/assets/fonts/archivo-latin-variable.woff2'],
-            weight: '100 900',
-            style: 'normal',
-            stretch: '62% 125%',
-          },
-        ],
-      },
-    },
-    {
-      provider: fontProviders.local(),
-      name: 'Instrument Serif',
-      cssVariable: '--font-serif',
-      fallbacks: ['serif'],
-      options: {
-        variants: [
-          { src: ['./src/assets/fonts/instrument-serif-latin.woff2'], weight: '400', style: 'normal' },
-          { src: ['./src/assets/fonts/instrument-serif-latin-italique.woff2'], weight: '400', style: 'italic' },
-        ],
-      },
-    },
   ],
 });

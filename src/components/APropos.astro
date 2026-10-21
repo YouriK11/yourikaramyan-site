@@ -1,0 +1,52 @@
+---
+// "À propos": who Youri is, in five short first-person sentences. Every fact comes from the CV
+// (age, studies, what he trains in, his projects, the internship he is looking for).
+import { typo } from '../data/typographie';
+import { PROFIL } from '../data/profil';
+
+const phrases = [
+  "Je m'appelle Youri Karamyan, j'ai 22 ans et j'étudie à Liège.",
+  'Après des études de sciences de gestion à HEC Liège, je suis en 3e bachelier E-Business à la HEPL.',
+  "Je m'y forme au marketing digital, à l'e-commerce et aux outils de gestion.",
+  "L'entrepreneuriat me motive : j'ai créé ma boutique en ligne en 2022, puis conçu l'application MonArc en 2026.",
+  PROFIL.identite.recherche,
+];
+---
+
+<section id="a-propos" class="section section--brume apropos" aria-labelledby="titre-apropos">
+  <div class="conteneur apropos__grille">
+    <h2 id="titre-apropos" class="titre-section">À propos</h2>
+    <div>
+      <p class="apropos__texte" set:html={typo(phrases.join(' '))} />
+      <a class="lien apropos__lien" href="#projets">Voir mes projets</a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .apropos__grille {
+    display: grid;
+    gap: 2rem;
+  }
+
+  .apropos__texte {
+    max-width: 36ch;
+    font-size: clamp(1.25rem, 0.95rem + 1.1vw, 2.125rem);
+    line-height: 1.45;
+    text-wrap: pretty;
+  }
+
+  .apropos__lien {
+    display: inline-block;
+    margin-top: 1.75rem;
+    font-weight: 600;
+  }
+
+  @media (min-width: 64em) {
+    .apropos__grille {
+      grid-template-columns: minmax(0, 4fr) minmax(0, 7fr);
+      column-gap: clamp(3rem, 6vw, 6rem);
+      align-items: start;
+    }
+  }
+</style>

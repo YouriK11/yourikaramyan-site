@@ -1,5 +1,7 @@
 ---
-// Case study: MonArc. Every fact and figure comes from docs/suivi.md (validated by Youri).
+// Case study: MonArc, shown inside its panel of the "Projets" section (src/components/Projets.astro).
+// The panel's summary already gives the title, the year and Youri's role sentence.
+// Every fact and figure comes from docs/suivi.md (validated by Youri).
 // Other users' photos and first names are blurred in src/assets/monarc (originals stay in sources/).
 import Telephone from './Telephone.astro';
 import Compteur from './Compteur.astro';
@@ -54,7 +56,7 @@ const TAILLES_EVENTAIL =
 const etapes = [
   {
     titre: 'Concevoir le produit',
-    // Youri's role sentence is in the header just above: it appears once in the section.
+    // Youri's role sentence is in the panel's summary just above: it appears once.
     texte: ["L'application combine la preuve en photo, un classement chaque semaine, six grades et des arcs privés."],
   },
   {
@@ -81,22 +83,18 @@ const etapes = [
 ];
 ---
 
-<section id="monarc" class="section sur-nuit etude" aria-labelledby="titre-monarc">
-  <div class="conteneur">
-    <header class="etude__entete">
-      <h2 id="titre-monarc" class="titre-section">Étude de cas&nbsp;: MonArc</h2>
-      <p class="etude__chapo">
-        MonArc est une application de suivi d'habitudes. J'ai conçu le produit et piloté son développement.
-      </p>
+<div class="etude">
+    <div class="etude__entete">
+      <p class="etude__chapo">MonArc est une application de suivi d'habitudes.</p>
       <div class="etude__liens">
         <a class="bouton bouton--abricot" href={PROFIL.monarc.appStore}>Voir MonArc sur l'App Store</a>
         <a class="bouton bouton--contour" href={PROFIL.monarc.site}>Ouvrir {PROFIL.monarc.siteAffiche}</a>
       </div>
       <p class="etude__note texte-secondaire">Sur Android, l'application s'installe depuis le site.</p>
-    </header>
+    </div>
 
     <div class="resultats">
-      <h3 class="etude__soustitre">Les résultats</h3>
+      <h4 class="etude__soustitre">Les résultats</h4>
       <ul class="chiffres" role="list">
         {
           resultats.map((r) => (
@@ -115,7 +113,7 @@ const etapes = [
       </p>
     </div>
 
-    <!-- The site's second animated moment (after the hero): the phones spread out once, when they come into view. -->
+    <!-- The site's second animated moment (after the hero): the phones spread out when the panel opens. -->
     <figure class="eventail" data-eventail>
       <div class="eventail__scene">
         {
@@ -145,7 +143,7 @@ const etapes = [
 
     <div class="etude__recit">
       <div class="etude__contexte">
-        <h3 class="etude__soustitre">Le contexte</h3>
+        <h4 class="etude__soustitre">Le contexte</h4>
         <!-- Mechanics as described on the App Store listing (checked 19/10/2026). -->
         <p>
           MonArc aide à tenir ses habitudes. Chaque participant choisit trois habitudes et leur rythme. Chaque jour, il
@@ -165,7 +163,7 @@ const etapes = [
       </div>
 
       <div class="etude__actions">
-        <h3 class="etude__soustitre">Ce que j'ai fait</h3>
+        <h4 class="etude__soustitre">Ce que j'ai fait</h4>
         <ol class="etapes" role="list">
           {
             etapes.map((etape, i) => (
@@ -173,7 +171,7 @@ const etapes = [
                 <span class="etape__numero" aria-hidden="true">
                   {i + 1}
                 </span>
-                <h4 class="etape__titre">{etape.titre}</h4>
+                <h5 class="etape__titre">{etape.titre}</h5>
                 {etape.texte.map((phrase) => (
                   <p set:html={typo(phrase)} />
                 ))}
@@ -185,7 +183,7 @@ const etapes = [
     </div>
 
     <div class="reseaux">
-      <h3 class="etude__soustitre">Sur les réseaux sociaux</h3>
+      <h4 class="etude__soustitre">Sur les réseaux sociaux</h4>
       <div class="reseaux__telephones">
         <Telephone
           src={grilleInstagram}
@@ -202,33 +200,44 @@ const etapes = [
         />
       </div>
     </div>
-  </div>
-</section>
+</div>
 
 <script>
-  // The fan opens once, when at least a third of it is on screen. Without JavaScript or with reduced motion,
-  // the phones are simply shown spread out. Transforms only: nothing around the phones ever moves.
+  // The fan spreads out when the MonArc panel opens and at least a third of it is on screen (inside a closed
+  // panel nothing is rendered, so the observer only fires once the panel is open). Closing the panel gathers
+  // the phones again: they spread out at every opening. Without JavaScript or with reduced motion, the phones
+  // are simply shown spread out. Transforms only: nothing around the phones ever moves.
   const eventail = document.querySelector<HTMLElement>('[data-eventail]');
   if (eventail && 'IntersectionObserver' in window && matchMedia('(prefers-reduced-motion: no-preference)').matches) {
-    eventail.classList.add('eventail--ferme');
+    const rassembler = () => {
+      eventail.classList.remove('eventail--anime');
+      eventail.classList.add('eventail--ferme');
+    };
     const observateur = new IntersectionObserver(
       (entrees) => {
         if (!entrees.some((entree) => entree.isIntersecting)) return;
-        observateur.disconnect();
+        observateur.unobserve(eventail);
         eventail.classList.add('eventail--anime');
         requestAnimationFrame(() => eventail.classList.remove('eventail--ferme'));
       },
       { threshold: 0.35 },
     );
+    rassembler();
     observateur.observe(eventail);
+
+    const panneau = eventail.closest('details');
+    panneau?.addEventListener('toggle', () => {
+      if (panneau.open) return;
+      rassembler();
+      observateur.observe(eventail);
+    });
   }
 </script>
 
 <style>
-  /* Header */
+  /* Introduction: what MonArc is, and where to find it */
   .etude__chapo {
     max-width: 40ch;
-    margin-top: 2rem;
     font-size: var(--texte-l);
     line-height: 1.45;
   }
@@ -563,14 +572,11 @@ const etapes = [
       align-items: end;
     }
 
-    .etude__entete .titre-section {
-      grid-column: 1 / -1;
-    }
-
     .etude__liens {
       grid-column: 2;
-      grid-row: 2;
+      grid-row: 1;
       justify-content: flex-end;
+      margin-top: 0;
     }
 
     .etude__note {

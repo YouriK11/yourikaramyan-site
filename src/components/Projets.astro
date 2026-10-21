@@ -4,10 +4,17 @@
 // readers and no-JS all work). Open, it shows the context, what he did and the results; MonArc's panel holds the
 // case study. The other projects stay a simple line until Youri gives more than the CV says.
 // Only facts from the CV, from Youri (21/10/2026) and from docs/suivi.md.
+import { Picture } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
 import EtudeDeCas from './EtudeDeCas.astro';
 import { PROFIL } from '../data/profil';
 import { PROJETS_AVEC_PANNEAU } from '../data/projets';
 import { typo } from '../data/typographie';
+
+// Visuals sent by Youri on 21/10/2026, cropped from sources/ (originals untouched, no metadata kept).
+import logoBoutique from '../assets/projets/boutique-logo.jpg';
+import gobeletsGobeat from '../assets/projets/gobeat-gobelets.jpg';
+import enseigneGobeat from '../assets/projets/gobeat-enseigne.jpg';
 
 const [monarc, freelance, boutique] = PROFIL.experiences;
 const [crm, yep] = PROFIL.projetsAcademiques;
@@ -23,7 +30,16 @@ interface Projet {
   contexte?: string;
   fait?: string[];
   resultats?: string[];
+  visuels?: Visuel[];
   etudeDeCas?: boolean;
+}
+
+interface Visuel {
+  src: ImageMetadata;
+  alt: string;
+  legende: string;
+  /** A logo sits on a small square white tile; photos share the row in 4:5. */
+  logo?: boolean;
 }
 
 const projets: Projet[] = [
@@ -45,6 +61,14 @@ const projets: Projet[] = [
     contexte: "En 2022, j'ai créé ma boutique en ligne d'équipements sportifs.",
     fait: [...boutique.points, "Acquisition des clients par le marketing d'influence, sur Twitter et YouTube."],
     resultats: [...boutique.resultats],
+    visuels: [
+      {
+        src: logoBoutique,
+        alt: 'Logo de la boutique : une chaussure de football qui frappe un ballon, en bleu.',
+        legende: 'Le logo de la boutique',
+        logo: true,
+      },
+    ],
   },
   {
     id: freelance.projet,
@@ -82,6 +106,19 @@ const projets: Projet[] = [
     resultats: [
       "Plus de 120 gobelets en biscuit présentés lors de l'assemblée générale.",
       'Trois personnes interrogées sur quatre prêtes à essayer le produit.',
+    ],
+    // The team photo (sources/gobeat/visuel-equipe.jpg) waits for Youri: nine teammates are recognisable on it.
+    visuels: [
+      {
+        src: gobeletsGobeat,
+        alt: "Gobelets Gob'Eat en biscuit, garnis et décorés de vermicelles colorés, sur deux plateaux blancs.",
+        legende: "Les gobelets Gob'Eat sur notre stand",
+      },
+      {
+        src: enseigneGobeat,
+        alt: "Enseigne au néon jaune « Gobeat » au-dessus du stand, entre des ballons et une guirlande d'ampoules.",
+        legende: "L'enseigne lumineuse du stand",
+      },
     ],
   },
 ];
@@ -136,6 +173,25 @@ const projets: Projet[] = [
                           <li set:html={typo(r)} />
                         ))}
                       </ul>
+                    </div>
+                  )}
+                  {p.visuels && (
+                    <div class="projet__visuels">
+                      {p.visuels.map((v) => (
+                        <figure class:list={['visuel', { 'visuel--logo': v.logo }]}>
+                          <Picture
+                            class="visuel__image"
+                            src={v.src}
+                            alt={v.alt}
+                            formats={['avif', 'webp']}
+                            width={v.logo ? 320 : 640}
+                            widths={v.logo ? [160, 240, 320] : [240, 360, 480, 640]}
+                            sizes={v.logo ? '(min-width: 48em) 10rem, 9rem' : '(min-width: 48em) 16rem, calc(50vw - 1.5rem)'}
+                            loading="lazy"
+                          />
+                          <figcaption class="visuel__legende" set:html={typo(v.legende)} />
+                        </figure>
+                      ))}
                     </div>
                   )}
                 </div>
@@ -398,6 +454,52 @@ const projets: Projet[] = [
   .projet__puces--resultats li {
     color: var(--blanc);
     font-weight: 600;
+  }
+
+  /* Visuals: below the results on phones, next to them from tablets (second column of the grid) */
+  .projet__visuels {
+    display: flex;
+    gap: 0.75rem;
+    align-items: flex-start;
+  }
+
+  .visuel {
+    flex: 1 1 0;
+    min-width: 0;
+    margin: 0;
+  }
+
+  .visuel__image {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: var(--rayon);
+    box-shadow: 0 0 0 1px rgb(255 255 255 / 0.16);
+  }
+
+  /* A logo sits on its own small white tile */
+  .visuel--logo {
+    flex: 0 0 auto;
+    width: 9rem;
+  }
+
+  .visuel--logo .visuel__image {
+    aspect-ratio: 1;
+    object-fit: cover;
+    background: var(--blanc);
+  }
+
+  .visuel__legende {
+    margin-top: 0.5rem;
+    color: var(--brume-sur-nuit);
+    font-size: var(--texte-s);
+    text-wrap: pretty;
+  }
+
+  @media (min-width: 48em) {
+    .visuel--logo {
+      width: 10rem;
+    }
   }
 
   /* From tablets: year on the left, title and role in the middle, result on the right */

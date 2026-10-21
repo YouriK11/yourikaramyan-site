@@ -106,6 +106,7 @@ Faits vérifiés sur Col&McArthur (octobre 2026) :
   - une enquête auprès de 85 personnes (p. 54) ;
   - « trois personnes interrogées sur quatre prêtes à essayer le produit » (75,3 % de « oui », question 5, p. 54) ;
   - deux cafés du centre de Liège interrogés (p. 29-31, leurs noms ne sont pas affichés).
+- [ ] **Photo d'équipe Gob'Eat** (`sources/gobeat/visuel-equipe.jpg`) : pas affichée. Neuf coéquipiers y sont reconnaissables. À ajouter seulement si Youri confirme leur accord (sinon : la laisser de côté, ou la recadrer sur le stand sans visage).
 - [ ] Domaine yourikaramyan.com : Youri l'achète lui-même avant l'étape 7.
 
 ## Précisions de Youri (19/10/2026)
@@ -121,3 +122,4 @@ Faits vérifiés sur Col&McArthur (octobre 2026) :
 - **Boutique e-commerce (2022)** : elle vendait des équipements sportifs. Les clients venaient d'une stratégie d'influenceurs sur Twitter et YouTube. Le site écrit « marketing d'influence, sur Twitter et YouTube ». Toujours sans le nom de la boutique ni Shopify.
 - **Freelance digital (2020-2023)** : clients indépendants. Le CV dit « particuliers et professionnels » : le site écrit « Mes clients étaient surtout des indépendants ». Mission donnée en exemple : le sous-titrage d'un cours en ligne.
 - **Young Enterprise Project** : entreprise étudiante Gob'Eat (gobelet en biscuit nappé de chocolat belge). Youri en était le directeur général et le point de contact commercial (business plan, p. 3 et 10). Le business plan dit « 2025-2026 », le CV dit « 2025 » : le site garde 2025, comme le CV. Le business plan nomme les neuf autres membres de l'équipe et leurs e-mails : ne jamais les afficher.
+- **Visuels des projets** (21/10/2026, déposés par Youri dans l'ancien dossier OneDrive `Documents\yourikaramyan-site\yourikaramyan-site\`, copiés dans `sources/`) : logo de la boutique (identique à `sources/boutique-2022/logo.jpg`, sans le nom de la boutique) et deux photos Gob'Eat (gobelets sur le stand, enseigne lumineuse). Versions recadrées en 4:5 (logo carré), sans métadonnées, dans `src/assets/projets/`. La capture Shopify (`sources/boutique-2022/shopify-stats.jpg`) reste hors du site : on y lit le nom de la boutique, « Shopify », « Domicile » et les miniatures de la galerie.

@@ -62,6 +62,13 @@ MonArc (donnés par Youri et dans le CV) :
 - plus de 1 700 inscrits dans la base e-mail ;
 - une vidéo TikTok publiée chaque jour, publications régulières sur Instagram.
 
+Young Enterprise Project, Gob'Eat (business plan `sources/business-plan-gobeat.pdf`, validés par Youri le 21/10/2026) :
+- une équipe de dix étudiants (p. 3) ;
+- plus de 120 gobelets présentés lors de l'assemblée générale (p. 4), aussi en ligne de résumé ;
+- une enquête auprès de 85 personnes (p. 54) ;
+- « trois personnes interrogées sur quatre prêtes à essayer le produit » (75,3 % de « oui », question 5, p. 54) ;
+- deux cafés du centre de Liège interrogés (p. 29-31, leurs noms ne sont pas affichés).
+
 TikTok @monarc_app (captures du 17/10/2026, validés par Youri) :
 - 6 578 abonnés : afficher « plus de 6 500 abonnés » ;
 - 172,8 K j'aime sur le profil : afficher « plus de 170 000 j'aime » ;
@@ -100,13 +107,6 @@ Faits vérifiés sur Col&McArthur (octobre 2026) :
 - [x] **Nouvelle photo** : en place le 21/10/2026 au soir (trouvée dans Téléchargements, copiée dans `sources/` et `src/assets/photos/youri-portrait-detoure.png`). Accueil, cadran de la page entreprise et image de partage vérifiés en 390, 1024, 1440 et 1920 px.
 - [ ] **Google Play** : MonArc n'y est pas publique. Ne jamais mentionner Google Play sans lien.
 - [ ] **Informations sur les projets** : le 21/10 vers 19 h, Youri a donné les informations de la boutique, du freelance et du Young Enterprise Project (voir « Précisions de Youri (21/10/2026) »). Ces trois projets ont retrouvé leur panneau. Reste le **CRM Odoo**, ligne simple tant que Youri n'a rien donné (questions dans `docs/rapport-refonte.md`). Pour le freelance, un résultat (nombre de clients ou de missions, un retour client) renforcerait le panneau.
-- [ ] **Chiffres du Young Enterprise Project, en attente de validation** (business plan Gob'Eat, `sources/business-plan-gobeat.pdf`). Affichés dans le panneau en local, à valider par Youri avant la mise en ligne publique (étape D) :
-  - une équipe de dix étudiants (p. 3) ;
-  - plus de 120 gobelets présentés lors de l'assemblée générale (p. 4), aussi en ligne de résumé ;
-  - une enquête auprès de 85 personnes (p. 54) ;
-  - « trois personnes interrogées sur quatre prêtes à essayer le produit » (75,3 % de « oui », question 5, p. 54) ;
-  - deux cafés du centre de Liège interrogés (p. 29-31, leurs noms ne sont pas affichés).
-- [ ] **Photo d'équipe Gob'Eat** (`sources/gobeat/visuel-equipe.jpg`) : pas affichée. Neuf coéquipiers y sont reconnaissables. À ajouter seulement si Youri confirme leur accord (sinon : la laisser de côté, ou la recadrer sur le stand sans visage).
 - [ ] Domaine yourikaramyan.com : Youri l'achète lui-même avant l'étape 7.
 
 ## Précisions de Youri (19/10/2026)
@@ -120,6 +120,7 @@ Faits vérifiés sur Col&McArthur (octobre 2026) :
 ## Précisions de Youri (21/10/2026)
 
 - **Boutique e-commerce (2022)** : elle vendait des équipements sportifs. Les clients venaient d'une stratégie d'influenceurs sur Twitter et YouTube. Le site écrit « marketing d'influence, sur Twitter et YouTube ». Toujours sans le nom de la boutique ni Shopify.
-- **Freelance digital (2020-2023)** : clients indépendants. Le CV dit « particuliers et professionnels » : le site écrit « Mes clients étaient surtout des indépendants ». Mission donnée en exemple : le sous-titrage d'un cours en ligne.
+- **Freelance digital (2020-2023)** : clients indépendants. Le CV dit « particuliers et professionnels » : le site écrit « Mes clients étaient surtout des indépendants » (phrase validée par Youri le 21/10/2026). Mission donnée en exemple : le sous-titrage d'un cours en ligne.
 - **Young Enterprise Project** : entreprise étudiante Gob'Eat (gobelet en biscuit nappé de chocolat belge). Youri en était le directeur général et le point de contact commercial (business plan, p. 3 et 10). Le business plan dit « 2025-2026 », le CV dit « 2025 » : le site garde 2025, comme le CV. Le business plan nomme les neuf autres membres de l'équipe et leurs e-mails : ne jamais les afficher.
+- **Photo d'équipe Gob'Eat** (`sources/gobeat/visuel-equipe.jpg`) : refusée par Youri le 21/10/2026. Ne pas la mettre sur le site.
 - **Visuels des projets** (21/10/2026, déposés par Youri dans l'ancien dossier OneDrive `Documents\yourikaramyan-site\yourikaramyan-site\`, copiés dans `sources/`) : logo de la boutique (identique à `sources/boutique-2022/logo.jpg`, sans le nom de la boutique) et deux photos Gob'Eat (gobelets sur le stand, enseigne lumineuse). Versions recadrées en 4:5 (logo carré), sans métadonnées, dans `src/assets/projets/`. La capture Shopify (`sources/boutique-2022/shopify-stats.jpg`) reste hors du site : on y lit le nom de la boutique, « Shopify », « Domicile » et les miniatures de la galerie.

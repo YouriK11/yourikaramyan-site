@@ -47,8 +47,7 @@ export const PROFIL = {
       debut: 2026,
       fin: 2026,
       points: [
-        // The CV also says "Google Play": the app is not there yet (Youri, 19/10/2026), so the site leaves it out.
-        "Conception et lancement d'une application de suivi d'habitudes sur l'App Store et en version web.",
+        "Conception et lancement d'une application de suivi d'habitudes sur l'App Store, Google Play et en version web.",
         'Promotion sur TikTok avec du contenu publié chaque jour, et sur Instagram avec des publications régulières.',
         `Gestion de la base clients par e-mail, avec plus de 1${NBSP}700 inscrits.`,
       ],
@@ -130,7 +129,7 @@ export const PROFIL = {
     site: 'https://getmonarcapp.com',
     siteAffiche: 'getmonarcapp.com',
     appStore: 'https://apps.apple.com/be/app/monarc/id6816906304?l=fr-FR',
-    // Not on Google Play yet: Android users install the web version from getmonarcapp.com.
-    googlePlay: null,
+    // Public on Google Play since 21/10/2026 (link given by Youri, listing checked the same day).
+    googlePlay: 'https://play.google.com/store/apps/details?id=com.getmonarcapp.app',
   },
 } as const;

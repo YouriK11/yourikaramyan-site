@@ -59,7 +59,7 @@ Prototype de l'effet d'accueil (lecture seule, ses fichiers gsap.js et bricolage
   - Sans prise en charge du Popover API, le panneau et son bouton restent masqués.
 - **Ancres** : `<body id="haut">` pour « Haut de page ». `#top` laisse le focus sur le lien du pied de page dans Firefox et Safari.
 - **Pied de page** collé en bas des pages courtes : `body` en flex colonne, `main { flex: 1 0 auto }`.
-- **`SITE.enConstruction`** (`src/data/site.ts`) met toutes les pages en `noindex`. À passer à false à l'étape 7, seulement quand le CV corrigé (sans Google Play) est en place.
+- **`SITE.enConstruction`** (`src/data/site.ts`) met toutes les pages en `noindex`. À passer à false à l'étape 7, avec l'accord de Youri (depuis le 21/10/2026, MonArc est sur Google Play : le CV ne contient plus d'erreur).
 
 ## Images
 

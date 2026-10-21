@@ -71,6 +71,7 @@ const etapes = [
     texte: [
       "MonArc est sortie le 1er octobre 2026 sur l'App Store et en version web.",
       'Plus de 500 personnes se sont inscrites le jour même.',
+      "L'application est aussi disponible sur Google Play.",
     ],
   },
   {
@@ -88,9 +89,9 @@ const etapes = [
       <p class="etude__chapo">MonArc est une application de suivi d'habitudes.</p>
       <div class="etude__liens">
         <a class="bouton bouton--abricot" href={PROFIL.monarc.appStore}>Voir MonArc sur l'App Store</a>
+        <a class="bouton bouton--abricot" href={PROFIL.monarc.googlePlay}>Voir MonArc sur Google Play</a>
         <a class="bouton bouton--contour" href={PROFIL.monarc.site}>Ouvrir {PROFIL.monarc.siteAffiche}</a>
       </div>
-      <p class="etude__note texte-secondaire">Sur Android, l'application s'installe depuis le site.</p>
     </div>
 
     <div class="resultats">
@@ -157,7 +158,7 @@ const etapes = [
           </div>
           <div>
             <dt>Plateformes</dt>
-            <dd>App Store et version web</dd>
+            <dd>App Store, Google Play et version web</dd>
           </div>
         </dl>
       </div>
@@ -249,12 +250,7 @@ const etapes = [
     margin-top: 2rem;
   }
 
-  .etude__note {
-    margin-top: 0.875rem;
-    font-size: var(--texte-s);
-  }
-
-  /* On phones the two buttons stack: same full width, as in the hero. */
+  /* On phones the buttons stack: same full width, as in the hero. */
   @media (max-width: 35.99em) {
     .etude__liens .bouton {
       flex: 1 1 100%;
@@ -578,11 +574,6 @@ const etapes = [
       grid-row: 1;
       justify-content: flex-end;
       margin-top: 0;
-    }
-
-    .etude__note {
-      grid-column: 2;
-      text-align: end;
     }
 
     .etude__recit {

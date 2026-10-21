@@ -20,7 +20,7 @@ Puis tape :
    (remplace le CV téléchargeable)
 3. `npm run dev`, puis ouvre http://localhost:4321/ et vérifie l'accueil, la page http://localhost:4321/col-macarthur/ et le bouton « Télécharger mon CV ». Arrête ensuite le serveur avec **Ctrl+C**.
 
-Ton nouveau CV ne mentionne plus Google Play : la mise en ligne est donc autorisée. Ouvre `src/data/site.ts` et remplace `enConstruction: true` par `enConstruction: false`. Google pourra alors indexer ton accueil. Les pages entreprises restent toujours cachées.
+Depuis le 21 octobre, MonArc est sur Google Play : ton CV ne contient plus d'erreur, la mise en ligne est donc autorisée. Ouvre `src/data/site.ts` et remplace `enConstruction: true` par `enConstruction: false`. Google pourra alors indexer ton accueil. Les pages entreprises restent toujours cachées.
 
 Le plus simple : dis-moi « photo et CV en place » et je fais ces vérifications à ta place, y compris relire le CV pour mettre le site à jour s'il a changé.
 

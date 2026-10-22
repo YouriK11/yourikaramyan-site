@@ -34,7 +34,7 @@ description: >-
 accroche:
   - >-
     Je m'appelle Youri Karamyan. Je suis étudiant en 3e bachelier E-Business à la HEPL, à Liège.
-    Je cherche un stage en marketing digital et e-commerce.
+    Je cherche un stage en marketing digital, de janvier à mai 2027.
   - >-
     [À COMPLÉTER : deux ou trois phrases sur l'entreprise, avec des faits vérifiés sur son site.]
   - >-

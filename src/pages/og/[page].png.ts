@@ -78,7 +78,9 @@ function image(pour: string | null, apercu: string | null): Noeud {
       ]
     : [
         div({ display: 'flex', marginTop: 34, color: BLANC, fontSize: 34 }, 'Étudiant en E-Business à la HEPL (Liège)'),
-        div({ display: 'flex', marginTop: 12, color: BRUME_SUR_NUIT, fontSize: 30 }, 'Stage en marketing digital et e-commerce'),
+        // Two set lines: in one, "2027" ended up alone on the second line
+        div({ display: 'flex', marginTop: 12, color: BRUME_SUR_NUIT, fontSize: 30 }, 'Stage en marketing digital'),
+        div({ display: 'flex', marginTop: 4, color: BRUME_SUR_NUIT, fontSize: 30 }, 'de janvier à mai 2027'),
       ];
 
   return div(

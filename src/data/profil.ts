@@ -1,4 +1,4 @@
-// Every fact about Youri shown on the site, transcribed from sources/CV_Youri_Karamyan.pdf (19/10/2026).
+// Every fact about Youri shown on the site, transcribed from sources/CV_Youri_Karamyan.pdf (22/10/2026).
 // Change the CV here once and every page follows.
 // French typography: " " is a non-breaking space (before ":" and similar signs).
 
@@ -9,8 +9,10 @@ export const PROFIL = {
     prenom: 'Youri',
     nom: 'Karamyan',
     titre: 'Étudiant en 3e bachelier E-Business, HEPL',
-    recherche: 'Je cherche un stage en marketing digital et e-commerce.',
-    accroche: "En dernière année d'E-Business, je me forme au marketing digital, à l'e-commerce et aux outils de gestion.",
+    // The CV says "Stage en marketing digital, de janvier à mai 2027." The site says it in the first person.
+    recherche: 'Je cherche un stage en marketing digital, de janvier à mai 2027.',
+    accroche:
+      "En dernière année d'E-Business, je me forme au marketing digital et à la relation client. Je veux aider une entreprise à se développer en ligne.",
     age: '22 ans',
     mobilite: 'Permis B et véhicule',
     lieu: 'Vivegnis, Liège',
@@ -41,15 +43,16 @@ export const PROFIL = {
     {
       titre: "Projet d'application mobile",
       projet: 'monarc',
+      // The 22/10/2026 CV no longer names the app under the title; the site keeps "MonArc, getmonarcapp.com".
       structure: 'MonArc',
       detail: 'getmonarcapp.com',
       periode: '2026',
       debut: 2026,
       fin: 2026,
       points: [
+        'Création de contenu publié chaque jour sur TikTok, et publications régulières sur Instagram.',
+        `Gestion d'une base clients de plus de 1${NBSP}700 contacts par e-mail.`,
         "Conception et lancement d'une application de suivi d'habitudes sur l'App Store, Google Play et en version web.",
-        'Promotion sur TikTok avec du contenu publié chaque jour, et sur Instagram avec des publications régulières.',
-        `Gestion de la base clients par e-mail, avec plus de 1${NBSP}700 inscrits.`,
       ],
     },
     {
@@ -61,7 +64,7 @@ export const PROFIL = {
       debut: 2020,
       fin: 2023,
       points: [
-        'Sites web, supports marketing, montage photo et vidéo, sous-titrage.',
+        'Photo et vidéo, supports marketing, sites web, sous-titrage.',
         "Traduction de documents entre le français, l'anglais et l'arménien.",
       ],
     },
@@ -82,16 +85,8 @@ export const PROFIL = {
     },
   ],
 
+  // The CRM Odoo project left the CV on 22/10/2026.
   projetsAcademiques: [
-    {
-      titre: "Implémentation d'un CRM Odoo",
-      projet: 'crm-odoo',
-      lieu: 'HEPL',
-      periode: '2026',
-      debut: 2026,
-      fin: 2026,
-      texte: 'Automatisation des leads, du pipeline commercial et du SAV.',
-    },
     {
       titre: 'Young Enterprise Project',
       projet: 'young-enterprise-project',
@@ -104,16 +99,17 @@ export const PROFIL = {
   ],
 
   jobs: [
-    { employeur: 'Quick Herstal', texte: 'équipier polyvalent sur cinq postes, service client.', periode: 'depuis 2023', debut: 2023, fin: null },
+    // Wording given by Youri on 22/10/2026 (the CV says "équipier polyvalent sur cinq postes, service client.").
+    { employeur: 'Quick Herstal', texte: 'équipier polyvalent tous les week-ends, en fermeture.', periode: 'depuis 2023', debut: 2023, fin: null },
     { employeur: 'Atlas Agency', texte: 'vente directe pour des associations caritatives.', periode: '2023', debut: 2023, fin: 2023 },
     { employeur: 'Chemin Faisant / Métaphore', texte: "agent d'entretien.", periode: '2020-2022', debut: 2020, fin: 2022 },
   ],
 
   competences: [
-    { groupe: 'E-commerce et web', detail: 'Shopify, WordPress, gestion de boutique en ligne' },
-    { groupe: 'Marketing', detail: 'Réseaux sociaux (TikTok, Instagram), création de contenu, montage vidéo' },
+    { groupe: 'Marketing et communication', detail: 'Réseaux sociaux (Instagram, TikTok), création de contenu, photo et vidéo' },
+    { groupe: 'Relation client', detail: 'Service client, vente directe, argumentation' },
     { groupe: 'Outils', detail: 'Odoo (CRM et ERP), IA générative' },
-    { groupe: 'Commercial', detail: 'Vente directe, argumentation, négociation' },
+    { groupe: 'Web', detail: 'Shopify, gestion de site' },
   ],
 
   langues: [
@@ -123,7 +119,7 @@ export const PROFIL = {
     { langue: 'Allemand', niveau: 'notions' },
   ],
 
-  interets: 'Entrepreneuriat, e-commerce, nouvelles technologies, course à pied et vidéo',
+  interets: 'Entrepreneuriat, immobilier, nouvelles technologies, course à pied et vidéo',
 
   monarc: {
     site: 'https://getmonarcapp.com',

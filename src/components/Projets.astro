@@ -17,7 +17,7 @@ import gobeletsGobeat from '../assets/projets/gobeat-gobelets.jpg';
 import enseigneGobeat from '../assets/projets/gobeat-enseigne.jpg';
 
 const [monarc, freelance, boutique] = PROFIL.experiences;
-const [crm, yep] = PROFIL.projetsAcademiques;
+const [yep] = PROFIL.projetsAcademiques;
 
 interface Projet {
   id: string;
@@ -75,17 +75,10 @@ const projets: Projet[] = [
     titre: freelance.titre,
     annee: freelance.periode,
     role: 'Indépendant, pour des clients particuliers et professionnels.',
-    ligne: 'Sites web, supports marketing, montage photo et vidéo, traduction.',
+    ligne: 'Photo et vidéo, supports marketing, sites web, traduction.',
     // Type of clients and one mission: given by Youri on 21/10/2026.
     contexte: "De 2020 à 2023, j'ai travaillé en freelance. Mes clients étaient surtout des indépendants.",
     fait: [...freelance.points, "Exemple de mission : le sous-titrage d'un cours en ligne."],
-  },
-  {
-    id: crm.projet,
-    titre: crm.titre,
-    annee: `${crm.lieu}, ${crm.periode}`,
-    role: 'Projet académique.',
-    ligne: crm.texte,
   },
   {
     id: yep.projet,

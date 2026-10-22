@@ -11,7 +11,7 @@ description: >-
 accroche:
   - >-
     Je m'appelle Youri Karamyan. Je suis étudiant en 3e bachelier E-Business à la HEPL, à Liège.
-    Je cherche un stage en marketing digital et e-commerce.
+    Je cherche un stage en marketing digital, de janvier à mai 2027.
   - >-
     Vos montres racontent l'Histoire avec des éléments authentiques : un fragment du mur de Berlin,
     du sable des plages de Normandie, l'asphalte du circuit de Spa-Francorchamps.
@@ -48,8 +48,7 @@ idees:
       - >-
         Chaque lancement touche ainsi d'abord les collectionneurs les plus concernés.
     experience: >-
-      une liste d'attente de plus de 1 700 inscrits pour MonArc, et l'automatisation des leads dans mon
-      projet CRM Odoo à la HEPL.
+      une liste d'attente de plus de 1 700 inscrits pour MonArc, que j'anime par e-mail.
 
   - titre: Un guide cadeau en trois questions
     texte:

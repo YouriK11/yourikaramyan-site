@@ -26,7 +26,7 @@ Consignes de Youri pour cette nuit :
 | 4 | Parcours, compétences, contact | Terminée le 19/10/2026 (nuit), commit 90c7403 |
 | 5 | Page /col-macarthur et système de duplication | Terminée le 20/10/2026, commit 630918b |
 | 6 | Finitions : images de partage, accessibilité, Lighthouse mobile, compteur de visites | Terminée le 20/10/2026, commit c51d1f6 (compteur prêt, inactif sans compte GoatCounter) |
-| 7 | Mise en ligne sur yourikaramyan.com (GitHub + Vercel, achat du domaine sur Vercel) | 21/10/2026 : étapes A à C terminées (CV final, `enConstruction: false`, dépôt privé `YouriK11/yourikaramyan-site` envoyé par Youri). D (Vercel) et E (domaine) à faire par Youri, qui me prévient ; F (vérifications en ligne) par Claude ensuite |
+| 7 | Mise en ligne sur yourikaramyan.com (GitHub + Vercel, achat du domaine sur Vercel) | 21/10/2026 : étapes A à C terminées (CV final, `enConstruction: false`, dépôt privé `YouriK11/yourikaramyan-site` envoyé par Youri). D faite le 22/10/2026 : https://yourikaramyan-site.vercel.app publie chaque envoi sur GitHub tout seul (vérifié : version c0ff6f5 en ligne une minute après l'envoi, noindex des pages entreprises, CV, images de partage). Reste E (domaine yourikaramyan.com, achat par Youri) puis F (vérifications complètes par Claude) |
 
 Passe visuelle « whaou » (20/10/2026) : branche `passe-whaou`, fusionnée dans `main` le 21/10/2026 avec la refonte. Détail dans `docs/rapport-passe-whaou.md`.
 

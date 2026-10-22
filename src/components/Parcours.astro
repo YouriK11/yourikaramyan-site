@@ -2,8 +2,9 @@
 // Timeline of every CV line, most recent first, grouped by starting year. Content comes from src/data/profil.ts only.
 // Lines whose project has a panel in the "Projets" section (src/data/projets.ts) show no details here, only a
 // "Voir le projet" link to it. The others keep their CV details.
-// By default it shows the essentials for a marketing and e-commerce internship, plus the student jobs on one line;
-// "Voir tout le parcours" unfolds the rest. Without JavaScript, everything is shown.
+// By default it shows the essentials for a marketing internship, plus the student jobs with their details (Youri
+// wants his Quick Herstal line seen, 22/10/2026); "Voir tout le parcours" unfolds the rest. Without JavaScript,
+// everything is shown.
 import { PROFIL } from '../data/profil';
 import { typo } from '../data/typographie';
 import { PROJETS_AVEC_PANNEAU } from '../data/projets';
@@ -76,10 +77,6 @@ const entrees: Entree[] = [
   })),
 ];
 
-// Student jobs: one line ("Quick Herstal (depuis 2023), Atlas Agency (2023) et ..."), with the CV's details when unfolded.
-const jobs = PROFIL.jobs.map((j) => `${j.employeur} (${j.periode})`);
-const ligneJobs = `${jobs.slice(0, -1).join(', ')} et ${jobs.at(-1)}.`;
-
 // Most recent first: starting year, then whatever is still ongoing or ended later.
 entrees.sort((a, b) => b.debut - a.debut || (b.fin ?? 9999) - (a.fin ?? 9999));
 
@@ -151,8 +148,7 @@ const groupes = [...new Set(entrees.map((e) => e.debut))].map((annee) => {
         <div class="frise__entrees">
           <div class="entree">
             <span class="pastille pastille--job entree__pastille" aria-hidden="true" />
-            <p class="jobs__ligne" data-resume set:html={typo(ligneJobs)} />
-            <ul class="jobs__details" role="list" data-secondaire>
+            <ul class="jobs__details" role="list">
               {
                 PROFIL.jobs.map((j) => (
                   <li>
@@ -310,18 +306,7 @@ const groupes = [...new Set(entrees.map((e) => e.debut))].map((annee) => {
 
   /* Folding: on screen only, and only once JavaScript can unfold it again. Paper always gets everything. */
   @media screen {
-    :global(html.js) .frise:not(.frise--complete) [data-secondaire],
-    :global(html.js) .frise.frise--complete [data-resume] {
-      display: none;
-    }
-  }
-
-  :global(html:not(.js)) [data-resume] {
-    display: none;
-  }
-
-  @media print {
-    [data-resume] {
+    :global(html.js) .frise:not(.frise--complete) [data-secondaire] {
       display: none;
     }
   }
@@ -333,11 +318,7 @@ const groupes = [...new Set(entrees.map((e) => e.debut))].map((annee) => {
   }
 
   .frise__annee--jobs .entree {
-    max-width: none; /* the three jobs fit on one line from 1440 px */
-  }
-
-  .jobs__ligne {
-    padding-top: 0.0625rem;
+    max-width: none; /* each job holds on one line on a computer */
   }
 
   .jobs__details {

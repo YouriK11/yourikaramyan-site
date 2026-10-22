@@ -15,14 +15,12 @@ import grilleInstagram from '../assets/monarc/instagram-grille.jpg';
 import statsTiktok from '../assets/monarc/tiktok-stats.jpg';
 
 // Key results, shown very large at the top of the case study. All validated by Youri (docs/suivi.md).
+// Four figures only (Youri, 22/10/2026): the weekly ranking and the TikTok likes are no longer shown.
 const resultats = [
   { valeur: 500, prefixe: '+', libelle: 'inscrits le jour du lancement' },
   { valeur: 1700, prefixe: '+', libelle: "inscrits sur la liste d'attente, avant le lancement" },
-  // Usage of the app: "20e sur 1 056 cette semaine" on Youri's "Aujourd'hui" screen (Youri, 21/10/2026).
-  { valeur: 1000, prefixe: '+', libelle: 'participants dans le classement de la semaine, au 21 octobre 2026' },
   { valeur: 1.9, decimales: 1, suffixe: ' M', libelle: 'vues sur TikTok en 60 jours' },
   { valeur: 6500, prefixe: '+', libelle: 'abonnés sur TikTok' },
-  { valeur: 170000, prefixe: '+', libelle: "j'aime sur le compte TikTok" },
 ];
 
 // The app's three screens, fanned out: the feed in front, the ranking and the profile behind it.
@@ -282,7 +280,7 @@ const etapes = [
   .chiffre__valeur {
     color: var(--abricot);
     font-family: var(--police-titre);
-    /* 11vw: "+170 000" still fits its column on a 320 px phone */
+    /* 11vw: "+1 700" still fits its column on a 320 px phone */
     font-size: min(clamp(2.75rem, 0.6rem + 5.6vw, 6rem), 11vw);
     font-weight: 780;
     font-stretch: 85%;
@@ -506,8 +504,8 @@ const etapes = [
       --angle: 8deg;
     }
 
+    /* Four figures: two per row until 64em, then all four on one row */
     .chiffres {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 3rem 2rem;
     }
 
@@ -537,6 +535,10 @@ const etapes = [
   }
 
   @media (min-width: 64em) {
+    .chiffres {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
     .etude__entete {
       display: grid;
       grid-template-columns: minmax(0, 1fr) auto;

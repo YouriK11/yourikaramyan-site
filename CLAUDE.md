@@ -12,11 +12,10 @@ Avant de coder avec Astro, GSAP, Vercel ou les images de partage, lire `docs/ref
 - Débutant en technique : lui expliquer chaque commande à taper, étape par étape, sans rien supposer.
 
 ## Source de vérité
-- `sources/CV_Youri_Karamyan.pdf` (version du 22/10/2026 : ancienne photo, stage de janvier à mai 2027, plus de CRM Odoo, App Store, Google Play et version web, yourikaramyan.com). Le relire avant toute modification de contenu. Sur le site, la nouvelle photo détourée reste partout (choix de Youri).
+- `sources/CV_Youri_Karamyan.pdf` (version du 23/10/2026 : ancienne photo, stage de janvier à mai 2027, chaque projet en une phrase, sans boutique ni nom d'application, yourikaramyan.com). Le relire avant toute modification de contenu. Sur le site, la nouvelle photo détourée reste partout (choix de Youri).
 - La copie publiée est `public/Youri-Karamyan-CV.pdf`. Si le CV change, remplacer les deux fichiers.
 - N'inventer aucune expérience, aucune date, aucun chiffre. Si une information manque : la demander à Youri, ou poser un emplacement visible `[À COMPLÉTER : ...]`.
-- N'afficher que les chiffres listés dans `docs/suivi.md` (section « Chiffres validés »), arrondis comme indiqué.
-- MonArc est sur Google Play depuis le 21/10/2026 (lien donné par Youri, fiche publique vérifiée le jour même) : https://play.google.com/store/apps/details?id=com.getmonarcapp.app. Le lancement du 1er octobre 2026 s'est fait sur l'App Store et en version web : Google Play est arrivé ensuite.
+- **Discrétion sur les projets personnels** (Youri, 23/10/2026 : « je suis quelqu'un de discret et je ne veux rien prouver ») : aucun chiffre sur ses projets, aucune capture ni photo de projet, aucun bouton vers l'application, et le nom de l'application n'apparaît nulle part (écrire « une application de suivi d'habitudes »). La boutique e-commerce de 2022 n'apparaît plus du tout. Cela vaut aussi pour les images de partage, la fiche pour Google et les pages entreprises.
 
 ## Public et ton
 - Recruteurs et fondateurs de PME belges. Moins d'une minute sur le site, souvent sur téléphone.
@@ -32,12 +31,12 @@ Avant de coder avec Astro, GSAP, Vercel ou les images de partage, lire `docs/ref
 - Aucun lien vers youri-digital-edge.base44.app (ancien site).
 
 ## Structure du site
-Le site présente d'abord la personne (décision de Youri du 21/10/2026). MonArc est un projet parmi les autres.
+Le site présente d'abord la personne (décision de Youri du 21/10/2026). Il reste sobre sur ses projets personnels (23/10/2026).
 
-1. Accueil : il ne parle que de Youri. Nom en très grand, une phrase de présentation, boutons « Télécharger mon CV » et « Me contacter », portrait. Sur ordinateur, l'accueil occupe toute la hauteur de l'écran. Effet signature : le premier grand moment animé du site. Les lettres du nom restent toujours serrées (aucune variation de graisse).
+1. Accueil : il ne parle que de Youri. Nom en très grand, une phrase de présentation, boutons « Télécharger mon CV » et « Me contacter », portrait. Sur ordinateur, l'accueil occupe toute la hauteur de l'écran. Effet signature : le seul moment animé du site. Les lettres du nom restent toujours serrées (aucune variation de graisse).
 2. À propos : 4 ou 5 phrases courtes à la première personne (qui il est, ses études, ce qui le motive, ce qu'il cherche), uniquement des faits du CV.
-3. Projets : une ligne par projet (MonArc, boutique e-commerce, freelance digital, Young Enterprise Project) : titre, année, rôle, une ligne de résultat. Un projet n'a un panneau dépliant `<details>` (fermé par défaut) que si Youri a donné son contexte, ce qu'il a fait et ses résultats : « un panneau qui s'ouvre sur presque rien fait plus de mal que de bien » (Youri, 21/10/2026). Liste dans `src/data/projets.ts` ; depuis le 21/10/2026 : MonArc, boutique e-commerce, freelance digital et Young Enterprise Project (Gob'Eat, source : `sources/business-plan-gobeat.pdf`, n'y nommer aucun autre membre de l'équipe). Le CRM Odoo est retiré du site et du CV (Youri, 22/10/2026). Le panneau MonArc contient l'étude de cas (chiffres, téléphones en éventail, réseaux sociaux) ; l'éventail s'ouvre à l'ouverture du panneau (deuxième et dernier moment animé du site). Boutons App Store, Google Play et getmonarcapp.com.
-4. Parcours : frise chronologique (formation, expériences, projets académiques, jobs étudiants). Les lignes dont le projet a un panneau n'ont pas de détails, seulement un lien « Voir le projet ». Les autres gardent les détails du CV.
+3. Projets (depuis le 23/10/2026) : une simple carte par projet, avec l'année, le titre et une seule phrase reprise mot pour mot du CV. Aucun panneau dépliant, aucun chiffre, aucune image, aucun bouton. Trois projets : Projet d'application mobile (2026), Freelance digital (2020-2023), Young Enterprise Project (HEPL, 2025). Les textes viennent de `src/data/profil.ts`.
+4. Parcours : frise chronologique (formation, expériences, projets académiques, jobs étudiants). Chaque ligne garde les détails du CV. Les jobs étudiants s'affichent en détail dès le départ.
 5. Compétences et langues, reprises du CV.
 6. Contact : e-mail avec bouton pour le copier, téléphone, LinkedIn.
 7. Pages entreprises `/[nom-entreprise]` : absentes du menu, `noindex`, exclues du sitemap. Contenu : accroche adressée à l'équipe, 3 idées concrètes, résumé du profil, CV, bouton de contact. Une nouvelle page se crée en dupliquant un seul fichier.
@@ -50,7 +49,7 @@ Le site présente d'abord la personne (décision de Youri du 21/10/2026). MonArc
 - L'abricot ne sert jamais de couleur de texte sur fond blanc (contraste insuffisant). Il sert de trait, de décor, ou de texte sur fond bleu nuit.
 - Polices : Bricolage Grotesque pour les titres, Instrument Sans pour le texte.
 - Utiliser la skill frontend-design. Le site a une vraie personnalité et ne ressemble à aucun template.
-- GSAP autorisé. Deux moments animés seulement : le nom de l'accueil, puis l'éventail de téléphones du panneau MonArc. Le reste du site reste calme et précis.
+- GSAP autorisé. Un seul moment animé : le nom de l'accueil (l'éventail de téléphones est supprimé depuis le 23/10/2026). Le reste du site reste calme et précis.
 - Portrait : photo détourée (sans fond) posée sur le bleu nuit, avec un léger halo clair derrière Youri. Fichier `src/assets/photos/youri-portrait-detoure.png`, copie de `sources/photo_youri_portrait_transparent.png` (1847 × 1558, en place depuis le 21/10/2026), jamais retouchée : seul le cadrage se fait à l'affichage (format 4:5, centré sur le visage, voir `src/data/portrait.ts`).
 - Effet signature : le nom ne pousse jamais le contenu en dessous pendant l'animation. Sa place finale est réservée dès le chargement (aucun décalage de mise en page).
 - Respecter `prefers-reduced-motion`.

@@ -17,9 +17,9 @@ accroche:
     du sable des plages de Normandie, l'asphalte du circuit de Spa-Francorchamps.
     Ces récits sont votre meilleur argument de vente en ligne.
   - >-
-    Pour MonArc, une application que j'ai conçue, je publie une vidéo TikTok par jour.
-    Avant le lancement, j'ai constitué une liste d'attente de plus de 1 700 inscrits.
-    Voici trois idées concrètes pour votre boutique en ligne.
+    Pour une application de suivi d'habitudes que j'ai conçue, je publie une vidéo TikTok par jour.
+    Avant le lancement, j'ai constitué une liste d'attente.
+    Voici trois idées concrètes pour vos ventes en ligne.
 
 idees:
   - titre: Une vidéo courte à chaque date anniversaire
@@ -33,7 +33,7 @@ idees:
       - >-
         Les trois prochaines dates tombent avant Noël : le 9 novembre (Berlin 1989), le 11 novembre
         (Armistice 1918) et le 5 décembre (Hallyday 2017).
-    experience: une vidéo TikTok publiée chaque jour pour MonArc.
+    experience: une vidéo TikTok publiée chaque jour pour une application de suivi d'habitudes.
 
   - titre: Une newsletter qui parle à chaque collectionneur
     texte:
@@ -48,7 +48,8 @@ idees:
       - >-
         Chaque lancement touche ainsi d'abord les collectionneurs les plus concernés.
     experience: >-
-      une liste d'attente de plus de 1 700 inscrits pour MonArc, que j'anime par e-mail.
+      une liste d'attente constituée avant le lancement d'une application de suivi d'habitudes, et animée par
+      e-mail.
 
   - titre: Un guide cadeau en trois questions
     texte:
@@ -58,7 +59,8 @@ idees:
         Trois questions mènent à la bonne montre et rappellent le paiement en trois fois sans frais.
         Ce guide sert à Noël, puis à la fête des pères.
     experience: >-
-      une boutique e-commerce créée et gérée de A à Z en 2022, avec plus de 21 000 € de ventes.
+      le Young Enterprise Project à la HEPL, la création d'une entreprise étudiante, de l'étude de marché au
+      lancement.
 
 objetEmail: Stage en marketing digital chez Col&McArthur
 ---

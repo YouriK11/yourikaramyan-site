@@ -112,6 +112,8 @@ Condition de Youri : le nom ne pousse jamais le contenu en dessous. Le Cumulativ
 
 ## Étude de cas et compteurs (étape 3)
 
+> Supprimés le 23/10/2026 (direction sobre, voir la dernière section) : `EtudeDeCas.astro`, `Compteur.astro`, `Telephone.astro`, `src/data/nombres.ts`, `src/assets/monarc/`. Les notes ci-dessous restent utiles si un compteur revient un jour.
+
 - **Compteurs** (`src/components/Compteur.astro`) :
   - un double invisible réserve la largeur finale ;
   - remise à 0 au démarrage si les animations sont permises ;
@@ -141,7 +143,7 @@ Condition de Youri : le nom ne pousse jamais le contenu en dessous. Le Cumulativ
 
 ## Finitions (étape 6)
 
-- **Deux moments animés** (passe « whaou », 20/10/2026) : le nom de l'accueil, puis l'éventail de téléphones de l'étude de cas. Ailleurs, seulement des détails discrets, coupés par `prefers-reduced-motion` : soulignement des liens, flèche de téléchargement au survol, trait du menu dessiné au survol (fond en `background-size`, rien ne bouge), téléphones soulevés de 6 px au survol (à partir de 64em).
+- **Un seul moment animé depuis le 23/10/2026** : le nom de l'accueil (l'éventail est supprimé). Historique : **deux moments animés** (passe « whaou », 20/10/2026) : le nom de l'accueil, puis l'éventail de téléphones de l'étude de cas. Ailleurs, seulement des détails discrets, coupés par `prefers-reduced-motion` : soulignement des liens, flèche de téléchargement au survol, trait du menu dessiné au survol (fond en `background-size`, rien ne bouge), téléphones soulevés de 6 px au survol (à partir de 64em).
 - **Survol réservé à la souris** : `@media (hover: hover)` autour de chaque `:hover` qui change l'aspect. Sinon, sur téléphone et tablette, l'état reste collé après un appui (lien de téléchargement, menu). Le soulèvement des téléphones ne s'applique qu'à partir de 64em : en dessous, la rangée défilante coupe ce qui dépasse.
 - **Défilement doux après le chargement seulement** : `scroll-behavior: smooth` est posé sur `html.defilement-doux`, classe ajoutée au `load` par `Base.astro`. Sans cela, un lien `/#contact` depuis une autre page fait défiler tout l'accueil (1,4 s) et déclenche tous les traits de titres en route.
 - **Trait abricot des titres de section** : fixe. Son animation (étape 6) a été retirée à la passe « whaou » : l'éventail est le deuxième et dernier moment animé.
@@ -153,7 +155,7 @@ Condition de Youri : le nom ne pousse jamais le contenu en dessous. Le Cumulativ
 - **Accueil sur ordinateur** (64em et plus) : `min-height: calc(100svh - var(--hauteur-entete))`, contenu centré verticalement. Le nom prend toute la largeur : `font-size: min(100cqi / (largeur du nom + 0.02), max(5.5rem, (100svh - entête - 23rem) / 2.1))`. Le portrait : `min(26rem, 30vw, 50 % de la hauteur utile)`. Couches : lettres (`.nom__ligne`, z-index 2) devant le portrait (z-index 1), trait abricot derrière. Tout est fixé au premier affichage : aucun décalage.
 - **Résultats** : 6 chiffres, `min(clamp(2.75rem, 0.6rem + 5.6vw, 6rem), 11vw)` en `font-stretch: 85%` ; « +170 000 » tient dans sa colonne de 320 à 2560 px.
 - **Éventail** : trois téléphones superposés dans une même case de grille (`grid-area: 1 / 1`), pivot en bas au centre, écart et angle en variables (`--ecart`, `--angle`, `--recul`). Le script ajoute `eventail--ferme` (téléphones resserrés) seulement si les animations sont permises, puis l'enlève quand 35 % de l'éventail est visible ; la transition (`eventail--anime`, 1,5 s, `cubic-bezier(0.45, 0, 0.2, 1)`) n'existe qu'à l'ouverture. Halo : dégradé radial clair en `::before`, rien de coûteux (pas de `filter`). `overflow-x: clip` sur la scène : les téléphones extérieurs peuvent dépasser le bord de l'écran sur téléphone sans créer de défilement horizontal.
-- **Parcours replié** : `data-secondaire` sur les entrées hors essentiel et les années vides, `data-resume` sur la ligne des jobs. Liste des essentiels : `ESSENTIELS` dans `Parcours.astro` (titres exacts de `profil.ts`).
+- **Parcours replié** : `data-secondaire` sur les entrées hors essentiel et les années vides. Les jobs étudiants s'affichent en détail dès le départ (la ligne résumée `data-resume` est supprimée le 22/10/2026). Liste des essentiels : `ESSENTIELS` dans `Parcours.astro` (titres exacts de `profil.ts`).
 - **Pièges rencontrés** : une grille `repeat(2, 17rem)` dans une colonne de 564 px a créé un défilement horizontal à 1024 px (corrigé avec `minmax(0, 17rem)`) ; la largeur du document (`scrollWidth`) ne le montrait pas, mais `innerHeight - clientHeight` (hauteur de la barre de défilement horizontale) oui. Une variable CSS définie sur `.frise` n'atteint pas le bouton placé après la liste : la définir sur `.parcours`.
 - **Transitions entre pages** : `@view-transition { navigation: auto; }`, fondu de 0,2 s, l'en-tête reste en place. Sans effet dans les navigateurs qui ne le gèrent pas.
 - **Attribut `hidden`** : `[hidden] { display: none !important; }` dans `global.css`, sinon `.bouton { display: inline-flex }` l'emporte et un bouton caché reste visible.
@@ -175,8 +177,7 @@ Condition de Youri : le nom ne pousse jamais le contenu en dessous. Le Cumulativ
 
 ## Refonte « la personne d'abord » (21/10/2026)
 
-- **Panneaux de projets** : `<details>` / `<summary>` natifs (`src/components/Projets.astro`). Chrome expose le résumé comme « DisclosureTriangle » avec l'état `expanded`, et garde le `<h3>` placé dans le résumé comme titre (vérifié dans l'arbre d'accessibilité). Le contenu d'un panneau fermé n'a aucune boîte : un `IntersectionObserver` sur un élément du panneau ne se déclenche qu'à l'ouverture. C'est ce qui lance l'éventail et les compteurs « à l'ouverture ».
-- **Liens vers un panneau** : `#monarc`, `#boutique-e-commerce`, `#freelance-digital`, `#young-enterprise-project` (champ `projet` de `profil.ts`). Un script ouvre le panneau visé au chargement, au changement d'ancre et au second clic sur le même lien. Avant l'impression, tous les panneaux s'ouvrent, puis se referment.
+- **Panneaux de projets** (supprimés le 23/10/2026, remplacés par des cartes) : `<details>` / `<summary>` natifs. Chrome expose le résumé comme « DisclosureTriangle » avec l'état `expanded`, et garde le `<h3>` placé dans le résumé comme titre (vérifié dans l'arbre d'accessibilité). Le contenu d'un panneau fermé n'a aucune boîte : un `IntersectionObserver` sur un élément du panneau ne se déclenche qu'à l'ouverture. Piège de mesure : Chrome peut réutiliser une image déjà en mémoire et fausser un test « rien ne se charge panneau fermé » ; vider le cache (CDP `Network.clearBrowserCache`) avant chaque mesure.
 - **Titres de niveau 5** : la remise à zéro de `global.css` couvre maintenant `h5` et `h6` (sinon marges par défaut dans les étapes de l'étude de cas).
 - **Menu complet à partir de 64em** : avec cinq liens et le bouton CV, il ne tient plus à 768 px. Les tablettes gardent le bouton « Menu ».
 - **Photo détourée** : `src/data/portrait.ts` cherche `src/assets/photos/youri-portrait-detoure.png` avec `import.meta.glob`. Présente : elle est utilisée partout (fond bleu nuit et halo en CSS sur l'image elle-même, proportions naturelles), et l'image de partage la compose avec sharp sur un cadre bleu nuit. Absente : l'ancienne photo reste. Après avoir copié le fichier, relancer `npm run dev` ou `npm run build`.
@@ -224,3 +225,10 @@ Netlify a été écarté (environ 20 mises en ligne par mois sur le plan gratuit
   - **Domaine principal** : choisir `yourikaramyan.com` (sans www) comme Production et rediriger `www` vers lui, pour correspondre à `site` dans `astro.config.mjs`.
 - **Avant la mise en ligne du domaine** : `site` pointe vers un domaine inexistant, donc les aperçus LinkedIn n'auront pas d'image. Ne partager aucun lien entreprise avant que le domaine fonctionne. Après correction, rafraîchir avec le LinkedIn Post Inspector.
 - **Vercel Web Analytics** (Hobby) : 50 000 événements par mois, 1 mois d'historique garanti, région de stockage non documentée. GoatCounter reste le choix recommandé (UE, sans cookies, historique long).
+
+## Direction sobre (23/10/2026)
+
+- **Projets** (`src/components/Projets.astro`) : trois cartes dans une liste (`ul`), une colonne sur téléphone, trois à partir de 48em. Chaque carte : année (abricot sur bleu nuit), titre `h3`, une phrase du CV. Contour clair fin, aucun script, aucune image.
+- **Données** (`src/data/profil.ts`) : `experiences` et `projetsAcademiques` n'ont plus qu'un champ `texte` (la phrase du CV). Plus de `projet`, `structure`, `detail`, `points`, `resultats`, ni d'objet `monarc`.
+- **Contrôle avant chaque envoi** : rien de ce qui suit dans `dist/` (HTML, plan du site, `robots.txt`) : `monarc`, `boutique`, `getmonarcapp`, `App Store`, `Google Play`, `Gob'Eat`, et les chiffres de projets (1 700, 21 000, +500, 1,9 M, 6 500, 170 000, 1 056, 120 gobelets, 85 personnes, 1,55). Regarder aussi les deux images de partage (`dist/og/*.png`) et la fiche JSON-LD de l'accueil.
+- **Axe dans Playwright** : `page.addScriptTag({ path: 'node_modules/axe-core/axe.min.js' })` (chemin absolu), pour ne pas dépendre d'un serveur de développement lancé.

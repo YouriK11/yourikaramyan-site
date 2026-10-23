@@ -57,6 +57,8 @@ Soirée du 20/10/2026 (même branche) : lettres du nom toujours serrées, trois 
 
 ## Chiffres validés (à afficher arrondis)
 
+> **Depuis le 23/10/2026, aucun de ces chiffres n'est affiché sur le site** (direction sobre voulue par Youri, voir « Nouvelle direction (23/10/2026) »). La liste reste comme historique.
+
 MonArc (donnés par Youri et dans le CV) :
 - plus de 500 inscrits le jour du lancement, le 1er octobre 2026 ;
 - plus de 1 700 inscrits dans la base e-mail ;
@@ -147,3 +149,17 @@ Faits vérifiés sur Col&McArthur (octobre 2026) :
 - **Chiffres MonArc** (22/10/2026, Youri) : quatre seulement dans le panneau : plus de 500 inscrits le jour du lancement, plus de 1 700 sur la liste d'attente, 1,9 million de vues TikTok en 60 jours, plus de 6 500 abonnés TikTok. « +1 000 participants » et « +170 000 j'aime » ne sont plus affichés (toujours valides). Grille : deux par ligne, quatre sur une ligne à partir de 64em.
 - **Jobs étudiants** (22/10/2026) : la ligne résumée « Quick Herstal (depuis 2023), Atlas Agency… » cachait la nouvelle formulation de Quick Herstal (visible seulement après « Voir tout le parcours »). Les trois jobs s'affichent maintenant en détail dès le départ.
 - **Page /col-macarthur** (22/10/2026) : la demande « retire la » est arrivée coupée ; rien n'a été modifié sur cette page.
+
+## Nouvelle direction (23/10/2026)
+
+Youri : « je suis quelqu'un de discret et je ne veux rien prouver. Le site doit être sobre sur mes projets personnels. » Appliqué sans question, comme il l'a demandé.
+
+- **CV du 23/10/2026** (13 h 07) : encore déposé dans `ANCIEN-ne-plus-utiliser\yourikaramyan-site\CV_Youri_Karamyan.pdf` (copie dans Téléchargements). Copié dans `sources/` et `public/Youri-Karamyan-CV.pdf`. Relu en entier : chaque projet tient en une phrase, plus de boutique ni de nom d'application, Quick Herstal « équipier polyvalent tous les week-ends, en fermeture ».
+- **Projets** : trois cartes (année, titre, une phrase du CV mot pour mot) : Projet d'application mobile (2026), Freelance digital (2020-2023), Young Enterprise Project (HEPL, 2025). Plus de panneaux.
+- **Retirés** : chiffres et compteurs, éventail de téléphones, captures TikTok et Instagram, photos Gob'Eat, logo de la boutique, boutons App Store, Google Play et getmonarcapp.com. Fichiers supprimés : `EtudeDeCas.astro`, `Compteur.astro`, `Telephone.astro`, `src/data/projets.ts`, `src/data/nombres.ts`, `src/assets/monarc/`, `src/assets/projets/` (originaux toujours dans `sources/`).
+- **Nom de l'application** : n'apparaît plus nulle part sur le site (pages, images de partage, fiche JSON-LD). On écrit « une application de suivi d'habitudes ».
+- **Boutique e-commerce** : retirée partout (projets, parcours, pages entreprises).
+- **Parcours** : chaque ligne reprend la phrase du CV ; plus de lien « Voir le projet ».
+- **Page /col-macarthur** : bloc des chiffres clés retiré, lien vers l'étude de cas remplacé par « Voir mes projets ». « Mon profil en bref » : « J'ai conçu une application de suivi d'habitudes et sa communication. » Accroche : « Pour une application de suivi d'habitudes que j'ai conçue, je publie une vidéo TikTok par jour. Avant le lancement, j'ai constitué une liste d'attente. Voici trois idées concrètes pour vos ventes en ligne. » (« votre boutique en ligne » devient « vos ventes en ligne », pour que le mot « boutique » disparaisse du site). « Mon expérience » sans chiffres : idée 1 « une vidéo TikTok publiée chaque jour pour une application de suivi d'habitudes » ; idée 2 « une liste d'attente constituée avant le lancement d'une application de suivi d'habitudes, et animée par e-mail » ; idée 3 « le Young Enterprise Project à la HEPL, la création d'une entreprise étudiante, de l'étude de marché au lancement ». Liste « Mon CV » sans boutique.
+- **Animations** : il ne reste que le nom de l'accueil.
+- **Vérifié** (version finale) : aucun « MonArc », « boutique », lien vers l'app ni chiffre de projet dans `dist/` ; images de partage et JSON-LD propres ; 390, 1440 et 1920 px sans décalage ni débordement ; axe 0 erreur (accueil et Col&McArthur, 390 et 1440 px) ; Lighthouse mobile accueil 97, 99, 99 (SEO 100), Col&McArthur 100.

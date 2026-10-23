@@ -1,298 +1,55 @@
 ---
-// "Projets": one row per project, with the title, the year, Youri's role and one line of result.
-// Projects listed in src/data/projets.ts open on a panel (native <details>, closed by default: keyboard, screen
-// readers and no-JS all work). Open, it shows the context, what he did and the results; MonArc's panel holds the
-// case study. The other projects stay a simple line until Youri gives more than the CV says.
-// Only facts from the CV, from Youri (21/10/2026) and from docs/suivi.md.
-import { Picture } from 'astro:assets';
-import type { ImageMetadata } from 'astro';
-import EtudeDeCas from './EtudeDeCas.astro';
+// "Projets": one sober card per project, with the year, the title and one sentence taken word for word from the CV.
+// Youri is discreet about his personal projects (23/10/2026): no panels, no figures, no screenshots, no app name.
 import { PROFIL } from '../data/profil';
-import { PROJETS_AVEC_PANNEAU } from '../data/projets';
 import { typo } from '../data/typographie';
 
-// Visuals sent by Youri on 21/10/2026, cropped from sources/ (originals untouched, no metadata kept).
-import logoBoutique from '../assets/projets/boutique-logo.jpg';
-import gobeletsGobeat from '../assets/projets/gobeat-gobelets.jpg';
-import enseigneGobeat from '../assets/projets/gobeat-enseigne.jpg';
-
-const [monarc, freelance, boutique] = PROFIL.experiences;
+const [application, freelance] = PROFIL.experiences;
 const [yep] = PROFIL.projetsAcademiques;
 
-interface Projet {
-  id: string;
-  titre: string;
-  annee: string;
-  role: string;
-  /** One line shown when the panel is closed (hidden once open): a result when the CV gives one, otherwise what
-   *  was done. */
-  ligne: string;
-  contexte?: string;
-  fait?: string[];
-  resultats?: string[];
-  visuels?: Visuel[];
-  etudeDeCas?: boolean;
-}
-
-interface Visuel {
-  src: ImageMetadata;
-  alt: string;
-  legende: string;
-  /** A logo sits on a small square white tile; photos share the row in 4:5. */
-  logo?: boolean;
-}
-
-const projets: Projet[] = [
-  {
-    id: monarc.projet,
-    titre: 'MonArc',
-    annee: monarc.periode,
-    role: "J'ai conçu le produit et piloté son développement.",
-    ligne: 'Plus de 500 inscrits le jour du lancement.',
-    etudeDeCas: true,
-  },
-  {
-    id: boutique.projet,
-    titre: boutique.titre,
-    annee: boutique.periode,
-    role: 'Projet personnel, créé et géré de A à Z.',
-    ligne: boutique.resultats[0],
-    // What the shop sold and how it found its customers: given by Youri on 21/10/2026.
-    contexte: "En 2022, j'ai créé ma boutique en ligne d'équipements sportifs.",
-    fait: [...boutique.points, "Acquisition des clients par le marketing d'influence, sur Twitter et YouTube."],
-    resultats: [...boutique.resultats],
-    visuels: [
-      {
-        src: logoBoutique,
-        alt: 'Logo de la boutique : une chaussure de football qui frappe un ballon, en bleu.',
-        legende: 'Le logo de la boutique',
-        logo: true,
-      },
-    ],
-  },
-  {
-    id: freelance.projet,
-    titre: freelance.titre,
-    annee: freelance.periode,
-    role: 'Indépendant, pour des clients particuliers et professionnels.',
-    ligne: 'Photo et vidéo, supports marketing, sites web, traduction.',
-    // Type of clients and one mission: given by Youri on 21/10/2026.
-    contexte: "De 2020 à 2023, j'ai travaillé en freelance. Mes clients étaient surtout des indépendants.",
-    fait: [...freelance.points, "Exemple de mission : le sous-titrage d'un cours en ligne."],
-  },
-  {
-    id: yep.projet,
-    titre: yep.titre,
-    annee: `${yep.lieu}, ${yep.periode}`,
-    // From the Gob'Eat business plan sent by Youri on 21/10/2026 (sources/business-plan-gobeat.pdf): his role
-    // (p. 3 and 10), the product (p. 6), the survey (p. 54), the café interviews (p. 29-31) and the general
-    // meeting (p. 4). Figures validated by Youri on 21/10/2026 (docs/suivi.md). No other team member is named.
-    role: "Directeur général de Gob'Eat, notre entreprise étudiante.",
-    ligne: "Plus de 120 gobelets en biscuit présentés lors de l'assemblée générale.",
-    contexte:
-      "À dix étudiants de la HEPL, nous avons créé l'entreprise Gob'Eat. Notre produit : un gobelet en biscuit nappé de chocolat belge. Il se mange une fois le café terminé et ne laisse aucun déchet.",
-    fait: [
-      "Direction de l'équipe et point de contact commercial de l'entreprise.",
-      'Business plan : étude de marché, modèle financier, stratégie marketing et go-to-market.',
-      'Enquête auprès de 85 personnes et entretiens avec deux cafés du centre de Liège.',
-    ],
-    resultats: [
-      "Plus de 120 gobelets en biscuit présentés lors de l'assemblée générale.",
-      'Trois personnes interrogées sur quatre prêtes à essayer le produit.',
-    ],
-    // No team photo (sources/gobeat/visuel-equipe.jpg): Youri declined it on 21/10/2026.
-    visuels: [
-      {
-        src: gobeletsGobeat,
-        alt: "Gobelets Gob'Eat en biscuit, garnis et décorés de vermicelles colorés, sur deux plateaux blancs.",
-        legende: "Les gobelets Gob'Eat sur notre stand",
-      },
-      {
-        src: enseigneGobeat,
-        alt: "Enseigne au néon jaune « Gobeat » au-dessus du stand, entre des ballons et une guirlande d'ampoules.",
-        legende: "L'enseigne lumineuse du stand",
-      },
-    ],
-  },
+const projets = [
+  { titre: application.titre, annee: application.periode, phrase: application.texte },
+  { titre: freelance.titre, annee: freelance.periode, phrase: freelance.texte },
+  { titre: yep.titre, annee: `${yep.lieu}, ${yep.periode}`, phrase: yep.texte },
 ];
 ---
 
 <section id="projets" class="section sur-nuit projets" aria-labelledby="titre-projets">
   <div class="conteneur">
-    <div class="projets__entete">
-      <h2 id="titre-projets" class="titre-section">Projets</h2>
-      <p class="projets__aide texte-secondaire">Ouvrez un projet pour le découvrir en détail.</p>
-    </div>
+    <h2 id="titre-projets" class="titre-section">Projets</h2>
 
-    <div class="projets__liste">
+    <ul class="projets__liste" role="list">
       {
-        projets.map((p) =>
-          PROJETS_AVEC_PANNEAU.has(p.id) ? (
-          <details id={p.id} class="projet" data-projet>
-            <summary class="projet__resume">
-              <span class="projet__annee" set:html={typo(p.annee)} />
-              <h3 class="projet__titre" set:html={typo(p.titre)} />
-              <span class="projet__role" set:html={typo(p.role)} />
-              <span class="projet__ligne" set:html={typo(p.ligne)} />
-              <span class="projet__bascule" aria-hidden="true" />
-            </summary>
-
-            <div class="projet__contenu">
-              {p.etudeDeCas ? (
-                <EtudeDeCas />
-              ) : (
-                <div class="projet__details">
-                  {p.contexte && (
-                    <div>
-                      <h4 class="projet__soustitre">Le contexte</h4>
-                      <p set:html={typo(p.contexte)} />
-                    </div>
-                  )}
-                  {p.fait && (
-                    <div>
-                      <h4 class="projet__soustitre">Ce que j'ai fait</h4>
-                      <ul class="projet__puces" role="list">
-                        {p.fait.map((f) => (
-                          <li set:html={typo(f)} />
-                        ))}
-                      </ul>
-                    </div>
-                  )}
-                  {p.resultats && (
-                    <div>
-                      <h4 class="projet__soustitre">Les résultats</h4>
-                      <ul class="projet__puces projet__puces--resultats" role="list">
-                        {p.resultats.map((r) => (
-                          <li set:html={typo(r)} />
-                        ))}
-                      </ul>
-                    </div>
-                  )}
-                  {p.visuels && (
-                    <div class="projet__visuels">
-                      {p.visuels.map((v) => (
-                        <figure class:list={['visuel', { 'visuel--logo': v.logo }]}>
-                          <Picture
-                            class="visuel__image"
-                            src={v.src}
-                            alt={v.alt}
-                            formats={['avif', 'webp']}
-                            width={v.logo ? 320 : 640}
-                            widths={v.logo ? [160, 240, 320] : [240, 360, 480, 640]}
-                            sizes={v.logo ? '(min-width: 48em) 10rem, 9rem' : '(min-width: 48em) 16rem, calc(50vw - 1.5rem)'}
-                            loading="lazy"
-                          />
-                          <figcaption class="visuel__legende" set:html={typo(v.legende)} />
-                        </figure>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              )}
-            </div>
-          </details>
-          ) : (
-            <div id={p.id} class="projet">
-              <div class="projet__resume projet__resume--fixe">
-                <span class="projet__annee" set:html={typo(p.annee)} />
-                <h3 class="projet__titre" set:html={typo(p.titre)} />
-                <span class="projet__role" set:html={typo(p.role)} />
-                <span class="projet__ligne" set:html={typo(p.ligne)} />
-              </div>
-            </div>
-          ),
-        )
+        projets.map((p) => (
+          <li class="projet">
+            <p class="projet__annee" set:html={typo(p.annee)} />
+            <h3 class="projet__titre" set:html={typo(p.titre)} />
+            <p class="projet__phrase" set:html={typo(p.phrase)} />
+          </li>
+        ))
       }
-    </div>
+    </ul>
   </div>
 </section>
 
-<script>
-  // A link to a project (#monarc, "Voir le projet" in the timeline, the company pages) opens its panel.
-  const ouvrir = () => {
-    let id = location.hash.slice(1);
-    try {
-      id = decodeURIComponent(id);
-    } catch {
-      return; // malformed address: nothing to open
-    }
-    if (!id) return;
-    const cible = document.getElementById(id);
-    const panneau = cible?.closest<HTMLDetailsElement>('details[data-projet]');
-    if (!panneau || panneau.open) return;
-    panneau.open = true;
-    panneau.scrollIntoView();
-  };
-  addEventListener('hashchange', ouvrir);
-  // Same link clicked twice (the hash does not change): open the panel anyway.
-  document.addEventListener('click', (evenement) => {
-    const lien = evenement.target instanceof Element ? evenement.target.closest<HTMLAnchorElement>('a[href*="#"]') : null;
-    if (lien && lien.pathname === location.pathname && lien.hash === location.hash) ouvrir();
-  });
-
-  // Printing: every panel opens, then closes again.
-  const panneaux = Array.from(document.querySelectorAll<HTMLDetailsElement>('details[data-projet]'));
-  let ouverts: boolean[] = [];
-  addEventListener('beforeprint', () => {
-    ouverts = panneaux.map((p) => p.open);
-    panneaux.forEach((p) => (p.open = true));
-  });
-  addEventListener('afterprint', () => panneaux.forEach((p, i) => (p.open = ouverts[i] ?? false)));
-
-  // Last, once every listener is in place: open the panel named in the address (/#monarc).
-  ouvrir();
-</script>
-
 <style>
-  .projets__entete {
-    display: grid;
-    gap: 1.25rem;
-  }
-
-  .projets__aide {
-    font-size: var(--texte-s);
-  }
-
   .projets__liste {
-    margin-top: clamp(2.5rem, 2rem + 2vw, 4rem);
-    border-bottom: 1px solid rgb(255 255 255 / 0.16);
-  }
-
-  .projet {
-    border-top: 1px solid rgb(255 255 255 / 0.16);
-  }
-
-  /* Closed panel: year, title and role, one line of result, and the + / − button */
-  .projet__resume {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) 2.75rem;
-    grid-template-areas:
-      'annee bascule'
-      'titre bascule'
-      'role bascule'
-      'ligne ligne';
-    column-gap: 1rem;
-    padding-block: 1.5rem;
-    cursor: pointer;
-    list-style: none;
+    gap: 1rem;
+    margin-top: clamp(2.5rem, 2rem + 2vw, 4rem);
   }
 
-  /* Simple line (no panel): nothing to open */
-  .projet__resume--fixe {
-    cursor: auto;
-  }
-
-  .projet__resume::-webkit-details-marker {
-    display: none;
-  }
-
-  .projet__resume:focus-visible {
-    outline-offset: 4px;
-    border-radius: var(--rayon-s);
+  /* A card: a fine light outline on the midnight blue, nothing that moves */
+  .projet {
+    display: grid;
+    align-content: start;
+    gap: 0.5rem;
+    padding: clamp(1.5rem, 1.2rem + 1vw, 2.25rem);
+    border: 1px solid rgb(255 255 255 / 0.16);
+    border-radius: var(--rayon);
   }
 
   .projet__annee {
-    grid-area: annee;
     color: var(--abricot);
     font-family: var(--police-titre);
     font-size: var(--texte-m);
@@ -300,259 +57,32 @@ const projets: Projet[] = [
   }
 
   .projet__titre {
-    grid-area: titre;
-    margin-top: 0.375rem;
     font-family: var(--police-titre);
-    font-size: clamp(1.75rem, 1.2rem + 2vw, 3rem);
+    font-size: clamp(1.5rem, 1.2rem + 1vw, 2.125rem);
     font-weight: 760;
     font-stretch: 90%;
-    line-height: 1.05;
+    line-height: 1.1;
     text-wrap: balance;
   }
 
-  .projet__role {
-    grid-area: role;
-    margin-top: 0.375rem;
+  .projet__phrase {
+    margin-top: 0.25rem;
     color: var(--brume-sur-nuit);
     text-wrap: pretty;
   }
 
-  .projet__ligne {
-    grid-area: ligne;
-    position: relative;
-    margin-top: 0.875rem;
-    padding-left: 1.125rem;
-    font-weight: 600;
-    text-wrap: pretty;
-  }
-
-  /* Open panel: the content below says it all, the summary line disappears */
-  .projet[open] .projet__ligne {
-    display: none;
-  }
-
-  /* Small apricot square, as the CV's bullets */
-  .projet__ligne::before,
-  .projet__puces li::before {
-    content: '';
-    position: absolute;
-    top: 0.62em;
-    left: 0;
-    width: 0.375rem;
-    height: 0.375rem;
-    border-radius: 1px;
-    background: var(--abricot);
-  }
-
-  /* The + turns into a − when the panel is open */
-  .projet__bascule {
-    grid-area: bascule;
-    position: relative;
-    align-self: center;
-    width: 2.75rem;
-    height: 2.75rem;
-    border: 2px solid rgb(255 255 255 / 0.4);
-    border-radius: 50%;
-  }
-
-  .projet__bascule::before,
-  .projet__bascule::after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 0.875rem;
-    height: 2px;
-    border-radius: 1px;
-    background: var(--blanc);
-    transform: translate(-50%, -50%);
-  }
-
-  .projet__bascule::after {
-    transform: translate(-50%, -50%) rotate(90deg);
-  }
-
-  .projet[open] .projet__bascule::after {
-    transform: translate(-50%, -50%);
-  }
-
-  .projet[open] .projet__bascule {
-    border-color: var(--abricot);
-  }
-
-  @media (hover: hover) {
-    summary.projet__resume:hover .projet__bascule {
-      border-color: var(--abricot);
-    }
-
-    summary.projet__resume:hover .projet__titre {
-      text-decoration: underline;
-      text-decoration-color: var(--abricot);
-      text-decoration-thickness: 3px;
-      text-underline-offset: 0.15em;
-    }
-  }
-
-  @media (prefers-reduced-motion: no-preference) {
-    .projet__bascule::after {
-      transition: transform 0.25s ease;
-    }
-  }
-
-  /* High-contrast mode: the + and − bars keep the text colour */
-  @media (forced-colors: active) {
-    .projet__bascule::before,
-    .projet__bascule::after {
-      forced-color-adjust: none;
-      background: CanvasText;
-    }
-  }
-
-  /* Open panel */
-  .projet__contenu {
-    padding-top: 0.5rem;
-    padding-bottom: clamp(2.5rem, 2rem + 2vw, 4rem);
-  }
-
-  .projet__details {
-    display: grid;
-    gap: 2rem;
-    max-width: 48rem;
-  }
-
-  .projet__soustitre {
-    margin-bottom: 0.75rem;
-    font-family: var(--police-titre);
-    font-size: clamp(1.25rem, 1rem + 0.8vw, 1.75rem);
-    font-weight: 720;
-    font-stretch: 92%;
-    line-height: 1.15;
-  }
-
-  .projet__details p {
-    color: var(--brume-sur-nuit);
-  }
-
-  .projet__puces {
-    display: grid;
-    gap: 0.5rem;
-  }
-
-  .projet__puces li {
-    position: relative;
-    padding-left: 1.125rem;
-    color: var(--brume-sur-nuit);
-  }
-
-  .projet__puces--resultats li {
-    color: var(--blanc);
-    font-weight: 600;
-  }
-
-  /* Visuals: below the results on phones, next to them from tablets (second column of the grid) */
-  .projet__visuels {
-    display: flex;
-    gap: 0.75rem;
-    align-items: flex-start;
-  }
-
-  .visuel {
-    flex: 1 1 0;
-    min-width: 0;
-    margin: 0;
-  }
-
-  .visuel__image {
-    display: block;
-    width: 100%;
-    height: auto;
-    border-radius: var(--rayon);
-    box-shadow: 0 0 0 1px rgb(255 255 255 / 0.16);
-  }
-
-  /* A logo sits on its own small white tile */
-  .visuel--logo {
-    flex: 0 0 auto;
-    width: 9rem;
-  }
-
-  .visuel--logo .visuel__image {
-    aspect-ratio: 1;
-    object-fit: cover;
-    background: var(--blanc);
-  }
-
-  .visuel__legende {
-    margin-top: 0.5rem;
-    color: var(--brume-sur-nuit);
-    font-size: var(--texte-s);
-    text-wrap: pretty;
-  }
-
+  /* From tablets: the three cards side by side */
   @media (min-width: 48em) {
-    .visuel--logo {
-      width: 10rem;
+    .projets__liste {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: clamp(1rem, 2vw, 1.5rem);
     }
   }
 
-  /* From tablets: year on the left, title and role in the middle, result on the right */
-  @media (min-width: 48em) {
+  /* Paper: the outline keeps the cards apart on white */
+  @media print {
     .projet {
-      --annee: 7rem;
-      --colonnes: clamp(1.5rem, 3vw, 3rem);
-    }
-
-    .projet__resume {
-      grid-template-columns: var(--annee) minmax(0, 1.15fr) minmax(0, 1fr) 2.75rem;
-      grid-template-areas:
-        'annee titre ligne bascule'
-        'annee role ligne bascule';
-      column-gap: var(--colonnes);
-      align-items: center;
-      padding-block: 2rem;
-    }
-
-    .projet__annee {
-      align-self: start;
-      padding-top: 0.5rem;
-    }
-
-    .projet__titre {
-      align-self: end;
-      margin-top: 0;
-    }
-
-    .projet__role {
-      align-self: start;
-    }
-
-    .projet__ligne {
-      margin-top: 0;
-    }
-
-    /* The row keeps its height when the line is hidden */
-    .projet[open] .projet__ligne {
-      display: block;
-      visibility: hidden;
-    }
-
-    .projet__contenu {
-      padding-left: calc(var(--annee) + var(--colonnes));
-    }
-
-    /* Same columns as the summary: "Ce que j'ai fait" starts under the result */
-    .projet__details {
-      grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
-      column-gap: var(--colonnes);
-      padding-right: calc(2.75rem + var(--colonnes));
-      max-width: none;
-    }
-  }
-
-  /* The MonArc case study needs the whole width */
-  @media (min-width: 48em) {
-    .projet:has(.etude) .projet__contenu {
-      padding-left: 0;
+      border-color: #999;
     }
   }
 </style>

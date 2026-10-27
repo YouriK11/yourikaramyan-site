@@ -38,11 +38,10 @@ accroche:
   - >-
     [À COMPLÉTER : deux ou trois phrases sur l'entreprise, avec des faits vérifiés sur son site.]
   - >-
-    [À COMPLÉTER : le lien avec ton expérience, sans chiffre ni nom d'application, puis « Voici trois idées concrètes pour vos ventes en ligne. »]
+    [À COMPLÉTER : le lien avec ton expérience, puis « Voici trois idées concrètes pour votre boutique en ligne. »]
 
 # Exactement 3 idées. Pour chacune : un titre, un ou plusieurs paragraphes, et ton expérience liée.
 # L'expérience s'affiche après « Mon expérience : » : commence-la par une minuscule.
-# Reste discret sur tes projets : aucun chiffre, aucun nom d'application (choix de Youri, 23/10/2026).
 idees:
   - titre: '[À COMPLÉTER : titre de l''idée 1]'
     texte:

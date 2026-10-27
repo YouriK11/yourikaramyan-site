@@ -1,11 +1,13 @@
 ---
-// Timeline of every CV line, most recent first, grouped by starting year, each with its CV details. Content comes
-// from src/data/profil.ts only.
+// Timeline of every CV line, most recent first, grouped by starting year, with the CV's dates ("2024 - en cours").
+// Content comes from src/data/profil.ts only. Lines whose project has a page (/projets/<slug>/, src/data/projets.ts)
+// show no details here, only a "Voir le projet" link to it. The others keep their CV details.
 // By default it shows the essentials for a marketing internship, plus the student jobs with their details (Youri
 // wants his Quick Herstal line seen, 22/10/2026); "Voir tout le parcours" unfolds the rest. Without JavaScript,
 // everything is shown.
 import { PROFIL } from '../data/profil';
 import { typo } from '../data/typographie';
+import { SLUGS_PROJETS, lienProjet } from '../data/projets';
 
 type Categorie = 'formation' | 'experience' | 'academique' | 'job';
 
@@ -17,6 +19,7 @@ interface Entree {
   debut: number;
   fin: number | null;
   textes: string[];
+  lien?: { href: string; texte: string };
   essentiel: boolean;
 }
 
@@ -27,8 +30,17 @@ const LIBELLES: Record<Categorie, string> = {
   job: 'Job étudiant',
 };
 
-// Shown before "Voir tout le parcours": the mobile app project, both bachelor's degrees and the academic projects.
-const ESSENTIELS = new Set(["Projet d'application mobile", 'Bachelier en E-Business', 'Bachelier en Sciences de gestion']);
+// Shown before "Voir tout le parcours": every project with a page, both bachelor's degrees and the academic projects.
+const ESSENTIELS = new Set([
+  "Projet d'application mobile",
+  'Entrepreneuriat e-commerce',
+  'Freelance digital',
+  'Bachelier en E-Business',
+  'Bachelier en Sciences de gestion',
+]);
+
+const lien = (projet: string) =>
+  SLUGS_PROJETS.has(projet) ? { lien: { href: lienProjet(projet), texte: 'Voir le projet' } } : {};
 
 const entrees: Entree[] = [
   ...PROFIL.formation.map((f) => ({
@@ -44,21 +56,24 @@ const entrees: Entree[] = [
   ...PROFIL.experiences.map((e) => ({
     categorie: 'experience' as const,
     titre: e.titre,
-    lieu: '',
+    lieu: [e.structure, e.detail].filter(Boolean).join(', '),
     periode: e.periode,
     debut: e.debut,
     fin: e.fin,
-    textes: [e.texte],
+    textes: SLUGS_PROJETS.has(e.projet) ? [] : [...e.points],
+    ...lien(e.projet),
     essentiel: ESSENTIELS.has(e.titre),
   })),
   ...PROFIL.projetsAcademiques.map((p) => ({
     categorie: 'academique' as const,
     titre: p.titre,
-    lieu: p.lieu,
+    // As on the CV: "HEPL", then the role when there is one (Young Enterprise Project)
+    lieu: p.role ? `${p.lieu}, ${p.role.charAt(0).toLowerCase()}${p.role.slice(1)}` : p.lieu,
     periode: p.periode,
     debut: p.debut,
     fin: p.fin,
-    textes: [p.texte],
+    textes: SLUGS_PROJETS.has(p.projet) ? [] : [...p.points],
+    ...lien(p.projet),
     essentiel: true,
   })),
 ];
@@ -109,6 +124,12 @@ const groupes = [...new Set(entrees.map((e) => e.debut))].map((annee) => {
                         <li set:html={typo(t)} />
                       ))}
                     </ul>
+                  )}
+                  {e.lien && (
+                    <a class="lien entree__lien" href={e.lien.href}>
+                      {e.lien.texte}
+                      <span class="sr-only"> : {e.titre}</span>
+                    </a>
                   )}
                 </li>
               ))}
@@ -341,6 +362,12 @@ const groupes = [...new Set(entrees.map((e) => e.debut))].map((annee) => {
     height: 0.375rem;
     border-radius: 1px;
     background: var(--abricot);
+  }
+
+  .entree__lien {
+    display: inline-block;
+    margin-top: 0.75rem;
+    font-weight: 600;
   }
 
   /* Desktop: large years in their own column, kept in view while their entries scroll by. */

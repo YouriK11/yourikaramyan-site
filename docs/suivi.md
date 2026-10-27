@@ -57,13 +57,16 @@ Soirée du 20/10/2026 (même branche) : lettres du nom toujours serrées, trois 
 
 ## Chiffres validés (à afficher arrondis)
 
-> **Depuis le 23/10/2026, aucun de ces chiffres n'est affiché sur le site** (direction sobre voulue par Youri, voir « Nouvelle direction (23/10/2026) »). La liste reste comme historique.
+> **26/10/2026 : ces chiffres sont de nouveau la seule source des chiffres du site** (voir « Nouveau principe (26/10/2026) »). Affichés : application (+500, +1 700, 1,9 M de vues en 60 jours, +6 500 abonnés TikTok), Young Enterprise Project (dix étudiants, 85 personnes, deux cafés, plus de 120 gobelets, trois sur quatre). Jamais affichés : le chiffre d'affaires et le taux de conversion de la boutique (Youri, 26/10/2026). La direction sobre du 23/10/2026 est annulée.
 
 MonArc (donnés par Youri et dans le CV) :
 - plus de 500 inscrits le jour du lancement, le 1er octobre 2026 ;
 - plus de 1 700 inscrits dans la base e-mail ;
 - une vidéo TikTok publiée chaque jour, publications régulières sur Instagram (n'est plus un des six grands chiffres depuis le 21/10/2026 : elle reste dans « Ce que j'ai fait ») ;
 - **usage de l'app** : l'écran « Aujourd'hui » de Youri affiche « 20e sur 1 056 cette semaine ». Afficher « +1 000 participants dans le classement de la semaine, au 21 octobre 2026 » (date du relevé : celle du message de Youri, qui décrit l'écran au présent ; aucune capture sur l'ordinateur). Remplace « 7j/7 » dans les six chiffres (Youri, 21/10/2026).
+
+Freelance digital (Youri, 26/10/2026) :
+- une dizaine de clients accompagnés : afficher « ~10 » (lu « environ 10 » par les lecteurs d'écran) ou « une dizaine de clients ».
 
 Young Enterprise Project, Gob'Eat (business plan `sources/business-plan-gobeat.pdf`, validés par Youri le 21/10/2026) :
 - une équipe de dix étudiants (p. 3) ;
@@ -163,3 +166,53 @@ Youri : « je suis quelqu'un de discret et je ne veux rien prouver. Le site doit
 - **Page /col-macarthur** : bloc des chiffres clés retiré, lien vers l'étude de cas remplacé par « Voir mes projets ». « Mon profil en bref » : « J'ai conçu une application de suivi d'habitudes et sa communication. » Accroche : « Pour une application de suivi d'habitudes que j'ai conçue, je publie une vidéo TikTok par jour. Avant le lancement, j'ai constitué une liste d'attente. Voici trois idées concrètes pour vos ventes en ligne. » (« votre boutique en ligne » devient « vos ventes en ligne », pour que le mot « boutique » disparaisse du site). « Mon expérience » sans chiffres : idée 1 « une vidéo TikTok publiée chaque jour pour une application de suivi d'habitudes » ; idée 2 « une liste d'attente constituée avant le lancement d'une application de suivi d'habitudes, et animée par e-mail » ; idée 3 « le Young Enterprise Project à la HEPL, la création d'une entreprise étudiante, de l'étude de marché au lancement ». Liste « Mon CV » sans boutique.
 - **Animations** : il ne reste que le nom de l'accueil.
 - **Vérifié** (version finale) : aucun « MonArc », « boutique », lien vers l'app ni chiffre de projet dans `dist/` ; images de partage et JSON-LD propres ; 390, 1440 et 1920 px sans décalage ni débordement ; axe 0 erreur (accueil et Col&McArthur, 390 et 1440 px) ; Lighthouse mobile accueil 97, 99, 99 (SEO 100), Col&McArthur 100.
+
+## Nouveau principe (26/10/2026, premier message, remplacé le même jour par « Portfolio professionnel »)
+
+Youri : « Ce message remplace toutes mes demandes précédentes sur le contenu du site. » Le CV reste court ; le site en est le détail : mêmes titres, mêmes dates, mêmes formulations de base, avec des explications et les seuls chiffres validés. Appliqué sans question.
+
+- **CV du 26/10/2026** (14 h 50) : déposé à la racine du projet (pas dans `sources/`), déplacé dans `sources/CV_Youri_Karamyan.pdf` et copié dans `public/Youri-Karamyan-CV.pdf`. Relu en entier. Nouveautés : introduction ; « 2024 - en cours » ; projet d'application mobile « 2026 - en cours » (App Store et Google Play, liste d'attente de plus de 1 700 inscrits) ; Entrepreneuriat e-commerce (boutique en ligne, projet personnel, 2022-2023) ; Freelance « Indépendant, pour des particuliers et des entreprises » ; Ressourcerie du Pays de Liège (HEPL, 2026 : plan de communication, proposition d'un nouveau site internet) ; Young Enterprise Project « Directeur général de Gob'Eat, entreprise étudiante de gobelets en biscuit » ; Quick « 2023 - en cours » ; outils (Shopify, Canva, Microsoft Office, ChatGPT, Claude, Gemini) ; qualités (sept) ; intérêts avec « salle de sport » ; « 22 ans » et « Permis B et véhicule » séparés.
+- **Restauré depuis git (f8ee0d2)** : étude de cas, compteurs, téléphones, captures (TikTok recadrée sans « $0.00 »), photos Gob'Eat, logo de la boutique.
+- **Choix de Claude** : l'accueil garde l'en-tête du CV (titre et stage de janvier à mai 2027) ; l'intro du CV, mot pour mot, est au centre d'À propos (« Je m'appelle Youri Karamyan, j'ai 22 ans et j'étudie à Liège. » + intro + « Mon stage peut avoir lieu de janvier à mai 2027. »), pour ne pas l'afficher deux fois. Le nom MonArc reste cité dans l'étude de cas et sur /col-macarthur. Bouton getmonarcapp.com retiré (seuls App Store et Google Play sont demandés, comme sur le CV). Plateformes : « App Store et Google Play ». Un panneau sans résultat connu n'a pas de partie « Les résultats » (rien d'inventé, aucun emplacement vide). Ressourcerie : « HEPL » à la place de la date dans les projets ; 2026 dans le parcours. Outils : les noms d'assistants IA sont affichés, car le CV les cite (règle de CLAUDE.md mise à jour).
+- **/col-macarthur** : chiffres de l'application de retour (+500, +1 700, 1,9 M, +6 500 abonnés ; le chiffre d'affaires de la boutique n'y est plus), accroche et « Mon expérience » d'avant le 23/10 ; idée 3 : « création et gestion d'une boutique e-commerce. »
+
+### Informations qui manquent, projet par projet (à demander à Youri)
+
+- **Application mobile** : nombre de téléchargements ou d'utilisateurs actifs, note sur l'App Store, date de sortie sur Google Play, nombre d'abonnés Instagram, un relevé TikTok plus récent que le 17/10/2026.
+- **Entrepreneuriat e-commerce** : un résultat affichable autre que le chiffre d'affaires et la conversion (nombre de commandes ou de clients, avis), les fournisseurs (types, pays), les canaux de vente, ce qui a mis fin à la boutique en 2023. Autorisation d'écrire « Shopify ».
+- **Ressourcerie du Pays de Liège** : ce qu'est la Ressourcerie et ce qu'elle demandait, travail seul ou en équipe (combien), contenu du plan de communication (objectifs, cibles, canaux, calendrier), forme de la proposition de site (maquette, prototype, lien), résultat (note, retour ou adoption par la Ressourcerie), mois en 2026, un visuel.
+- **Freelance digital** : nombre de clients ou de missions, deux ou trois exemples concrets (types de sites, supports, vidéos), un résultat ou un retour client, des visuels.
+- **Young Enterprise Project** : ventes réalisées (gobelets vendus, chiffre d'affaires), prix de vente, partenariats signés avec des cafés, prix ou classement au concours YEP, durée du projet (2025 ou 2025-2026), validation des autres chiffres du business plan si Youri veut les afficher (recette essayée plus de 15 fois, biscuit qui tient 40 minutes, coût matière de 0,18 €, besoin de financement de 5 000 €).
+
+## Portfolio professionnel (26/10/2026, second message, remplace toutes les demandes précédentes sur le contenu)
+
+Youri : « Le site est un portfolio professionnel. Il ne recopie pas le CV : il montre ce que j'ai fait, ce que j'ai accompli et avec quels outils. » La règle sur les noms d'outils d'IA est levée (CLAUDE.md mis à jour). Appliqué sans question.
+
+- **À propos** : texte de Youri, mot pour mot, en deux paragraphes. L'accueil garde « Je cherche un stage en marketing digital, de janvier à mai 2027. »
+- **Mes résultats** (nouvelle section après À propos) : +500, +1 700, 1,9 M, +6 500, ~10, avec compteurs.
+- **Pages projets** `/projets/<slug>/` : application-mobile, entrepreneuriat-e-commerce, freelance-digital, young-enterprise-project. Indexables, dans le plan du site, image de partage `/og/projet-<slug>.png`. Sections : le contexte, ce que j'ai fait, ce que j'ai accompli, les outils, en images, projet suivant et retour à l'accueil. Cartes sur l'accueil (visuel, dates, titre, rôle, un résultat). Les anciens panneaux `<details>` et `EtudeDeCas.astro` sont supprimés ; `Eventail.astro`, `Chiffres.astro` et `Resultats.astro` sont nouveaux.
+- **Ressourcerie du Pays de Liège** : pas de page (Youri ne l'a pas listée dans les pages projets), seulement dans le parcours avec ses deux lignes du CV.
+- **Choix de Claude** :
+  - Application : « J'ai conçu le produit et piloté son développement. » comme rôle ; plus de bouton getmonarcapp.com (seuls App Store et Google Play sont demandés).
+  - Boutique : résultat de la carte « Une boutique créée et gérée de A à Z. » ; « ce que j'ai accompli » sans chiffre (le chiffre d'affaires et la conversion restent interdits) ; Shopify cité, puisque Youri l'a donné comme outil.
+  - Freelance : visuel de la carte en mots (Photo, Vidéo, Sites web, Traduction), faute d'image ; outils écrits « Adobe Premiere Pro », « Photoshop », « Canva ».
+  - Young Enterprise Project : six thèmes demandés couverts avec le business plan (pôles de l'équipe p. 3, point de contact commercial p. 10, enquête p. 54, cafés p. 29-31, SWOT et PESTEL p. 14-15, positionnement p. 36, réseaux p. 41, pâtissiers p. 8, fournisseurs p. 21-27, 120 gobelets p. 4). Outils : Instagram, TikTok, LinkedIn (réseaux de la stratégie, p. 41) ; Youri n'a donné aucun outil pour ce projet. Le « lancement » est décrit par la présentation lors de l'assemblée générale, seul fait connu.
+  - Description pour Google à la troisième personne (« …(Liège), cherche un stage… »). Section « Compétences » (titre court, comme le menu).
+- **/col-macarthur** : chiffres de l'application gardés ; lien « Voir le projet MonArc » vers `/projets/application-mobile/`.
+
+### Informations qui manquent pour enrichir chaque page (à demander à Youri)
+
+- **Application mobile** : date de sortie sur Google Play ; nombre de téléchargements ou d'utilisateurs actifs ; note sur les stores ; abonnés Instagram ; un relevé TikTok plus récent que le 17/10/2026 ; ce que Youri a fait avec Supabase et Brevo (base de données, e-mails : taux d'ouverture, nombre d'envois) ; le point de départ du projet (problème observé, public visé) ; comment la liste d'attente s'est constituée.
+- **Entrepreneuriat e-commerce** : un résultat affichable autre que le chiffre d'affaires et la conversion (nombre de commandes ou de clients, pays livrés, nombre d'influenceurs) ; types de produits précis ; fournisseurs (stock ou dropshipping, pays) ; pourquoi la boutique s'est arrêtée en 2023 ; des captures de la boutique ou des campagnes (sans le nom de la boutique).
+- **Freelance digital** : deux ou trois missions concrètes (types de clients, sites, vidéos) ; un retour client ; des visuels (avant/après, extraits vidéo, captures de sites) ; nombre de missions.
+- **Young Enterprise Project** : ce qu'a été concrètement le lancement commercial (date, lieu, ventes, gobelets vendus, prix) ; partenariats signés avec des cafés ; prix ou classement au concours YEP ; résultats des comptes Instagram et TikTok de Gob'Eat ; tes contributions personnelles par rapport à l'équipe ; les chiffres du business plan que tu accepterais d'afficher (recette essayée plus de 15 fois, biscuit qui tient 40 minutes, coût matière de 0,18 €) ; outils utilisés (Canva, Odoo pour gobeat.odoo.com ?).
+- **Ressourcerie du Pays de Liège** (si tu veux une page) : ce qu'est la Ressourcerie et sa demande, travail seul ou en équipe, contenu du plan de communication, forme de la proposition de site, résultat, un visuel.
+- **Relecture indépendante** (deux relecteurs, 26-27/10/2026), corrections appliquées :
+  - retirés, car non validés : « six grades » et « trois habitudes » (application) ; « des ventes de mars 2022 à janvier 2023 » (dates du rapport Shopify, source du chiffre d'affaires interdit) ;
+  - « une dizaine de clients » affiché « 10 » avec « clients environ » (le « ~ » n'est pas une notation française) ;
+  - textes des pages à la première personne (boutique, freelance), « sourcing » remplacé, répétitions retirées ; Young Enterprise Project : « Nous avons ensuite assuré le lancement commercial du produit. » (fait du CV) ;
+  - cartes : toute la carte est cliquable (la ligne de résultat ne l'était pas), images bien cadrées (la carte Gob'Eat montrait le rideau), visuels décoratifs ; logo de la boutique dans l'en-tête de sa page ;
+  - Freelance visible dans le parcours replié ; chiffres lus « Plus de 500 », « 1,9 million » par les lecteurs d'écran ; impression des cartes et des puces ; images plus nettes sur écran haute densité ;
+  - noms de fichiers entreprise `projets` et `projet-…` refusés ; plan du site limité à `/projets/<slug>/`.
+- **À confirmer par Youri** : outils du Young Enterprise Project (Instagram, TikTok, LinkedIn, repris du business plan p. 41) ; ce qu'a été concrètement le lancement commercial de Gob'Eat.
+- **Vérifié avant publication** (27/10/2026, version finale) : 390, 1440 et 1920 px sans débordement ni décalage ; axe 0 erreur sur l'accueil, les 4 pages projets et /col-macarthur (390 et 1440 px) ; `astro check` 0 erreur ; aucun chiffre interdit ni nom de l'équipe Gob'Eat dans `dist/` ; plan du site : accueil et 4 pages projets ; /col-macarthur toujours noindex. Lighthouse mobile : accueil 77, 97, 98, 99, 98 (médiane 98 ; le 77 tombe sur un indice de puissance de 1 762, machine ralentie), pages projets 100 (SEO 100 partout).

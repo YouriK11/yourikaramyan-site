@@ -1,5 +1,5 @@
 ---
-// Skills, languages and practical details, worded exactly as on the CV (src/data/profil.ts).
+// Skills, qualities, languages and interests, worded exactly as on the CV (src/data/profil.ts).
 import { PROFIL } from '../data/profil';
 import { typo } from '../data/typographie';
 
@@ -10,7 +10,7 @@ const majuscule = (texte: string) => texte.charAt(0).toUpperCase() + texte.slice
 
 <section id="competences" class="section section--brume competences" aria-labelledby="titre-competences">
   <div class="conteneur competences__grille">
-    <h2 id="titre-competences" class="titre-section">Compétences et langues</h2>
+    <h2 id="titre-competences" class="titre-section">Compétences</h2>
 
     <div class="competences__groupes">
       {
@@ -25,6 +25,12 @@ const majuscule = (texte: string) => texte.charAt(0).toUpperCase() + texte.slice
           </div>
         ))
       }
+      <div class="groupe">
+        <h3 class="groupe__titre">Qualités</h3>
+        <ul class="groupe__elements" role="list">
+          {PROFIL.qualites.map((q) => <li set:html={typo(q)} />)}
+        </ul>
+      </div>
     </div>
 
     <div class="competences__cote">

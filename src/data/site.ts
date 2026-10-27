@@ -4,7 +4,7 @@ export const SITE = {
   url: 'https://yourikaramyan.com',
   titre: 'Youri Karamyan | Stage en marketing digital',
   description:
-    'Youri Karamyan, étudiant en 3e bachelier E-Business à la HEPL (Liège). Je cherche un stage en marketing digital, de janvier à mai 2027.',
+    'Youri Karamyan, étudiant en 3e bachelier E-Business à la HEPL (Liège), cherche un stage en marketing digital, de janvier à mai 2027.',
   // While true, every page carries <meta name="robots" content="noindex">. Set to false at launch (step 7).
   enConstruction: false,
   // GoatCounter site code (the "xxx" in xxx.goatcounter.com), free and cookieless. Empty = no visit counter.

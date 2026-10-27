@@ -112,7 +112,7 @@ Condition de Youri : le nom ne pousse jamais le contenu en dessous. Le Cumulativ
 
 ## Étude de cas et compteurs (étape 3)
 
-> Supprimés le 23/10/2026 (direction sobre, voir la dernière section) : `EtudeDeCas.astro`, `Compteur.astro`, `Telephone.astro`, `src/data/nombres.ts`, `src/assets/monarc/`. Les notes ci-dessous restent utiles si un compteur revient un jour.
+> Supprimés le 23/10/2026, puis restaurés le 26/10/2026 pour le portfolio (voir la dernière section) : `Compteur.astro`, `Telephone.astro`, `src/data/nombres.ts`, `src/assets/monarc/`. `EtudeDeCas.astro` reste supprimé (remplacé par `src/pages/projets/[projet].astro` et `Eventail.astro`).
 
 - **Compteurs** (`src/components/Compteur.astro`) :
   - un double invisible réserve la largeur finale ;
@@ -137,13 +137,13 @@ Condition de Youri : le nom ne pousse jamais le contenu en dessous. Le Cumulativ
 
 ## Images de partage (étape 6)
 
-- Champ facultatif `apercu` (40 signes au maximum) dans un fichier entreprise : la ligne sous le nom sur l'image. Par défaut : « Trois idées pour votre e-commerce ». `flexShrink: 0` sur chaque bloc, et un nom de plus de 18 signes passe en 40 px, pour qu'un nom long ne tasse pas le trait abricot.
+- Champ facultatif `apercu` (40 signes au maximum) dans un fichier entreprise : la ligne sous le nom sur l'image. Par défaut : « Trois idées pour votre e-commerce ». `flexShrink: 0` sur chaque bloc, et un titre de plus de 22 signes passe en 38 px (« pour Col&McArthur », titre de projet), pour qu'un nom long ne tasse pas le trait abricot.
 - satori 0.63.0 épinglé + sharp. Lire les polices avec des chemins relatifs à la racine du projet (`import.meta.url` pointe dans `dist/` et échoue). `boxSizing: 'border-box'` sur la racine, `display: 'flex'` sur chaque div à plusieurs enfants. Échapper `&` (Col&McArthur).
 - LinkedIn : 1200 × 630, URL absolue en https, `og:image:width`, `og:image:height`, `og:image:type`, `og:image:alt`. Rafraîchir avec le Post Inspector après chaque changement. Gmail n'affiche aucun aperçu : le texte de l'e-mail doit se suffire.
 
 ## Finitions (étape 6)
 
-- **Un seul moment animé depuis le 23/10/2026** : le nom de l'accueil (l'éventail est supprimé). Historique : **deux moments animés** (passe « whaou », 20/10/2026) : le nom de l'accueil, puis l'éventail de téléphones de l'étude de cas. Ailleurs, seulement des détails discrets, coupés par `prefers-reduced-motion` : soulignement des liens, flèche de téléchargement au survol, trait du menu dessiné au survol (fond en `background-size`, rien ne bouge), téléphones soulevés de 6 px au survol (à partir de 64em).
+- **Deux moments animés** : le nom de l'accueil, puis l'éventail de téléphones de la page du projet d'application (rétabli le 26/10/2026 ; supprimé du 23 au 26/10). Les compteurs comptent une fois.
 - **Survol réservé à la souris** : `@media (hover: hover)` autour de chaque `:hover` qui change l'aspect. Sinon, sur téléphone et tablette, l'état reste collé après un appui (lien de téléchargement, menu). Le soulèvement des téléphones ne s'applique qu'à partir de 64em : en dessous, la rangée défilante coupe ce qui dépasse.
 - **Défilement doux après le chargement seulement** : `scroll-behavior: smooth` est posé sur `html.defilement-doux`, classe ajoutée au `load` par `Base.astro`. Sans cela, un lien `/#contact` depuis une autre page fait défiler tout l'accueil (1,4 s) et déclenche tous les traits de titres en route.
 - **Trait abricot des titres de section** : fixe. Son animation (étape 6) a été retirée à la passe « whaou » : l'éventail est le deuxième et dernier moment animé.
@@ -230,5 +230,22 @@ Netlify a été écarté (environ 20 mises en ligne par mois sur le plan gratuit
 
 - **Projets** (`src/components/Projets.astro`) : trois cartes dans une liste (`ul`), une colonne sur téléphone, trois à partir de 48em. Chaque carte : année (abricot sur bleu nuit), titre `h3`, une phrase du CV. Contour clair fin, aucun script, aucune image.
 - **Données** (`src/data/profil.ts`) : `experiences` et `projetsAcademiques` n'ont plus qu'un champ `texte` (la phrase du CV). Plus de `projet`, `structure`, `detail`, `points`, `resultats`, ni d'objet `monarc`.
-- **Contrôle avant chaque envoi** : rien de ce qui suit dans `dist/` (HTML, plan du site, `robots.txt`) : `monarc`, `boutique`, `getmonarcapp`, `App Store`, `Google Play`, `Gob'Eat`, et les chiffres de projets (1 700, 21 000, +500, 1,9 M, 6 500, 170 000, 1 056, 120 gobelets, 85 personnes, 1,55). Regarder aussi les deux images de partage (`dist/og/*.png`) et la fiche JSON-LD de l'accueil.
+- **Contrôle avant chaque envoi** (depuis le 26/10/2026) : dans `dist/` (HTML, images de partage, JSON-LD), aucun chiffre hors de la liste validée de `docs/suivi.md` ; en particulier ni le chiffre d'affaires ni le taux de conversion de la boutique (21 000, 1,55), ni les chiffres du business plan non validés (15 essais, 40 minutes, 0,18 €, 5 000 €, 140 ml), ni aucun nom de membre de l'équipe Gob'Eat ou de café interrogé.
 - **Axe dans Playwright** : `page.addScriptTag({ path: 'node_modules/axe-core/axe.min.js' })` (chemin absolu), pour ne pas dépendre d'un serveur de développement lancé.
+
+## Portfolio : pages projets (26/10/2026)
+
+> Remplace la « Direction sobre » ci-dessus et les panneaux `<details>` : ils sont supprimés.
+
+- **Données** : `src/data/projets.ts` (`PROJETS`, `lienProjet`, `SLUGS_PROJETS`). Le `slug` de chaque projet est le champ `projet` de `profil.ts` : le parcours affiche « Voir le projet » vers `/projets/<slug>/` quand le projet a une page, sinon les lignes du CV (Ressourcerie).
+- **Page** : `src/pages/projets/[projet].astro`, `getStaticPaths` sur `PROJETS`, projet suivant en boucle. Sections : en-tête bleu nuit (dates, `h1`, rôle, boutons), contexte et étapes (fond blanc, numéros bleu nuit : l'abricot n'est jamais du texte sur blanc), « Ce que j'ai accompli » (`Chiffres.astro`), outils (étiquettes), « En images » (éventail, captures en téléphone, photos ou logo), projet suivant.
+- **Cartes de l'accueil** (`Projets.astro`) : le lien est dans le `h3`, son `::after` couvre la carte (une seule annonce par carte pour les lecteurs d'écran) ; focus visible sur la carte avec `:has(:focus-visible)`. Visuel en 16:10, décoratif (`alt=""`). Le `<picture>` doit prendre toute la hauteur (`.carte__visuel :global(picture) { height: 100% }`), sinon `height: 100%` et `object-position` de l'image n'ont aucun effet ; cadrage réglable par projet (`cadrage`), logo sur fond blanc, ou mots en grand quand il n'y a pas d'image.
+- **Chiffres** (`Chiffres.astro`) : thème `nuit` (abricot sur bleu nuit) ou `clair` (bleu nuit sur blanc, trait abricot). Une ligne à partir de 64em ; à cinq chiffres, la taille baisse pour que « +1 700 » tienne. `Compteur.astro` accepte `lecture` (« ~10 » lu « Environ 10 »).
+- **Éventail** (`Eventail.astro`) : s'ouvre une fois quand 35 % est visible ; fermé seulement si les animations sont permises.
+- **Plan du site** : liste blanche `/` et `/projets/<slug>/` (expression régulière) dans `astro.config.mjs`. Les noms de fichiers entreprise `projets` et `projet-…` sont refusés (`src/content.config.ts`), pour qu'une page entreprise ne prenne jamais une adresse de projet ou d'image de partage.
+- **Images de partage** : `/og/projet-<slug>.png`, titre du projet en abricot et dates en dessous (`src/pages/og/[page].png.ts`, props `titre` et `sousTitre`).
+- **Test** : une capture pleine page sans défilement montre les compteurs à 0 et l'éventail fermé. Pour les vérifier, amener la section à l'écran avec `scroll-behavior: auto` (le site active le défilement doux après le chargement), attendre 2,4 s, puis lire le texte.
+
+- **Lien de carte** : `::after` en `z-index: 1`, sinon la puce positionnée de la ligne de résultat passe au-dessus et ce clic ne mène nulle part.
+- **Compteurs et éventail déjà à l'écran au chargement** (position de défilement restaurée) : ils restent dans leur état final, sans repartir de 0 ni se refermer.
+- **Logo** (boutique) : affiché dans l'en-tête de la page projet, pas dans « En images » (une section entière pour un seul logo paraissait vide).

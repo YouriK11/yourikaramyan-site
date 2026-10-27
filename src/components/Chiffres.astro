@@ -1,0 +1,111 @@
+---
+// A row of key figures, very large, counting up once in view (src/components/Compteur.astro).
+// "nuit": apricot figures on the midnight blue. "clair": midnight blue figures on white, with an apricot stroke
+// (apricot is never a text colour on white). Used by "Mes résultats" on the home page and by the project pages.
+import Compteur from './Compteur.astro';
+import { typo } from '../data/typographie';
+import type { Chiffre } from '../data/projets';
+
+interface Props {
+  chiffres: Chiffre[];
+  theme?: 'nuit' | 'clair';
+}
+
+const { chiffres, theme = 'nuit' } = Astro.props;
+---
+
+<ul
+  class:list={['chiffres', `chiffres--${theme}`, { 'chiffres--cinq': chiffres.length === 5, 'chiffres--seul': chiffres.length === 1 }]}
+  role="list"
+  style={`--colonnes: ${chiffres.length}`}
+>
+  {
+    chiffres.map((c) => (
+      <li class="chiffre">
+        <span class="chiffre__valeur">
+          {c.valeur !== undefined ? (
+            <Compteur valeur={c.valeur} decimales={c.decimales} prefixe={c.prefixe} suffixe={c.suffixe} lecture={c.lecture} />
+          ) : (
+            c.texte
+          )}
+        </span>
+        <span class="chiffre__libelle" set:html={typo(c.libelle)} />
+      </li>
+    ))
+  }
+</ul>
+
+<style>
+  .chiffres {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 2rem 1rem;
+  }
+
+  .chiffre {
+    display: grid;
+    align-content: start;
+    gap: 0.5rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid rgb(255 255 255 / 0.18);
+  }
+
+  .chiffres--clair .chiffre {
+    border-top: 2px solid var(--abricot);
+  }
+
+  .chiffre__valeur {
+    color: var(--abricot);
+    font-family: var(--police-titre);
+    /* 11vw: "+1 700" still fits its column on a 320 px phone */
+    font-size: min(clamp(2.75rem, 0.6rem + 5.6vw, 6rem), 11vw);
+    font-weight: 780;
+    font-stretch: 85%;
+    line-height: 0.95;
+    letter-spacing: -0.015em;
+    white-space: nowrap;
+  }
+
+  .chiffres--clair .chiffre__valeur {
+    color: var(--nuit);
+  }
+
+  .chiffre__libelle {
+    max-width: 24ch;
+    color: var(--brume-sur-nuit);
+    font-size: var(--texte-m);
+    line-height: 1.4;
+  }
+
+  .chiffres--clair .chiffre__libelle {
+    color: var(--ardoise);
+  }
+
+  @media (min-width: 48em) {
+    .chiffres {
+      gap: 3rem 2rem;
+    }
+  }
+
+  /* Computers: every figure on one row; five figures get a slightly smaller size so "+1 700" keeps its column */
+  @media (min-width: 64em) {
+    .chiffres {
+      grid-template-columns: repeat(var(--colonnes), minmax(0, 1fr));
+    }
+
+    .chiffres--cinq .chiffre__valeur {
+      font-size: clamp(2.75rem, 1rem + 3.4vw, 4.75rem);
+    }
+  }
+
+  /* A single figure keeps the width of one column, never a stroke across the whole page */
+  .chiffres--seul {
+    grid-template-columns: minmax(0, 20rem);
+  }
+
+  @media print {
+    .chiffre__valeur {
+      color: #000 !important;
+    }
+  }
+</style>

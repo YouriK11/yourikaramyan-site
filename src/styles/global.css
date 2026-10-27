@@ -384,7 +384,7 @@ button {
   view-transition-name: entete;
 }
 
-/* Print: a clean black-on-white CV */
+/* Print: a clean black-on-white CV, counters at their final value */
 @media print {
   /* Navigation and buttons are useless on paper (and browsers drop their background colour) */
   .entete,
@@ -409,7 +409,6 @@ button {
 
   .sur-nuit .texte-secondaire,
   .idee__numero,
-  .projet__annee,
   .idee__experience > span:first-child {
     color: #000 !important;
   }
@@ -419,7 +418,9 @@ button {
   .titre-section::after,
   .nom__trait,
   .groupe__elements li::before,
-  .entree__textes li::before {
+  .entree__textes li::before,
+  .carte__resultat::before,
+  .accompli__textes li::before {
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
   }
@@ -445,6 +446,14 @@ button {
     opacity: 1 !important;
     visibility: visible !important;
     transform: none !important;
+  }
+
+  .compteur__valeur {
+    visibility: hidden;
+  }
+
+  .compteur__fantome {
+    visibility: visible !important;
   }
 
   .section {

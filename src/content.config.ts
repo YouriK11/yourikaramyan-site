@@ -24,8 +24,9 @@ const adresse = ({ entry }: { entry: string }) => {
       `Nom de fichier « ${entry} » invalide : minuscules sans accent, chiffres et tirets seulement (exemple : atelier-dubois.md).`,
     );
   }
-  // Already taken by the 404 page and the home page's share image (/og/accueil.png)
-  if (['404', 'accueil'].includes(id)) {
+  // Already taken by the 404 page, the home page's share image (/og/accueil.png), the project pages (/projets/...)
+  // and their share images (/og/projet-<slug>.png)
+  if (['404', 'accueil', 'projets'].includes(id) || id.startsWith('projet-')) {
     throw new Error(`Nom de fichier « ${entry} » réservé par le site : choisis un autre nom.`);
   }
   return id;

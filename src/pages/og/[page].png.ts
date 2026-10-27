@@ -1,11 +1,13 @@
 // Link preview images (Open Graph, 1200x630 PNG), drawn at build time with satori and sharp:
-// /og/accueil.png for the site, and /og/<company>.png for every company page.
+// /og/accueil.png for the site, /og/projet-<slug>.png for every project page and /og/<company>.png for every company
+// page.
 import type { APIRoute, GetStaticPaths } from 'astro';
 import { getCollection } from 'astro:content';
 import { readFile } from 'node:fs/promises';
 import satori from 'satori';
 import sharp from 'sharp';
 import { PORTRAIT_DETOURE, FICHIER_PORTRAIT_OG } from '../../data/portrait';
+import { PROJETS } from '../../data/projets';
 
 const NUIT = '#18214F';
 const ABRICOT = '#EE9A35';
@@ -15,10 +17,16 @@ const BRUME_SUR_NUIT = '#C3C9DF';
 export const getStaticPaths = (async () => {
   const entreprises = await getCollection('entreprises');
   return [
-    { params: { page: 'accueil' }, props: { pour: null, apercu: null } },
+    { params: { page: 'accueil' }, props: { titre: null, sousTitre: null } },
+    // A project: its title in apricot, then its dates
+    ...PROJETS.map((projet) => ({
+      params: { page: `projet-${projet.slug}` },
+      props: { titre: projet.titre, sousTitre: projet.periode.replace(/ /g, ' ') },
+    })),
+    // A company: "pour <name>" in apricot, then the preview line
     ...entreprises.map((entree) => ({
       params: { page: entree.id },
-      props: { pour: entree.data.nom, apercu: entree.data.apercu },
+      props: { titre: `pour ${entree.data.nom}`, sousTitre: entree.data.apercu ?? '' },
     })),
   ];
 }) satisfies GetStaticPaths;
@@ -66,15 +74,15 @@ async function photoPartage(): Promise<Buffer> {
 type Noeud = { type: string; props: Record<string, unknown> };
 const div = (style: Record<string, unknown>, children?: unknown): Noeud => ({ type: 'div', props: { style, children } });
 
-function image(pour: string | null, apercu: string | null): Noeud {
-  const texte = pour
+function image(titre: string | null, sousTitre: string | null): Noeud {
+  const texte = titre
     ? [
-        // Long company names get a smaller size so they stay on one line
+        // Long titles get a smaller size so they stay on one line
         div(
-          { display: 'flex', flexShrink: 0, marginTop: 34, color: ABRICOT, fontFamily: 'Bricolage', fontSize: pour.length > 18 ? 40 : 50, lineHeight: 1.05 },
-          `pour ${pour}`,
+          { display: 'flex', flexShrink: 0, marginTop: 34, color: ABRICOT, fontFamily: 'Bricolage', fontSize: titre.length > 22 ? 38 : 50, lineHeight: 1.05 },
+          titre,
         ),
-        div({ display: 'flex', flexShrink: 0, marginTop: 18, color: BRUME_SUR_NUIT, fontSize: 30 }, apercu ?? ''),
+        div({ display: 'flex', flexShrink: 0, marginTop: 18, color: BRUME_SUR_NUIT, fontSize: 30 }, sousTitre ?? ''),
       ]
     : [
         div({ display: 'flex', marginTop: 34, color: BLANC, fontSize: 34 }, 'Étudiant en E-Business à la HEPL (Liège)'),
@@ -118,9 +126,9 @@ function image(pour: string | null, apercu: string | null): Noeud {
   );
 }
 
-export const GET: APIRoute<{ pour: string | null; apercu: string | null }> = async ({ props }) => {
+export const GET: APIRoute<{ titre: string | null; sousTitre: string | null }> = async ({ props }) => {
   // satori expects a React-like element tree; plain objects with type/props are accepted.
-  const svg = await satori(image(props.pour, props.apercu) as unknown as Parameters<typeof satori>[0], {
+  const svg = await satori(image(props.titre, props.sousTitre) as unknown as Parameters<typeof satori>[0], {
     width: 1200,
     height: 630,
     fonts: [

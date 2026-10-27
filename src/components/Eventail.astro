@@ -1,0 +1,244 @@
+---
+// The mobile app's three screens, fanned out: the feed in front, the ranking and the profile behind it. The site's
+// second animated moment (after the hero): the phones spread out once a third of the fan is on screen. Without
+// JavaScript or with reduced motion, they are simply shown spread out. Transforms only: nothing around them moves.
+// Other users' photos and first names are blurred in src/assets/monarc (originals stay in sources/).
+import Telephone from './Telephone.astro';
+import { typo } from '../data/typographie';
+import ecranFil from '../assets/monarc/app-fil.jpg';
+import ecranClassement from '../assets/monarc/app-classement.jpg';
+import ecranProfil from '../assets/monarc/app-profil.jpg';
+
+const eventail = [
+  {
+    cote: 'gauche',
+    position: 'à gauche',
+    src: ecranClassement,
+    alt: 'Écran Classement de MonArc : le classement de la semaine, avec le grade et les points de chaque participant.',
+    legende: 'Le classement de la semaine',
+  },
+  {
+    cote: 'centre',
+    position: 'au centre',
+    src: ecranFil,
+    alt: "Écran Fil de MonArc : la preuve photo d'une séance de musculation publiée par un participant.",
+    legende: 'Le fil des preuves photo',
+  },
+  {
+    cote: 'droite',
+    position: 'à droite',
+    src: ecranProfil,
+    alt: 'Écran Profil de MonArc : grade Apprenti, 940 points et progression vers le grade suivant.',
+    legende: 'Le profil, les points et les grades',
+  },
+];
+
+// Rendered width of the fanned phones (see --largeur-tel below), for the browser to pick the right file.
+const TAILLES_EVENTAIL =
+  '(min-width: 90em) 22rem, (min-width: 80em) 21rem, (min-width: 64em) 19rem, (min-width: 48em) 17rem, 15rem';
+---
+
+<figure class="eventail" data-eventail>
+  <div class="eventail__scene">
+    {
+      eventail.map((ecran) => (
+        <div class={`eventail__tel eventail__tel--${ecran.cote}`}>
+          <Telephone src={ecran.src} alt={ecran.alt} sizes={TAILLES_EVENTAIL} />
+        </div>
+      ))
+    }
+  </div>
+  <figcaption class="eventail__legende">
+    <ul class="eventail__ecrans" role="list">
+      {
+        eventail.map((ecran) => (
+          <li class={`eventail__ecran eventail__ecran--${ecran.cote}`}>
+            <span set:html={typo(ecran.legende)} />
+            <span class="eventail__position"> ({ecran.position})</span>
+          </li>
+        ))
+      }
+    </ul>
+  </figcaption>
+</figure>
+
+<script>
+  const eventail = document.querySelector<HTMLElement>('[data-eventail]');
+  if (eventail && 'IntersectionObserver' in window && matchMedia('(prefers-reduced-motion: no-preference)').matches) {
+    const observateur = new IntersectionObserver(
+      (entrees) => {
+        if (!entrees.some((entree) => entree.isIntersecting)) return;
+        observateur.unobserve(eventail);
+        eventail.classList.add('eventail--anime');
+        requestAnimationFrame(() => eventail.classList.remove('eventail--ferme'));
+      },
+      { threshold: 0.35 },
+    );
+    // Already on screen at load (restored scroll position): leave it spread out, never close it in front of the visitor
+    const { top, bottom } = eventail.getBoundingClientRect();
+    if (!(top < innerHeight && bottom > 0)) {
+      eventail.classList.add('eventail--ferme');
+      observateur.observe(eventail);
+    }
+  }
+</script>
+
+<style>
+  .eventail {
+    --largeur-tel: clamp(15rem, 8rem + 14vw, 22rem); /* never smaller than the old 240 px screens */
+    --ecart: 46%;
+    --angle: 7deg;
+    --recul: 0.86;
+    margin: 0;
+  }
+
+  .eventail__scene {
+    position: relative;
+    display: grid;
+    justify-content: center;
+    align-items: end;
+    margin-inline: calc(-1 * var(--gouttiere));
+    padding-block: clamp(2.5rem, 1.5rem + 3vw, 4.5rem) clamp(1.5rem, 1rem + 2vw, 3rem);
+    overflow-x: clip; /* the outer phones may bleed past the screen edge on phones */
+  }
+
+  /* Light halo, so the dark phones stand out from the midnight blue */
+  .eventail__scene::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: min(170vw, 80rem);
+    aspect-ratio: 1.25;
+    background: radial-gradient(
+      closest-side,
+      rgb(238 241 248 / 0.32),
+      rgb(238 241 248 / 0.18) 50%,
+      rgb(238 241 248 / 0.07) 78%,
+      rgb(238 241 248 / 0)
+    );
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+  }
+
+  .eventail__tel {
+    position: relative;
+    grid-area: 1 / 1;
+    width: var(--largeur-tel);
+    transform-origin: 50% 100%;
+  }
+
+  .eventail__tel :global(.telephone__cadre) {
+    box-shadow:
+      inset 0 0 0 1px rgb(255 255 255 / 0.16),
+      0 1.75rem 3.5rem -1rem rgb(4 6 22 / 0.65);
+  }
+
+  .eventail__tel--centre {
+    z-index: 2;
+    transform: translateY(-5%);
+  }
+
+  .eventail__tel--gauche {
+    z-index: 1;
+    transform: translateX(calc(-1 * var(--ecart))) rotate(calc(-1 * var(--angle))) scale(var(--recul));
+  }
+
+  .eventail__tel--droite {
+    z-index: 1;
+    transform: translateX(var(--ecart)) rotate(var(--angle)) scale(var(--recul));
+  }
+
+  /* Before it is seen: the three phones stacked, the outer two just peeking out */
+  .eventail--ferme .eventail__tel--centre {
+    transform: none;
+  }
+
+  .eventail--ferme .eventail__tel--gauche {
+    transform: translateX(-9%) rotate(-1.5deg) scale(var(--recul));
+  }
+
+  .eventail--ferme .eventail__tel--droite {
+    transform: translateX(9%) rotate(1.5deg) scale(var(--recul));
+  }
+
+  .eventail--ferme .eventail__scene::before {
+    opacity: 0.45;
+  }
+
+  /* Slow start, soft landing: the spread reads as one gentle gesture */
+  .eventail--anime .eventail__tel {
+    transition: transform 1.5s cubic-bezier(0.45, 0, 0.2, 1);
+  }
+
+  .eventail--anime .eventail__tel--centre {
+    transition-duration: 1.2s;
+  }
+
+  .eventail--anime .eventail__scene::before {
+    transition: opacity 1.5s ease;
+  }
+
+  /* Captions: a list with positions on phones, one caption under each phone from 48em */
+  .eventail__legende {
+    margin-top: 0.5rem;
+  }
+
+  .eventail__ecrans {
+    display: grid;
+    gap: 0.25rem;
+    color: var(--brume-sur-nuit);
+    font-size: var(--texte-s);
+    line-height: 1.4;
+  }
+
+  @media (min-width: 48em) {
+    .eventail {
+      --ecart: 64%;
+      --angle: 8deg;
+    }
+
+    .eventail__ecrans {
+      grid-template-columns: minmax(0, 1fr) var(--largeur-tel) minmax(0, 1fr);
+      column-gap: 2rem;
+    }
+
+    .eventail__ecran--gauche {
+      text-align: end;
+    }
+
+    .eventail__ecran--centre {
+      color: var(--blanc);
+      text-align: center;
+    }
+
+    .eventail__position {
+      display: none;
+    }
+  }
+
+  /* Paper: the phones side by side, never fanned */
+  @media print {
+    .eventail__scene {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1rem;
+      margin-inline: 0;
+      padding: 0;
+      overflow: visible;
+    }
+
+    .eventail__scene::before {
+      display: none;
+    }
+
+    .eventail__tel {
+      grid-area: auto !important;
+      width: auto;
+      transform: none !important;
+    }
+
+    .eventail__ecran--centre {
+      color: inherit;
+    }
+  }
+</style>

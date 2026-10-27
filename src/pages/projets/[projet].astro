@@ -1,0 +1,536 @@
+---
+// One page per project (src/data/projets.ts), at /projets/<slug>/: indexed, in the sitemap, with its own share image
+// (/og/projet-<slug>.png). The context, what Youri did, what he achieved with the figures, the tools and the visuals,
+// then the next project and the way back home.
+import type { GetStaticPaths, InferGetStaticPropsType } from 'astro';
+import { Picture } from 'astro:assets';
+import Base from '../../layouts/Base.astro';
+import Entete from '../../components/Entete.astro';
+import PiedDePage from '../../components/PiedDePage.astro';
+import Chiffres from '../../components/Chiffres.astro';
+import Eventail from '../../components/Eventail.astro';
+import Telephone from '../../components/Telephone.astro';
+import { PROJETS, lienProjet } from '../../data/projets';
+import { typo } from '../../data/typographie';
+
+export const getStaticPaths = (() =>
+  PROJETS.map((projet, i) => ({
+    params: { projet: projet.slug },
+    props: { projet, suivant: PROJETS[(i + 1) % PROJETS.length] },
+  }))) satisfies GetStaticPaths;
+
+type Props = InferGetStaticPropsType<typeof getStaticPaths>;
+const { projet, suivant } = Astro.props;
+
+// A logo goes in the header (a whole section for one logo looks empty); screenshots in phone frames; photos below.
+const logo = projet.visuels?.find((v) => v.logo);
+const captures = projet.visuels?.filter((v) => v.telephone) ?? [];
+const images = projet.visuels?.filter((v) => !v.telephone && !v.logo) ?? [];
+const aDesVisuels = projet.eventail || captures.length > 0 || images.length > 0;
+---
+
+<Base
+  titre={`${projet.titre} | Youri Karamyan`}
+  description={projet.description}
+  image={`/og/projet-${projet.slug}.png`}
+  imageAlt={`Youri Karamyan, ${projet.titre} (${projet.periode}).`}
+>
+  <Entete />
+  <main id="contenu">
+    <section class="section sur-nuit tete" aria-labelledby="titre-projet">
+      <div class:list={['conteneur', { 'tete__grille': logo }]}>
+        <div>
+          <a class="lien tete__retour" href="/#projets">Tous les projets</a>
+          <p class="tete__periode" set:html={typo(projet.periode)} />
+          <h1 id="titre-projet" class="tete__titre" set:html={typo(projet.titre)} />
+          <p class="tete__role" set:html={typo(projet.role)} />
+          {
+            projet.boutons && (
+              <div class="tete__boutons">
+                {projet.boutons.map((b) => (
+                  <a class="bouton bouton--abricot" href={b.href}>
+                    {b.texte}
+                  </a>
+                ))}
+              </div>
+            )
+          }
+        </div>
+        {
+          logo && (
+            <figure class="tete__logo">
+              <Picture
+                class="tete__logo-image"
+                src={logo.src}
+                alt={logo.alt}
+                formats={['avif', 'webp']}
+                width={640}
+                widths={[240, 360, 480, 640]}
+                sizes="(min-width: 48em) 18rem, 11rem"
+                loading="eager"
+              />
+              <figcaption class="visuel__legende" set:html={typo(logo.legende)} />
+            </figure>
+          )
+        }
+      </div>
+    </section>
+
+    <section class="section recit" aria-label="Le contexte et ce que j'ai fait">
+      <div class="conteneur recit__grille">
+        <div>
+          <h2 class="titre-section">Le contexte</h2>
+          {projet.contexte.map((paragraphe) => <p class="recit__texte" set:html={typo(paragraphe)} />)}
+        </div>
+        <div>
+          <h2 class="titre-section">Ce que j'ai fait</h2>
+          <ol class="etapes" role="list">
+            {
+              projet.fait.map((etape, i) => (
+                <li class="etape">
+                  <span class="etape__numero" aria-hidden="true">
+                    {i + 1}
+                  </span>
+                  <h3 class="etape__titre" set:html={typo(etape.titre)} />
+                  {etape.texte.map((phrase) => (
+                    <p set:html={typo(phrase)} />
+                  ))}
+                </li>
+              ))
+            }
+          </ol>
+        </div>
+      </div>
+    </section>
+
+    <section class="section sur-nuit accompli" aria-labelledby="titre-accompli">
+      <div class="conteneur">
+        <h2 id="titre-accompli" class="titre-section">Ce que j'ai accompli</h2>
+        {projet.accompli.chiffres && (
+          <div class="accompli__chiffres">
+            <Chiffres chiffres={projet.accompli.chiffres} />
+          </div>
+        )}
+        {
+          projet.accompli.textes && (
+            <ul class="accompli__textes" role="list">
+              {projet.accompli.textes.map((t) => (
+                <li set:html={typo(t)} />
+              ))}
+            </ul>
+          )
+        }
+      </div>
+    </section>
+
+    <section class="section section--brume outils" aria-labelledby="titre-outils">
+      <div class="conteneur outils__grille">
+        <h2 id="titre-outils" class="titre-section">Les outils</h2>
+        <ul class="outils__liste" role="list">
+          {projet.outils.map((outil) => <li>{outil}</li>)}
+        </ul>
+      </div>
+    </section>
+
+    {
+      aDesVisuels && (
+        <section class="section sur-nuit visuels" aria-labelledby="titre-visuels">
+          <div class="conteneur">
+            <h2 id="titre-visuels" class="titre-section">En images</h2>
+            {projet.eventail && (
+              <div class="visuels__eventail">
+                <Eventail />
+              </div>
+            )}
+            {captures.length > 0 && (
+              <div class="visuels__telephones">
+                {captures.map((c) => (
+                  <Telephone
+                    src={c.src}
+                    alt={c.alt}
+                    legende={c.legende}
+                    camera={c.telephone?.camera}
+                    sizes="(min-width: 64em) 21rem, (min-width: 36em) 17rem, min(62vw, 15rem)"
+                  />
+                ))}
+              </div>
+            )}
+            {images.length > 0 && (
+              <div class="visuels__images">
+                {images.map((v) => (
+                  <figure class="visuel">
+                    <Picture
+                      class="visuel__image"
+                      src={v.src}
+                      alt={v.alt}
+                      formats={['avif', 'webp']}
+                      width={1080}
+                      widths={[320, 480, 640, 800, 1080]}
+                      sizes="(min-width: 64em) 26rem, (min-width: 48em) 40vw, calc(50vw - 1.5rem)"
+                      loading="lazy"
+                    />
+                    <figcaption class="visuel__legende" set:html={typo(v.legende)} />
+                  </figure>
+                ))}
+              </div>
+            )}
+          </div>
+        </section>
+      )
+    }
+
+    <nav class="section suite" aria-label="Pages suivantes">
+      <div class="conteneur suite__grille">
+        <a class="suite__suivant" href={lienProjet(suivant.slug)}>
+          <span class="suite__etiquette">Projet suivant</span>
+          <span class="suite__titre" set:html={typo(suivant.titre)} />
+        </a>
+        <a class="lien suite__accueil" href="/">Retour à l'accueil</a>
+      </div>
+    </nav>
+  </main>
+  <PiedDePage />
+</Base>
+
+<style>
+  /* Header: dates, title, role, and the store buttons for the mobile app */
+  .tete {
+    padding-block: clamp(2.5rem, 1.5rem + 4vw, 5rem) clamp(3rem, 2rem + 4vw, 6rem);
+  }
+
+  .tete__retour {
+    display: inline-block;
+    font-size: var(--texte-s);
+    font-weight: 600;
+  }
+
+  .tete__periode {
+    margin-top: clamp(2rem, 1.5rem + 2vw, 3.5rem);
+    color: var(--abricot);
+    font-family: var(--police-titre);
+    font-size: var(--texte-m);
+    font-weight: 720;
+  }
+
+  .tete__titre {
+    max-width: 18ch;
+    margin-top: 0.5rem;
+    font-family: var(--police-titre);
+    font-size: clamp(2.5rem, 1.4rem + 4.6vw, 5.5rem);
+    font-weight: 780;
+    font-stretch: 88%;
+    line-height: 0.98;
+    letter-spacing: -0.01em;
+    text-wrap: balance;
+  }
+
+  .tete__role {
+    max-width: 48ch;
+    margin-top: 1.25rem;
+    color: var(--brume-sur-nuit);
+    font-size: var(--texte-l);
+    line-height: 1.45;
+    text-wrap: pretty;
+  }
+
+  .tete__boutons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 2rem;
+  }
+
+  /* On phones the buttons stack at the same full width, as in the hero */
+  @media (max-width: 35.99em) {
+    .tete__boutons .bouton {
+      flex: 1 1 100%;
+    }
+  }
+
+  /* Context and steps */
+  .recit__grille {
+    display: grid;
+    gap: clamp(3rem, 2rem + 3vw, 4.5rem);
+  }
+
+  .recit__texte {
+    max-width: 52ch;
+    margin-top: 1.25rem;
+    font-size: var(--texte-l);
+    line-height: 1.5;
+    text-wrap: pretty;
+  }
+
+  .recit__texte:first-of-type {
+    margin-top: 2rem;
+  }
+
+  .etapes {
+    display: grid;
+    gap: 2rem;
+    margin-top: 2rem;
+  }
+
+  .etape {
+    display: grid;
+    grid-template-columns: 2.25rem minmax(0, 1fr);
+    align-content: start; /* steps side by side share a height: never stretch the rows */
+    column-gap: 0.75rem;
+    padding-top: 1.25rem;
+    border-top: 2px solid var(--abricot);
+  }
+
+  .etape > :not(.etape__numero) {
+    grid-column: 2;
+  }
+
+  /* Midnight blue numbers: apricot is never a text colour on white */
+  .etape__numero {
+    grid-row: 1 / span 4;
+    color: var(--nuit);
+    font-family: var(--police-titre);
+    font-size: 1.75rem;
+    font-weight: 760;
+    line-height: 1;
+  }
+
+  .etape__titre {
+    font-size: clamp(1.125rem, 0.95rem + 0.3vw, 1.3125rem);
+    font-weight: 650;
+    line-height: 1.3;
+  }
+
+  .etape p {
+    margin-top: 0.375rem;
+    color: var(--ardoise);
+    text-wrap: pretty;
+  }
+
+  /* What he achieved */
+  .accompli__chiffres {
+    margin-top: 2.5rem;
+  }
+
+  .accompli__textes {
+    display: grid;
+    gap: 0.75rem;
+    max-width: 52ch;
+    margin-top: 2rem;
+  }
+
+  .accompli__chiffres + .accompli__textes {
+    margin-top: 3rem;
+  }
+
+  .accompli__textes li {
+    position: relative;
+    padding-left: 1.25rem;
+    font-size: var(--texte-l);
+    font-weight: 600;
+    line-height: 1.45;
+  }
+
+  /* Small apricot square, as the CV's bullets */
+  .accompli__textes li::before {
+    content: '';
+    position: absolute;
+    top: 0.62em;
+    left: 0;
+    width: 0.4375rem;
+    height: 0.4375rem;
+    border-radius: 1px;
+    background: var(--abricot);
+  }
+
+  /* Tools: one label each */
+  .outils__grille {
+    display: grid;
+    gap: 2rem;
+  }
+
+  .outils__liste {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.625rem;
+  }
+
+  .outils__liste li {
+    padding: 0.5rem 1rem;
+    border: 1px solid rgb(24 33 79 / 0.24);
+    border-radius: 999px;
+    background: var(--blanc);
+    font-weight: 600;
+  }
+
+  /* Visuals */
+  .visuels__eventail {
+    margin-top: 1rem;
+  }
+
+  .visuels__telephones {
+    display: grid;
+    grid-template-columns: min(62vw, 15rem);
+    gap: 2.5rem;
+    justify-content: center;
+    align-items: end; /* both captions on one line despite the different screenshot heights */
+    margin-top: clamp(3rem, 2rem + 3vw, 5rem);
+  }
+
+  .visuels__images {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+    margin-top: 2.5rem;
+  }
+
+  .visuel {
+    margin: 0;
+  }
+
+  .visuel__image {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: var(--rayon);
+    box-shadow: 0 0 0 1px rgb(255 255 255 / 0.16);
+  }
+
+  /* The shop's logo, on its own white tile in the header */
+  .tete__logo {
+    width: 11rem;
+    margin: 2.5rem 0 0;
+  }
+
+  .tete__logo-image {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1;
+    object-fit: contain;
+    border-radius: var(--rayon);
+    background: var(--blanc);
+  }
+
+  .visuel__legende {
+    margin-top: 0.625rem;
+    color: var(--brume-sur-nuit);
+    font-size: var(--texte-s);
+    text-wrap: pretty;
+  }
+
+  /* Next project and back home */
+  .suite__grille {
+    display: grid;
+    gap: 2rem;
+    justify-items: start;
+  }
+
+  .suite__suivant {
+    display: grid;
+    gap: 0.25rem;
+    width: 100%;
+    padding: clamp(1.5rem, 1rem + 2vw, 2.5rem);
+    border-radius: var(--rayon);
+    background: var(--nuit);
+    color: var(--blanc);
+    text-decoration: none;
+  }
+
+  .suite__etiquette {
+    color: var(--abricot);
+    font-family: var(--police-titre);
+    font-size: var(--texte-m);
+    font-weight: 720;
+  }
+
+  .suite__titre {
+    font-family: var(--police-titre);
+    font-size: clamp(1.75rem, 1.2rem + 2vw, 3rem);
+    font-weight: 760;
+    font-stretch: 90%;
+    line-height: 1.05;
+  }
+
+  /* Decorative arrow, left out of the link's name where alternative text for content is supported */
+  .suite__titre::after {
+    content: ' →';
+    content: ' →' / '';
+  }
+
+  .suite__accueil {
+    font-weight: 600;
+  }
+
+  @media (hover: hover) {
+    .suite__suivant:hover .suite__titre {
+      text-decoration: underline;
+      text-decoration-color: var(--abricot);
+      text-decoration-thickness: 3px;
+      text-underline-offset: 0.15em;
+    }
+  }
+
+  @media (min-width: 36em) {
+    .visuels__telephones {
+      grid-template-columns: repeat(2, minmax(0, 17rem));
+    }
+  }
+
+  @media (min-width: 48em) {
+    .etapes {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 2.5rem 2rem;
+    }
+
+    .visuels__images {
+      grid-template-columns: repeat(2, minmax(0, 26rem));
+      gap: 1.5rem;
+    }
+
+    .tete__grille {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      column-gap: clamp(2rem, 5vw, 5rem);
+      align-items: end;
+    }
+
+    .tete__logo {
+      width: 18rem;
+      margin: 0;
+    }
+
+    .outils__grille {
+      grid-template-columns: minmax(0, 4fr) minmax(0, 7fr);
+      column-gap: clamp(3rem, 6vw, 6rem);
+      align-items: center;
+    }
+  }
+
+  @media (min-width: 64em) {
+    .recit__grille {
+      grid-template-columns: minmax(0, 4fr) minmax(0, 7fr);
+      column-gap: 5rem;
+    }
+
+    .visuels__telephones {
+      grid-template-columns: repeat(2, minmax(0, 21rem));
+    }
+  }
+
+  @media print {
+    .tete__retour,
+    .tete__boutons,
+    .suite {
+      display: none;
+    }
+
+    .tete__periode,
+    .suite__etiquette {
+      color: #000;
+    }
+
+    .outils__liste li {
+      background: none;
+    }
+  }
+</style>

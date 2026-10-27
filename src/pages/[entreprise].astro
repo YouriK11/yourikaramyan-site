@@ -10,6 +10,7 @@ import Contact from '../components/Contact.astro';
 import PiedDePage from '../components/PiedDePage.astro';
 import IconeTelechargement from '../components/IconeTelechargement.astro';
 import { PROFIL } from '../data/profil';
+import { PROJETS, lienProjet } from '../data/projets';
 import { typo } from '../data/typographie';
 import { PORTRAIT, PORTRAIT_DETOURE } from '../data/portrait';
 
@@ -33,15 +34,28 @@ const reperes = Array.from({ length: 12 }, (_, i) => ({ angle: i * 30, long: i =
 
 const lienEmail = `mailto:${PROFIL.contact.email}?subject=${encodeURIComponent(objetEmail)}`;
 
+// Key figures of the mobile app, all validated by Youri (docs/suivi.md). The shop's turnover is not shown
+// (Youri, 26/10/2026).
+const chiffres = [
+  { valeur: '+500', libelle: 'inscrits le jour du lancement de MonArc' },
+  { valeur: '+1 700', libelle: "inscrits sur la liste d'attente avant le lancement" },
+  { valeur: '1,9 M', libelle: 'de vues TikTok en 60 jours' },
+  { valeur: '+6 500', libelle: 'abonnés TikTok' },
+];
+
 // The CV at a glance: the most relevant lines, from src/data/profil.ts, ongoing first, then by end year.
-// No figures on the personal projects (Youri, 23/10/2026).
+const [application, boutique, freelance] = PROFIL.experiences;
+const [ressourcerie, yep] = PROFIL.projetsAcademiques;
 const cv = [
   { titre: PROFIL.formation[0].titre, lieu: PROFIL.formation[0].lieu, periode: PROFIL.formation[0].periode },
-  { titre: PROFIL.experiences[0].titre, lieu: '', periode: PROFIL.experiences[0].periode },
-  { titre: PROFIL.projetsAcademiques[0].titre, lieu: PROFIL.projetsAcademiques[0].lieu, periode: PROFIL.projetsAcademiques[0].periode },
+  { titre: application.titre, lieu: '', periode: application.periode },
+  { titre: ressourcerie.titre, lieu: ressourcerie.lieu, periode: ressourcerie.periode },
+  { titre: yep.titre, lieu: yep.lieu, periode: yep.periode },
   { titre: PROFIL.formation[1].titre, lieu: PROFIL.formation[1].lieu, periode: PROFIL.formation[1].periode },
-  { titre: PROFIL.experiences[1].titre, lieu: '', periode: PROFIL.experiences[1].periode },
+  { titre: boutique.titre, lieu: boutique.structure.toLowerCase(), periode: boutique.periode },
+  { titre: freelance.titre, lieu: freelance.structure.toLowerCase(), periode: freelance.periode },
 ];
+
 ---
 
 <Base
@@ -123,16 +137,30 @@ const cv = [
     </section>
 
     <section class="section profil" aria-labelledby="titre-profil">
-      <div class="conteneur">
-        <h2 id="titre-profil" class="titre-section">Mon profil en bref</h2>
-        <p class="profil__texte">J'ai conçu une application de suivi d'habitudes et sa communication.</p>
-        <p class="profil__texte profil__texte--suite">
-          Je parle arménien (langue maternelle), français (bilingue) et anglais (B2). J'ai le permis B et un véhicule.
-        </p>
-        <p class="profil__liens">
-          <a class="lien" href="/#projets">Voir mes projets</a>
-          <a class="lien" href="/">Voir mon site complet</a>
-        </p>
+      <div class="conteneur profil__grille">
+        <div>
+          <h2 id="titre-profil" class="titre-section">Mon profil en bref</h2>
+          <p class="profil__texte">
+            MonArc est une application de suivi d'habitudes. J'ai conçu le produit et piloté son développement.
+          </p>
+          <p class="profil__texte profil__texte--suite">
+            Je parle arménien (langue maternelle), français (bilingue) et anglais (B2). J'ai le permis B et un véhicule.
+          </p>
+          <p class="profil__liens">
+            <a class="lien" href={lienProjet(PROJETS[0].slug)}>Voir le projet MonArc</a>
+            <a class="lien" href="/">Voir mon site complet</a>
+          </p>
+        </div>
+        <ul class="profil__chiffres" role="list">
+          {
+            chiffres.map((c) => (
+              <li>
+                <span class="profil__valeur">{c.valeur}</span>
+                <span class="profil__libelle" set:html={typo(c.libelle)} />
+              </li>
+            ))
+          }
+        </ul>
       </div>
     </section>
 
@@ -371,6 +399,11 @@ const cv = [
   }
 
   /* Profile */
+  .profil__grille {
+    display: grid;
+    gap: 2.5rem;
+  }
+
   .profil__texte {
     max-width: 52ch;
     margin-top: 2rem;
@@ -388,6 +421,35 @@ const cv = [
     gap: 0.75rem 1.5rem;
     margin-top: 1.5rem;
     font-weight: 600;
+  }
+
+  .profil__chiffres {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.75rem 1.25rem;
+  }
+
+  .profil__chiffres li {
+    display: grid;
+    align-content: start;
+    gap: 0.375rem;
+    padding-top: 1rem;
+    border-top: 2px solid var(--nuit);
+  }
+
+  .profil__valeur {
+    font-family: var(--police-titre);
+    font-size: clamp(1.875rem, 0.9rem + 3.6vw, 4.5rem); /* "+1 700" fits its column up to 1920 px */
+    font-weight: 780;
+    font-stretch: 90%;
+    line-height: 1;
+    white-space: nowrap;
+  }
+
+  .profil__libelle {
+    color: var(--ardoise);
+    font-size: var(--texte-s);
+    line-height: 1.4;
   }
 
   /* CV at a glance */
@@ -458,10 +520,20 @@ const cv = [
       margin-bottom: 1.25rem;
     }
 
+    .profil__grille,
     .cv__grille {
       grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
       column-gap: clamp(3rem, 6vw, 6rem);
       align-items: start;
+    }
+
+    .profil__chiffres {
+      margin-top: 0.5rem;
+      row-gap: 2.5rem;
+    }
+
+    .profil__libelle {
+      font-size: var(--texte-m);
     }
   }
 </style>

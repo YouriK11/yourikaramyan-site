@@ -10,7 +10,7 @@ import Contact from '../components/Contact.astro';
 import PiedDePage from '../components/PiedDePage.astro';
 import IconeTelechargement from '../components/IconeTelechargement.astro';
 import { PROFIL } from '../data/profil';
-import { PROJETS, RELEVE_APPLICATION, lienProjet } from '../data/projets';
+import { PROJETS, lienProjet } from '../data/projets';
 import { typo } from '../data/typographie';
 import { PORTRAIT, PORTRAIT_DETOURE } from '../data/portrait';
 
@@ -159,7 +159,6 @@ const cv = [
               </li>
             ))
           }
-          <li class="profil__releve" set:html={typo(RELEVE_APPLICATION)} />
         </ul>
       </div>
     </section>
@@ -450,15 +449,6 @@ const cv = [
     color: var(--ardoise);
     font-size: var(--texte-s);
     line-height: 1.4;
-  }
-
-  /* The reading date, across the whole grid, right under the figures */
-  .profil__chiffres li.profil__releve {
-    grid-column: 1 / -1;
-    padding-top: 0;
-    border-top: none;
-    color: var(--ardoise);
-    font-size: var(--texte-s);
   }
 
   /* CV at a glance */

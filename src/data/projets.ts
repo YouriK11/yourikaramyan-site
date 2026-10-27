@@ -77,9 +77,6 @@ export const CHIFFRES_APPLICATION = {
   abonnes: { valeur: 6500, prefixe: '+', lecture: 'Plus de 6 500' },
 } satisfies Record<string, Omit<Chiffre, 'libelle'>>;
 
-/** Users and TikTok views read on 25/10/2026, TikTok followers on 17/10/2026 (Youri). */
-export const RELEVE_APPLICATION = 'Relevé du 25 octobre 2026, sauf les abonnés TikTok (17 octobre 2026).';
-
 /** "Une dizaine de clients" (Youri, 26/10/2026): shown as "10" with "environ" in the label. */
 export const CLIENTS_FREELANCE = { valeur: 10 } satisfies Omit<Chiffre, 'libelle'>;
 
@@ -160,7 +157,6 @@ export const PROJETS: Projet[] = [
         { ...CHIFFRES_APPLICATION.vues, libelle: 'de vues sur TikTok' },
         { ...CHIFFRES_APPLICATION.abonnes, libelle: 'abonnés sur TikTok' },
       ],
-      releve: RELEVE_APPLICATION,
     },
     outils: ['Claude Code', 'Supabase', 'Brevo', 'TikTok', 'Instagram'],
     eventail: true,

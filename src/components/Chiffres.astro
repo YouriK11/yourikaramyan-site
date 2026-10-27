@@ -2,6 +2,7 @@
 // A row of key figures, very large, counting up once in view (src/components/Compteur.astro).
 // "nuit": apricot figures on the midnight blue. "clair": midnight blue figures on white, with an apricot stroke
 // (apricot is never a text colour on white). Used by "Mes résultats" on the home page and by the project pages.
+// Up to five figures share one row on computers; six make two rows of three.
 import Compteur from './Compteur.astro';
 import { typo } from '../data/typographie';
 import type { Chiffre } from '../data/projets';
@@ -9,13 +10,19 @@ import type { Chiffre } from '../data/projets';
 interface Props {
   chiffres: Chiffre[];
   theme?: 'nuit' | 'clair';
+  /** When the figures were read, shown right under them. */
+  releve?: string;
 }
 
-const { chiffres, theme = 'nuit' } = Astro.props;
+const { chiffres, theme = 'nuit', releve } = Astro.props;
 ---
 
 <ul
-  class:list={['chiffres', `chiffres--${theme}`, { 'chiffres--cinq': chiffres.length === 5, 'chiffres--seul': chiffres.length === 1 }]}
+  class:list={[
+    'chiffres',
+    `chiffres--${theme}`,
+    { 'chiffres--cinq': chiffres.length === 5, 'chiffres--six': chiffres.length === 6, 'chiffres--seul': chiffres.length === 1 },
+  ]}
   role="list"
   style={`--colonnes: ${chiffres.length}`}
 >
@@ -25,6 +32,11 @@ const { chiffres, theme = 'nuit' } = Astro.props;
         <span class="chiffre__valeur">
           {c.valeur !== undefined ? (
             <Compteur valeur={c.valeur} decimales={c.decimales} prefixe={c.prefixe} suffixe={c.suffixe} lecture={c.lecture} />
+          ) : c.lecture ? (
+            <>
+              <span aria-hidden="true">{c.texte}</span>
+              <span class="sr-only">{c.lecture}</span>
+            </>
           ) : (
             c.texte
           )}
@@ -34,6 +46,7 @@ const { chiffres, theme = 'nuit' } = Astro.props;
     ))
   }
 </ul>
+{releve && <p class:list={['chiffres__releve', `chiffres__releve--${theme}`]} set:html={typo(releve)} />}
 
 <style>
   .chiffres {
@@ -98,9 +111,26 @@ const { chiffres, theme = 'nuit' } = Astro.props;
     }
   }
 
+  .chiffres__releve {
+    margin-top: 1.75rem;
+    color: var(--brume-sur-nuit);
+    font-size: var(--texte-s);
+  }
+
+  .chiffres__releve--clair {
+    color: var(--ardoise);
+  }
+
+  /* Six figures: two rows of three on computers */
+  @media (min-width: 64em) {
+    .chiffres--six {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
   /* A single figure keeps the width of one column, never a stroke across the whole page */
   .chiffres--seul {
-    grid-template-columns: minmax(0, 20rem);
+    grid-template-columns: minmax(0, 32rem);
   }
 
   @media print {

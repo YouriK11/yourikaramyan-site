@@ -108,7 +108,7 @@ const aDesVisuels = projet.eventail || captures.length > 0 || images.length > 0;
         <h2 id="titre-accompli" class="titre-section">Ce que j'ai accompli</h2>
         {projet.accompli.chiffres && (
           <div class="accompli__chiffres">
-            <Chiffres chiffres={projet.accompli.chiffres} />
+            <Chiffres chiffres={projet.accompli.chiffres} releve={projet.accompli.releve} />
           </div>
         )}
         {

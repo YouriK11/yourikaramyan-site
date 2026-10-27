@@ -1,8 +1,8 @@
 // The four project pages (/projets/<slug>/), in display order, and their card on the home page.
 // Youri, 26/10/2026: the site is a professional portfolio. It shows what he did, what he achieved and with which
 // tools. Titles and dates come from the CV (sources/CV_Youri_Karamyan.pdf); figures only from the validated list in
-// docs/suivi.md (or given by Youri on 26/10/2026: "une dizaine de clients" in freelance). Nothing is made up: what is
-// missing is listed in docs/suivi.md.
+// docs/suivi.md (Youri's answers of 27/10/2026 included). Nothing is made up: what is missing is listed in
+// docs/suivi.md.
 // The slug is also the "projet" field of src/data/profil.ts, so the timeline links to the page.
 import type { ImageMetadata } from 'astro';
 import ecranFil from '../assets/monarc/app-fil.jpg';
@@ -20,10 +20,10 @@ export interface Chiffre {
   decimales?: number;
   prefixe?: string;
   suffixe?: string;
+  /** ...or a fixed text ("2 M", "2e")... */
+  texte?: string;
   /** ...read this way by screen readers, when the symbols would be read literally ("+500" is "Plus de 500"). */
   lecture?: string;
-  /** ...or a fixed text ("3 sur 4"). */
-  texte?: string;
 }
 
 export interface Image {
@@ -55,7 +55,8 @@ export interface Projet {
   carte: { image: ImageMetadata; logo?: boolean; cadrage?: string } | { mots: string[] };
   contexte: string[];
   fait: Etape[];
-  accompli: { chiffres?: Chiffre[]; textes?: string[] };
+  /** releve: when the figures were read, shown right under them (Youri, 27/10/2026). */
+  accompli: { chiffres?: Chiffre[]; releve?: string; textes?: string[] };
   outils: string[];
   /** The mobile app's fan of three screens (src/components/Eventail.astro). */
   eventail?: boolean;
@@ -66,16 +67,27 @@ export interface Projet {
 const [application, boutique, freelance] = PROFIL.experiences;
 const [, yep] = PROFIL.projetsAcademiques;
 
-/** The mobile app's validated figures (docs/suivi.md), shared by its page and by "Mes résultats" on the home page. */
+/** The mobile app's validated figures (docs/suivi.md), shared by its page, "Mes résultats" and the company pages. */
 export const CHIFFRES_APPLICATION = {
   lancement: { valeur: 500, prefixe: '+', lecture: 'Plus de 500' },
+  inscrits: { valeur: 1000, prefixe: '+', lecture: 'Plus de 1 000' },
+  actifs: { valeur: 300, lecture: 'Environ 300' },
   attente: { valeur: 1700, prefixe: '+', lecture: 'Plus de 1 700' },
-  vues: { valeur: 1.9, decimales: 1, suffixe: ' M', lecture: '1,9 million' },
+  vues: { texte: '2 M', lecture: '2 millions' },
   abonnes: { valeur: 6500, prefixe: '+', lecture: 'Plus de 6 500' },
 } satisfies Record<string, Omit<Chiffre, 'libelle'>>;
 
+/** Users and TikTok views read on 25/10/2026, TikTok followers on 17/10/2026 (Youri). */
+export const RELEVE_APPLICATION = 'Relevé du 25 octobre 2026, sauf les abonnés TikTok (17 octobre 2026).';
+
 /** "Une dizaine de clients" (Youri, 26/10/2026): shown as "10" with "environ" in the label. */
 export const CLIENTS_FREELANCE = { valeur: 10 } satisfies Omit<Chiffre, 'libelle'>;
+
+/** The shop's sales: "21 000 € générés en 6 mois" (Youri, 27/10/2026). The conversion rate stays private. */
+export const VENTES_BOUTIQUE = { valeur: 21000, prefixe: '+', suffixe: ' €', lecture: 'Plus de 21 000 euros' } satisfies Omit<
+  Chiffre,
+  'libelle'
+>;
 
 export const PROJETS: Projet[] = [
   {
@@ -83,31 +95,45 @@ export const PROJETS: Projet[] = [
     titre: application.titre,
     periode: application.periode,
     role: "J'ai conçu le produit et piloté son développement.",
-    resultat: 'Plus de 500 inscrits le jour du lancement.',
+    resultat: 'Plus de 1 000 inscrits en 3 semaines.',
     description:
-      "Projet d'application mobile de Youri Karamyan : MonArc, une application de suivi d'habitudes disponible sur l'App Store et Google Play.",
+      "Projet d'application mobile de Youri Karamyan : MonArc, une application de suivi d'habitudes lancée le 1er octobre 2026, avec plus de 1 000 inscrits en 3 semaines.",
     carte: { image: ecranFil, cadrage: '50% 35%' },
-    // Mechanics as described on the App Store listing (checked 19/10/2026). No number of habits or grades: neither
-    // is validated.
+    // Mechanics as described on the App Store listing (checked 19/10/2026); dates, users and tools: Youri, 27/10/2026.
+    // No number of habits or grades: neither is validated.
     contexte: [
-      "MonArc est une application de suivi d'habitudes, disponible sur l'App Store et Google Play.",
+      "MonArc est une application de suivi d'habitudes. Elle est sortie le 1er octobre 2026 sur l'App Store et en version web, puis sur Google Play.",
       "Chaque participant choisit ses habitudes et leur rythme. Chaque jour, il valide ce qu'il a fait. Une preuve photo lui rapporte tous les points. Un classement le compare aux autres participants.",
     ],
     fait: [
       {
         titre: 'Concevoir le produit',
-        texte: ["L'application combine la preuve photo, un classement hebdomadaire, des grades et des arcs privés."],
+        texte: [
+          "J'ai piloté la conception et le développement de l'application avec Claude Code.",
+          "L'application combine la preuve photo, un classement hebdomadaire, des grades et des arcs privés.",
+        ],
+      },
+      {
+        titre: 'Construire la base technique',
+        texte: [
+          "Sur Supabase, j'ai mis en place la base de données, la connexion par code reçu par e-mail et le stockage des photos.",
+          "J'ai défini les règles d'accès aux données et la modération : signalements, blocages et retrait de preuves.",
+        ],
       },
       {
         titre: 'Préparer le lancement',
-        texte: ["Avant le lancement, j'ai constitué une liste d'attente de plus de 1 700 inscrits.", "Je l'anime par e-mail."],
+        texte: [
+          "Avant le lancement, j'ai constitué sur Brevo une liste d'attente de plus de 1 700 inscrits.",
+          "J'ai authentifié le domaine getmonarcapp.com pour l'envoi des e-mails.",
+        ],
       },
       {
         titre: "Lancer l'application",
         texte: [
-          "MonArc est sortie le 1er octobre 2026 sur l'App Store.",
-          'Plus de 500 personnes se sont inscrites le jour même.',
-          "L'application est aussi disponible sur Google Play.",
+          "MonArc est sortie le 1er octobre 2026 sur l'App Store et en version web.",
+          'Environ 540 personnes se sont inscrites le jour même.',
+          'Sur Google Play, un test fermé a réuni environ 150 testeurs dès début octobre.',
+          "L'application y est disponible pour tous depuis le 21 octobre 2026.",
         ],
       },
       {
@@ -117,16 +143,26 @@ export const PROJETS: Projet[] = [
           'Sur Instagram, je partage régulièrement les preuves du jour.',
         ],
       },
+      {
+        titre: 'Fidéliser par e-mail',
+        texte: [
+          "Sur Brevo, j'envoie l'annonce du lancement, les bilans de la semaine et des relances aux inscrits inactifs.",
+          'Les listes de destinataires sont tirées de la base de données.',
+        ],
+      },
     ],
     accompli: {
       chiffres: [
         { ...CHIFFRES_APPLICATION.lancement, libelle: 'inscrits le jour du lancement' },
+        { ...CHIFFRES_APPLICATION.inscrits, libelle: 'inscrits en 3 semaines' },
+        { ...CHIFFRES_APPLICATION.actifs, libelle: 'personnes environ, actives chaque semaine' },
         { ...CHIFFRES_APPLICATION.attente, libelle: "inscrits sur la liste d'attente avant le lancement" },
-        { ...CHIFFRES_APPLICATION.vues, libelle: 'de vues sur TikTok en 60 jours' },
+        { ...CHIFFRES_APPLICATION.vues, libelle: 'de vues sur TikTok' },
         { ...CHIFFRES_APPLICATION.abonnes, libelle: 'abonnés sur TikTok' },
       ],
+      releve: RELEVE_APPLICATION,
     },
-    outils: ['Claude', 'Supabase', 'Brevo', 'TikTok', 'Instagram'],
+    outils: ['Claude Code', 'Supabase', 'Brevo', 'TikTok', 'Instagram'],
     eventail: true,
     visuels: [
       {
@@ -138,8 +174,8 @@ export const PROJETS: Projet[] = [
       {
         // Cropped under the "J'aime" and "Commentaires" tiles (Youri, 21/10/2026): no "Récompenses estimées $0.00".
         src: statsTiktok,
-        alt: 'Statistiques TikTok du compte @monarc_app sur 60 jours : 1,9 million de vues de publications.',
-        legende: 'Les statistiques TikTok sur 60 jours',
+        alt: 'Statistiques TikTok du compte @monarc_app sur 60 jours, au 17 octobre 2026 : 1,9 million de vues de publications.',
+        legende: 'Les statistiques TikTok sur 60 jours, au 17 octobre 2026',
         telephone: { camera: false },
       },
     ],
@@ -153,15 +189,16 @@ export const PROJETS: Projet[] = [
     titre: boutique.titre,
     periode: boutique.periode,
     role: `${boutique.structure}, ${boutique.detail}.`,
-    // The turnover and the conversion rate are not shown (Youri, 26/10/2026, kept in docs/suivi.md), nor the dates of
-    // the Shopify report they come from.
-    resultat: 'Une boutique créée et gérée de A à Z.',
+    resultat: 'Plus de 21 000 € de ventes en 6 mois.',
     description:
-      "Entrepreneuriat e-commerce de Youri Karamyan, de 2022 à 2023 : une boutique en ligne d'équipements sportifs, créée sur Shopify.",
+      "Entrepreneuriat e-commerce de Youri Karamyan : une boutique en ligne d'équipements sportifs créée sur Shopify et gérée seul, avec plus de 21 000 € de ventes en 6 mois.",
     carte: { image: logoBoutique, logo: true },
-    // What the shop sold and how it found its customers: Youri, 21/10/2026. The site, the products and the social
-    // networks come from the CV of 19/10/2026. The shop's name stays private.
-    contexte: ["En 2022, j'ai créé sur Shopify ma propre boutique en ligne d'équipements sportifs.", "Je l'ai gérée jusqu'en 2023."],
+    // What the shop sold and how it found its customers: Youri, 21/10/2026. Sales and "tout seul": Youri, 27/10/2026.
+    // The site, the products and the social networks come from the CV of 19/10/2026. The shop's name stays private.
+    contexte: [
+      "En 2022, j'ai créé sur Shopify ma propre boutique en ligne d'équipements sportifs.",
+      "Je l'ai gérée seul, de A à Z, jusqu'en 2023.",
+    ],
     fait: [
       {
         titre: 'Créer la boutique',
@@ -180,7 +217,8 @@ export const PROJETS: Projet[] = [
       },
     ],
     accompli: {
-      textes: ['Une boutique en ligne créée et gérée de A à Z, de 2022 à 2023.'],
+      chiffres: [{ ...VENTES_BOUTIQUE, libelle: 'de ventes en 6 mois' }],
+      textes: ["Une boutique en ligne que j'ai créée et gérée seul, de A à Z."],
     },
     outils: ['Shopify'],
     visuels: [
@@ -226,67 +264,83 @@ export const PROJETS: Projet[] = [
     titre: yep.titre,
     periode: `${yep.lieu}, ${yep.periode}`,
     role: `${yep.role}.`,
-    resultat: "Plus de 120 gobelets présentés lors de l'assemblée générale.",
+    resultat: '2e place au prix professionnel des jurys.',
     description:
-      "Young Enterprise Project de Youri Karamyan à la HEPL : directeur général de Gob'Eat, une entreprise étudiante de gobelets en biscuit.",
+      "Young Enterprise Project de Youri Karamyan à la HEPL : directeur général de Gob'Eat, une entreprise étudiante de gobelets en biscuit, 2e place au prix professionnel des jurys.",
     carte: { image: gobeletsGobeat, cadrage: '50% 62%' },
-    // From the Gob'Eat business plan sent by Youri on 21/10/2026 (sources/business-plan-gobeat.pdf): team, poles and
-    // role (p. 3 and 10), product (p. 6), pastry chefs (p. 8), SWOT and PESTEL (p. 14-15), competition (p. 16-19),
-    // suppliers (p. 21-27), cafés (p. 29-31), target (p. 33-34), positioning (p. 36), networks (p. 41), survey
-    // (p. 54), general meeting (p. 4). The commercial launch comes from the CV. No other team member is named, and no
-    // team photo (Youri, 21/10/2026).
+    // The prize: Youri, 27/10/2026. Everything else comes from the Gob'Eat business plan (sources/business-plan-gobeat.pdf),
+    // which Youri allowed to use in full on 27/10/2026: team, poles and role (p. 3 and 10), general meeting (p. 4),
+    // product (p. 6), recipe and resistance (p. 8), SWOT and PESTEL (p. 14-15), four competitors (p. 16-19), three
+    // suppliers and material cost (p. 21-24), cafés and their price range (p. 29-31), B2B2C model and targets
+    // (p. 33-34), positioning (p. 36), networks (p. 41), survey (p. 54). The commercial launch comes from the CV.
+    // No team member and no café is named, and no team photo (Youri, 21/10/2026).
     contexte: [
       "Dans le cadre du Young Enterprise Project, à la HEPL, nous avons créé à dix l'entreprise étudiante Gob'Eat.",
-      'Notre produit : un gobelet en biscuit nappé de chocolat belge. Il se mange une fois le café terminé et ne laisse aucun déchet.',
+      'Notre produit : un gobelet en biscuit artisanal de 140 ml, nappé de chocolat belge. Il se mange une fois le café terminé et ne laisse aucun déchet.',
       'Notre cœur de cible : les cafés indépendants de Liège et de sa périphérie.',
     ],
     fait: [
       {
-        titre: "Gérer l'équipe",
+        titre: "Diriger l'équipe",
         texte: [
-          "J'ai géré l'équipe en tant que directeur général.",
+          "J'ai dirigé l'équipe de dix étudiants en tant que directeur général.",
           "L'équipe était organisée en pôles : produit, e-commerce, communication, artistique, opérations, finance et juridique.",
         ],
       },
       {
         titre: 'Porter la relation commerciale',
-        texte: ["J'assurais les responsabilités commerciales de Gob'Eat, dont j'étais le point de contact."],
+        texte: [
+          "J'assurais les responsabilités commerciales de Gob'Eat, dont j'étais le point de contact.",
+          'Notre modèle : vendre aux cafés un produit qui doit séduire leurs clients.',
+        ],
       },
       {
         titre: 'Étudier le marché',
         texte: [
           'Nous avons mené une enquête auprès de 85 personnes.',
-          'Nous avons aussi interrogé deux cafés du centre de Liège.',
-          "L'étude comprenait aussi une analyse de la concurrence, une analyse SWOT et une analyse PESTEL.",
+          "76,5 % d'entre elles n'avaient jamais entendu parler de gobelet comestible.",
+          'Nous avons interrogé deux cafés du centre de Liège : ils seraient prêts à payer entre 0,50 € et 2 € le gobelet.',
+          "L'étude comprenait aussi l'analyse de quatre concurrents, une analyse SWOT et une analyse PESTEL.",
         ],
       },
       {
         titre: 'Construire la stratégie marketing',
         texte: [
           'Notre positionnement : la gourmandise et le zéro déchet.',
+          "Après les cafés indépendants, nous visions les traiteurs, les événements d'entreprise et les pâtisseries haut de gamme.",
           "Instagram et TikTok servaient à toucher le public. LinkedIn servait à démarcher les gérants d'établissements.",
         ],
       },
       {
-        titre: 'Développer et lancer le produit',
+        titre: 'Développer le produit',
         texte: [
-          "Nous avons mis au point la recette avec l'aide de pâtissiers professionnels.",
-          'Nous avons choisi des fournisseurs professionnels pour les ingrédients.',
+          "Nous avons essayé la recette plus de 15 fois, avec l'aide de pâtissiers professionnels.",
+          'Notre biscuit résiste 40 minutes aux liquides chauds.',
+          'Nous avons sélectionné trois fournisseurs professionnels pour les ingrédients.',
+          'Le coût matière est estimé à 0,18 € par gobelet.',
+        ],
+      },
+      {
+        titre: "Présenter et lancer Gob'Eat",
+        texte: [
           "Nous avons présenté plus de 120 gobelets lors de l'assemblée générale de l'entreprise.",
           'Nous avons ensuite assuré le lancement commercial du produit.',
+          "Gob'Eat a obtenu la 2e place au prix professionnel des jurys.",
         ],
       },
     ],
     accompli: {
       chiffres: [
+        { texte: '2e', lecture: 'Deuxième', libelle: 'place au prix professionnel des jurys' },
         { valeur: 120, prefixe: '+', lecture: 'Plus de 120', libelle: "gobelets présentés lors de l'assemblée générale" },
         { valeur: 85, libelle: "personnes interrogées pour l'étude de marché" },
-        { texte: '3 sur 4', libelle: 'personnes interrogées prêtes à essayer le produit' },
+        { valeur: 75, suffixe: ' %', libelle: 'des personnes interrogées prêtes à essayer le produit' },
+        { valeur: 40, suffixe: ' min', lecture: '40 minutes', libelle: 'de résistance du biscuit aux liquides chauds' },
         { valeur: 10, libelle: "étudiants dans l'équipe que j'ai dirigée" },
       ],
     },
-    // The three networks of the marketing strategy (business plan, p. 41). Youri gave no tools for this project.
-    outils: ['Instagram', 'TikTok', 'LinkedIn'],
+    // Named in the business plan: the three networks (p. 41) and the website on Odoo (gobeat.odoo.com, p. 10).
+    outils: ['Instagram', 'TikTok', 'LinkedIn', 'Odoo'],
     visuels: [
       {
         src: gobeletsGobeat,

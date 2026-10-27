@@ -10,7 +10,7 @@ import Contact from '../components/Contact.astro';
 import PiedDePage from '../components/PiedDePage.astro';
 import IconeTelechargement from '../components/IconeTelechargement.astro';
 import { PROFIL } from '../data/profil';
-import { PROJETS, lienProjet } from '../data/projets';
+import { PROJETS, RELEVE_APPLICATION, lienProjet } from '../data/projets';
 import { typo } from '../data/typographie';
 import { PORTRAIT, PORTRAIT_DETOURE } from '../data/portrait';
 
@@ -34,12 +34,11 @@ const reperes = Array.from({ length: 12 }, (_, i) => ({ angle: i * 30, long: i =
 
 const lienEmail = `mailto:${PROFIL.contact.email}?subject=${encodeURIComponent(objetEmail)}`;
 
-// Key figures of the mobile app, all validated by Youri (docs/suivi.md). The shop's turnover is not shown
-// (Youri, 26/10/2026).
+// Key figures of the mobile app, all validated by Youri (docs/suivi.md), with the date they were read.
 const chiffres = [
-  { valeur: '+500', libelle: 'inscrits le jour du lancement de MonArc' },
+  { valeur: '+1 000', libelle: 'inscrits sur MonArc en 3 semaines' },
   { valeur: '+1 700', libelle: "inscrits sur la liste d'attente avant le lancement" },
-  { valeur: '1,9 M', libelle: 'de vues TikTok en 60 jours' },
+  { valeur: '2 M', libelle: 'de vues TikTok' },
   { valeur: '+6 500', libelle: 'abonnés TikTok' },
 ];
 
@@ -160,6 +159,7 @@ const cv = [
               </li>
             ))
           }
+          <li class="profil__releve" set:html={typo(RELEVE_APPLICATION)} />
         </ul>
       </div>
     </section>
@@ -450,6 +450,15 @@ const cv = [
     color: var(--ardoise);
     font-size: var(--texte-s);
     line-height: 1.4;
+  }
+
+  /* The reading date, across the whole grid, right under the figures */
+  .profil__chiffres li.profil__releve {
+    grid-column: 1 / -1;
+    padding-top: 0;
+    border-top: none;
+    color: var(--ardoise);
+    font-size: var(--texte-s);
   }
 
   /* CV at a glance */

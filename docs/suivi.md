@@ -59,7 +59,19 @@ Soirée du 20/10/2026 (même branche) : lettres du nom toujours serrées, trois 
 
 > **26/10/2026 : ces chiffres sont de nouveau la seule source des chiffres du site** (voir « Nouveau principe (26/10/2026) »). Affichés : application (+500, +1 700, 1,9 M de vues en 60 jours, +6 500 abonnés TikTok), Young Enterprise Project (dix étudiants, 85 personnes, deux cafés, plus de 120 gobelets, trois sur quatre). Jamais affichés : le chiffre d'affaires et le taux de conversion de la boutique (Youri, 26/10/2026). La direction sobre du 23/10/2026 est annulée.
 
-MonArc (donnés par Youri et dans le CV) :
+MonArc, relevé du 25 octobre 2026 (Youri, 27/10/2026 ; afficher la date du relevé à côté des chiffres) :
+- plus de 1 000 inscrits en 3 semaines ;
+- environ 540 inscrits le jour du lancement (le site garde « +500 » dans les grands chiffres et écrit « environ 540 » dans le texte) ;
+- environ 300 personnes actives chaque semaine ;
+- plus de 1 700 inscrits sur la liste d'attente avant le lancement ;
+- 2 000 000 de vues TikTok (afficher « 2 M ») ; les abonnés TikTok (+6 500) datent du relevé du 17/10/2026 ;
+- dates : App Store et version web le 1er octobre 2026 (lancement) ; Google Play : test fermé avec environ 150 testeurs dès début octobre, disponible pour tous depuis le 21 octobre 2026.
+
+Boutique (Youri, 27/10/2026) : « 21 000 € générés en 6 mois, j'ai tout géré tout seul » : afficher « plus de 21 000 € de ventes en 6 mois ». Le taux de conversion reste privé. Remplace l'interdiction du 26/10/2026.
+
+Young Enterprise Project (Youri, 27/10/2026) : 2e place au prix professionnel des jurys. Youri autorise à utiliser tout le business plan : recette essayée plus de 15 fois (p. 8), biscuit qui résiste 40 minutes aux liquides chauds (p. 8), gobelet de 140 ml (p. 6), trois fournisseurs (p. 21), coût matière estimé à 0,18 € (p. 24), cafés prêts à payer entre 0,50 € et 2 € (p. 31), 76,5 % des 85 répondants n'avaient jamais entendu parler de gobelet comestible (Q1, p. 54), 75,3 % prêts à essayer (affiché « 75 % »). Noms des cafés et des membres de l'équipe : toujours absents.
+
+Ancienne liste MonArc (donnés par Youri et dans le CV) :
 - plus de 500 inscrits le jour du lancement, le 1er octobre 2026 ;
 - plus de 1 700 inscrits dans la base e-mail ;
 - une vidéo TikTok publiée chaque jour, publications régulières sur Instagram (n'est plus un des six grands chiffres depuis le 21/10/2026 : elle reste dans « Ce que j'ai fait ») ;
@@ -216,3 +228,14 @@ Youri : « Le site est un portfolio professionnel. Il ne recopie pas le CV : il 
   - noms de fichiers entreprise `projets` et `projet-…` refusés ; plan du site limité à `/projets/<slug>/`.
 - **À confirmer par Youri** : outils du Young Enterprise Project (Instagram, TikTok, LinkedIn, repris du business plan p. 41) ; ce qu'a été concrètement le lancement commercial de Gob'Eat.
 - **Vérifié avant publication** (27/10/2026, version finale) : 390, 1440 et 1920 px sans débordement ni décalage ; axe 0 erreur sur l'accueil, les 4 pages projets et /col-macarthur (390 et 1440 px) ; `astro check` 0 erreur ; aucun chiffre interdit ni nom de l'équipe Gob'Eat dans `dist/` ; plan du site : accueil et 4 pages projets ; /col-macarthur toujours noindex. Lighthouse mobile : accueil 77, 97, 98, 99, 98 (médiane 98 ; le 77 tombe sur un indice de puissance de 1 762, machine ralentie), pages projets 100 (SEO 100 partout).
+
+## Réponses de Youri (27/10/2026)
+
+- **Freelance** : rien de plus (« t'auras rien »). La page reste telle quelle.
+- **Application** : Claude Code (conception et développement pilotés par Youri), Supabase (base de données, connexion par code reçu par e-mail, stockage des photos, règles d'accès, modération : signalements, blocages, retrait de preuves), Brevo (liste d'attente, domaine getmonarcapp.com authentifié, campagnes : annonce du lancement, bilans de la semaine, relances des inscrits inactifs, listes tirées de la base). Page : six étapes, six chiffres (deux rangées de trois), date du relevé sous les chiffres ; carte : « Plus de 1 000 inscrits en 3 semaines. » Outil « Claude » devient « Claude Code ».
+- **Accueil, Mes résultats** : « 1,9 M de vues en 60 jours » devient « 2 M de vues TikTok », avec la date des relevés sous la rangée.
+- **Boutique** : carte et page « Plus de 21 000 € de ventes en 6 mois », « gérée seul, de A à Z ».
+- **Young Enterprise Project** : carte « 2e place au prix professionnel des jurys » ; page enrichie avec le business plan (voir « Chiffres validés ») ; six chiffres : 2e, +120, 85, 75 %, 40 min, 10. Outils : Instagram, TikTok, LinkedIn et Odoo (le site gobeat.odoo.com du business plan, p. 10).
+- **/col-macarthur** : chiffres +1 000 inscrits en 3 semaines, +1 700, 2 M, +6 500, avec la date du relevé.
+- **Choix de Claude, à confirmer** : la date du relevé des 2 M de vues est celle des utilisateurs (25/10/2026) ; « +500 » reste dans les grands chiffres (« environ 540 » est dans le texte) ; Odoo ajouté aux outils de Gob'Eat ; les 21 000 € ne sont pas ajoutés à « Mes résultats » (Youri ne l'a pas demandé).
+- **Vérifié avant publication** (27/10/2026) : 390, 1440 et 1920 px sans débordement ; six chiffres en deux rangées de trois sur ordinateur ; axe 0 erreur sur six pages ; aucun taux de conversion, nom de l'équipe ou de café dans `dist/` ; Lighthouse mobile accueil 97, 98, 98, pages projets 96 à 100.

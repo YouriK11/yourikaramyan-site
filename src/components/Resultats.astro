@@ -7,7 +7,7 @@ import { CHIFFRES_APPLICATION, CLIENTS_FREELANCE, type Chiffre } from '../data/p
 const chiffres: Chiffre[] = [
   { ...CHIFFRES_APPLICATION.lancement, libelle: 'inscrits le jour du lancement de mon application' },
   { ...CHIFFRES_APPLICATION.attente, libelle: "inscrits sur la liste d'attente" },
-  { ...CHIFFRES_APPLICATION.vues, libelle: 'de vues TikTok en 60 jours' },
+  { ...CHIFFRES_APPLICATION.vues, libelle: 'de vues TikTok' },
   { ...CHIFFRES_APPLICATION.abonnes, libelle: 'abonnés TikTok' },
   { ...CLIENTS_FREELANCE, libelle: 'clients environ accompagnés en freelance' },
 ];
@@ -17,7 +17,7 @@ const chiffres: Chiffre[] = [
   <div class="conteneur">
     <h2 id="titre-resultats" class="titre-section">Mes résultats</h2>
     <div class="resultats__chiffres">
-      <Chiffres chiffres={chiffres} theme="clair" />
+      <Chiffres chiffres={chiffres} theme="clair" releve="Vues TikTok relevées le 25 octobre 2026, abonnés TikTok le 17 octobre 2026." />
     </div>
   </div>
 </section>
